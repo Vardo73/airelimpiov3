@@ -1,0 +1,161 @@
+@layout('master')
+
+@section('pollutant')
+
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Contaminantes</span></h2>
+    <hr/>
+</div>
+
+<br>
+<div class="container">
+    <div class="col col-12 align-self-end">
+        <div class="d-grid gap-2 mx-auto ">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newPollutantModal">Agregar Nuevo</button>
+        </div>
+    </div>
+    <br>
+    
+    <div class=" container-fluid table-responsive table-bordered">
+        <table class="table table-hover " name="tabAnual" id="tabAnual">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Contaminante</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @each(pollutant in pollutants)
+                <tr>
+                    <td>{{ pollutant.id}}</td>
+                    <td>{{ pollutant.name }}</td>
+                    <td>{{ pollutant.description }}</td>
+                    <td>
+                        <div class="row mx-auto">
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <button class="btn btn-info"  data-bs-toggle="modal" data-bs-target="#editPollutantModal{{pollutant.id}}">Editar</button>
+                            </div>
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <form action="{{route('delete_pollutant',[pollutant.id])}}?_method=DELETE" method="POST" id="formDelete">
+                                    {{csrfField()}}
+                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- MODAL Edit CONTAMINANTE -->
+                    <div class="container-fluid">
+                        <div class="modal fade" id="editPollutantModal{{pollutant.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2>Editar Contaminante</h2>
+                                    </div>
+                                    <form action="{{route('update_pollutant',[pollutant.id])}}?_method=PATCH" method="POST">
+                                        {{csrfField()}}
+                                        <div class="modal-body">
+                                            <div>
+                                                <label for="name">Nombre:</label>
+                                                <input class="form-control" type="text" name="name" id="name"  min="4" max="25" value="{{ pollutant.name }}">
+                                            </div>
+
+                                            @if(flashMessages.has('errors.name'))
+                                                <br>
+                                                <p class="alert alert-danger">{{flashMessages.get('errors.name')}}</p>
+                                            @end
+
+                                            <div>
+                                                <label for="description">Descripción:</label>
+                                                <textarea class="form-control" name="description" id="description" style="height: 100px" min="4" max="50" >{{ pollutant.description }}</textarea>
+                                            </div>
+                                            
+                                            @if(flashMessages.has('errors.description'))
+                                                <br>
+                                                <p class="alert alert-danger">{{flashMessages.get('errors.description')}}</p>
+                                            @end
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-outline-primary">Aceptar</button>
+                                            <button class="btn btn-outline-primary "  data-bs-dismiss="modal">Cancelar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endeach
+            </tbody>
+        </table>
+    </div>
+    
+
+
+    <!-- MODAL NUEVO CONTAMINANTE -->
+    <div class="container-fluid">
+        <div class="modal fade" id="newPollutantModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Agregar Contaminante</h2>
+                    </div>
+                    <form action="{{route('store_pollutant')}}" method="post">
+                        {{csrfField()}}
+                        <div class="modal-body">
+                            <div>
+                                <label for="name">Nombre:</label>
+                                <input class="form-control" type="text" name="name" id="name"  min="4" max="25">
+                            </div>
+
+                            @if(flashMessages.has('errors.name'))
+                            <br>
+                            <p class="alert alert-danger">{{flashMessages.get('errors.name')}}</p>
+                            @end
+
+                            <div>
+                                <label for="description">Descripción:</label>
+                                <textarea class="form-control" name="description" id="description" style="height: 100px" min="4" max="50" ></textarea>
+                            </div>
+                            
+                            @if(flashMessages.has('errors.description'))
+                            <br>
+                            <p class="alert alert-danger">{{flashMessages.get('errors.description')}}</p>
+                            @end
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-outline-primary" >Aceptar</button>
+                            <button class="btn btn-outline-primary btnCancel" name="btnCancelPollutant" id="btnCancelPollutant" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let form=document.getElementById('formDelete')
+    
+    if (form!=null) {
+        form.addEventListener('submit',(e)=>{
+            e.preventDefault()
+            Swal.fire({
+                title:'Está seguró de eliminar este elemento?',
+                showCancelButton:true,
+                confirmButtonText:'Eliminar',
+                denyButtonText:'Cancelar',
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    form.submit()
+                }
+            })
+        })  
+    }
+</script>
+@end

@@ -8,15 +8,6 @@ html, body {
   position: relative;
 }
 
-body:before {
-  content: '';
-  background: #5A45FF;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  position: absolute;
-}
 
 * {
   margin: 0;
@@ -26,16 +17,6 @@ body:before {
 a {
   color: #5A45FF;
   text-decoration: none;
-}
-
-main {
-  max-width: 620px;
-  margin: auto;
-  height: 100vh;
-  padding: 0 30px;
-  align-items: center;
-  display: flex;
-  justify-content: center;
 }
 
 .title {
@@ -73,4 +54,15 @@ main li:before {
 main code {
   font-size: 16px;
   background: #e6e2ff;
+}
+
+main {
+  margin: auto;
+  height: 100vh;
+  flex: 1;
+}
+
+.layout { 
+  height: calc(100vh - 100px); 
+  display: flex; 
 }

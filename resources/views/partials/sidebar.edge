@@ -1,0 +1,502 @@
+<section>
+    <style>
+        #side_nav{
+            min-width: 220px;
+            max-width: 220px;
+            min-height: 100vh;
+            max-height: 100vh;
+        }
+        
+        .hr-color{
+            color: white;
+        }
+        .sidebar li a{
+            color:#FFFFFF
+        }
+        .sidebar li a:hover{
+            background: #FFFFFF;
+            color:#0d6efd;
+            border-radius: 8px;
+        
+        }
+
+        @media(max-width:767px){
+            #side_nav{
+                position: fixed;
+                min-height: 100vh;
+            }
+        }
+        #footer{
+            position: absolute;
+            bottom: 0;
+            margin-left: .125%;
+            width: 15%;
+            height: 60px;
+            font-size: 12px;
+        }
+    </style>
+    
+    <div class="main-container d-flex" id="main-side">
+        <div class="sidebar bg-primary  " id="side_nav">
+            <div class="header-box px-2 pt-3 pb-2 d-flex justify-content-between shadow">
+                <a href="/" class="text-decoration-none">
+                    <h1 class="fs-6"><span class="bg-white text-primary rounded shadow px-2 me-2">AL</span>
+                        <span class="text-white">Aire Limpio</span>
+                    </h1>
+                </a>
+            </div>
+    
+            <ul class="list-unstyled px-2 ">
+                <!-- Mapas -->
+                <li class=" btn-group dropend d-block">
+                    <a class="text-decoration-none dropdown-toggle px-3 py-2 d-block "    href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-map"></i> Mapas
+                    </a>
+                    <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown" >
+                        <li><a class="dropdown-item" href="{{route('map')}}">Monitores </a></li>
+                        <li><a class="dropdown-item" href="">Padecimientos </a></li>
+                        <li><a class="dropdown-item" href="">Contaminantes </a></li>
+                    </ul>
+                </li>
+                <!-- Informate -->
+                <li class="" >
+                    <a class="text-decoration-none px-3 py-2 d-block "  data-bs-toggle="modal" data-bs-target="#InfoModal" href="">
+                        <i class="bi bi-info-circle"></i>
+                        Infórmate
+                    </a>
+                </li>
+                <!-- Apoyanos-->
+                <li class="">
+                    <a class="text-decoration-none px-3 py-2 d-block "  data-bs-toggle="modal" data-bs-target="#ApoyanosModal" href="" >
+                        <i class="bi bi-person-heart"></i>
+                        Apóyanos
+                    </a>
+                </li>
+                <!-- Indices-->
+                <li class="">
+                    <a class="text-decoration-none px-3 py-2 d-block "  data-bs-toggle="modal" data-bs-target="#FileModal" href="" >
+                        <i class="bi bi-bar-chart-fill"></i>
+                        Índices
+                    </a>
+                </li>
+            </ul>
+    
+            <hr class="hr-color mx-2">
+    
+            <ul class="list-unstyled px-2 ">
+                <li><a class="text-decoration-none px-3 py-2 d-block " data-bs-toggle="modal" data-bs-target="#AboutModal">
+                        <i class="bi bi-info-circle"></i>
+                        Sobre nosotros
+                    </a>
+                </li>
+                
+                <li class=" btn-group dropend d-block">
+                    <a class="text-decoration-none dropdown-toggle px-3 py-2 d-block "    href="" id="navbarContact" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-file-person"></i> Contacto
+                    </a>
+                    <ul class="dropdown-menu bg-info" aria-labelledby="navbarContact" >
+                        <li><a class="text-decoration-none px-3 py-2 d-block " data-bs-toggle="modal" data-bs-target="#ContactModal">
+                                Redes sociales
+                            </a>
+                        </li>
+                        <li><a class="text-decoration-none px-3 py-2 d-block " data-bs-toggle="modal" data-bs-target="#AddressModal">
+                            Dirección
+                            </a>
+                        </li>
+                        <li><a class="text-decoration-none px-3 py-2 d-block " data-bs-toggle="modal" data-bs-target="#PhoneModal">
+                            Teléfono
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a class="text-decoration-none px-3 py-2 d-block " data-bs-toggle="modal" data-bs-target="#SubscriberModal">
+                        <i class="bi bi-person-lines-fill"></i>
+                        Suscribete
+                    </a>
+                </li>
+            </ul>
+
+            <div id="footer" class="px-1 d-flex   ">
+                <div class="">
+                    <p class="text-white text-center">© 2021 Centro de Energía Renovable y Calidad Ambiental A.C.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Informate-->
+    <div class="container-fluid">
+        <div class="modal fade" id="InfoModal"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header justify-content-around" style="background:#0d6efd; color:#FFFFFF; ">
+                        <h2>Obten más información</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mx-auto" >
+                            <h4 style="text-align: center;">Visitando:</h4>
+                        </div>
+                        <hr/>
+                        <div class="row mx-auto">
+                            <a style="text-align: center;" href="https://aire.org.mx/" target="_blank" rel="noopener noreferrer">
+                                <img src="../img/logoAire.png" alt="0" width="150"  class="img-fluid d-inline-block align-text-top">
+                            </a>
+                        </div>
+                        <hr/>
+                        <div class="row mx-auto">
+                            <h4 style="text-align: center;">Inscríbete a nuestro boletín:</h4>
+                        </div>
+                        <hr/>
+                        <div class="row mx-auto" >
+                            <a style="text-align: center;" href="https://cerca.org.mx/registro/" target="_blank" rel="noopener noreferrer">
+                                <img src="../img/LogotipoColoresOriginales.svg" alt="0" width="175"  class="img-fluid d-inline-block align-text-top">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Modal Apoyanos-->
+    <div class="container-fluid">
+        <div class="modal fade" id="ApoyanosModal"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header justify-content-around" style="background:#0d6efd; color:#FFFFFF; ">
+                        <h2>Puedes ayudarnos</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mx-auto" >
+                            <h4 style="text-align: center;">Donando:</h4>
+                        </div>
+                        <hr/>
+                        <div class="row mx-auto">
+                            <a style="text-align: center;" href="https://www.paypal.com/donate/?hosted_button_id=CQX6JXVWALTGG" target="_blank" rel="noopener noreferrer">
+                                <img src="../img/logoPayPal.png" alt="0" width="150"  class="img-fluid d-inline-block align-text-top">
+                            </a>
+                        </div>
+                        <hr/>
+                        <div class="row mx-auto">
+                            <h4 style="text-align: center;">Firma una petición:</h4>
+                        </div>
+                        <hr/>
+                        <div class="row mx-auto" >
+                            <a style="text-align: center;" href="https://www.change.org/p/semarnat-mx-semarnat-no-otorgue-permisos-ambientales-para-otra-chimenea-de-proyecto-cci-vi" target="_blank" rel="noopener noreferrer">
+                                <h2>Petición 1</h2>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL INFO -->
+    <div class="container-fluid">
+        <div class="modal fade" id="AboutModal"  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                        <div class="modal-header justify-content-around" style="background:#0d6efd; color:#FFFFFF; ">
+                            <h2>¿Quiénes somos?</h2>
+                        </div>
+                        <div class="modal-body ">
+                            <p>Organización de la sociedad civil que surgió a partir de un grupo ciudadano diverso, incluyente, apartidista y empoderado por su propia membresía. Nuestro interés principal es buscar y promover soluciones que mejoren la calidad de vida de los sudcalifornianos, enfocándonos principalmente en impulsar una transición hacia el uso de energías más limpias y renovables y en el mejoramiento de la calidad del ambiente de nuestras ciudades y comunidades.</p>
+                            <div class="justify-content-around" style="text-align: center;">
+                                <img src="img/LogotipoColoresOriginales.svg" alt="" >
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONTACT -->
+    <div class="container-fluid">
+        <div class="modal fade" id="ContactModal"  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                        <div class="modal-header justify-content-around" style="background:#0d6efd; color:#FFFFFF; ">
+                            <h2>CONTACTO:</h2>
+                        </div>
+                        <div class="modal-body  justify-content-center">
+                            <div style="text-align:center;">
+                                <ul style="list-style:none; ">
+                                    <li class='hoverList'><a style="text-decoration:none;" href="https://www.facebook.com/CERCABCS" target="_blank"><h1><i class="bi bi-facebook"></i>Facebook</h1></a></li>
+                                    <li class='hoverList'><a style="text-decoration:none;" href="https://www.instagram.com/cercabcs" target="_blank"><h1><i class="bi bi-instagram"></i>Instagram</h1></a></li>
+                                    <li class='hoverList'><a style="text-decoration:none;" href="https://twitter.com/CERCABCS" target="_blank"><h1><i class="bi bi-twitter"></i>Twitter</h1></a></li>
+                                    <li class='hoverList'><a style="text-decoration:none;" href="https://www.cerca.org.mx/" target="_blank"><img src="img/LogotipoColoresOriginales.svg" alt=""></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL Subscribers -->
+    <div class="container-fluid">
+        <div class="modal fade" id="SubscriberModal"  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header justify-content-around" style="background:#0d6efd; color:#FFFFFF; ">
+                        <h2>Suscríbete:</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mx-auto">
+                            <p class="justify-content-around" style="text-align:center;">Recibe por correo electrónico alertas cuando los niveles de contaminación hayan rebasado la norma.</p>
+                            
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="name ">Nombre:</label>
+                                <input class="form-control" type="text" name="name" id="name" required min="1" max="25">
+                            </div>
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="lastname">Apellido:</label>
+                                <input class="form-control" type="text" name="lastname" id="lastname" required min="1" max="25">
+                            </div>
+                        </div>
+                        <div class="row mx-auto">
+                            <div class="col col-12 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="email ">Email:</label>
+                                <input class="form-control" type="email" name="email" id="email" required min="1" max="25">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row mx-auto">
+                            <div class="col col-12 d-grid gap-2 mx-auto">
+                                <input type="submit" class="btn btn-outline-primary" value="Aceptar" id="btnSubscriber" name="btnCreateStation" data-bs-dismiss="modal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL Dirección -->
+    <div class="container-fluid">
+        <div class="modal fade" id="AddressModal"  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                        <div class="modal-header justify-content-around" style="background:#0d6efd; color:#FFFFFF; ">
+                            <h2>Nuestra dirección es:</h2>
+                        </div>
+                        <div class="modal-body  justify-content-around">
+                            <a target="_blank" href="https://www.google.com/maps/dir//C.+Chiapas+3865+Las+Palmas+23070+La+Paz,+B.C.S./@24.1313306,-110.3160733,17z/data=!4m5!4m4!1m0!1m2!1m1!1s0x86afd33ad892949f:0xf8845915e8c7a673" >
+                                <h4>C. Chiapas 3865, Las Palmas, 23070 La Paz, B.C.S.</h4>
+                            </a>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODAL Telefono -->
+    <div class="container-fluid">
+        <div class="modal fade" id="PhoneModal"  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                        <div class="modal-header  justify-content-around" style="background:#0d6efd; color:#FFFFFF; ">
+                            <h2>Nuestro número de teléfono es:</h2>
+                        </div>
+                        <div class="modal-body mx-auto justify-content-around">
+                            <h4>(+52)612-128-8497</h4>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--MODAL Index -->
+    <div class="container-fluid">
+        <div class="modal fade" id="FileModal"  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                        <div class="modal-header justify-content-around" style="background:#0d6efd; color:#FFFFFF; ">
+                            <h2>Índices de colores</h2>
+                        </div>
+                        <div class="modal-body  justify-content-around">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true"><i class="bi bi-file-earmark-text"></i></button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                  <button class="nav-link" id="profile1-tab" data-bs-toggle="tab" data-bs-target="#profile1" type="button" role="tab" aria-controls="profile1" aria-selected="false"><i class="bi bi-1-square"></i></button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                  <button class="nav-link" id="profile2-tab" data-bs-toggle="tab" data-bs-target="#profile2" type="button" role="tab" aria-controls="profile2" aria-selected="false"><i class="bi bi-2-square"></i></button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                  <button class="nav-link" id="profile5-tab" data-bs-toggle="tab" data-bs-target="#profile5" type="button" role="tab" aria-controls="profile5" aria-selected="false"><i class="bi bi-3-square"></i></button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab" style="text-align:center;">
+                                    <br>
+                                    <h5 >Índice de calidad del aire y sus riesgos en la salud</h5>
+                                    <hr>
+                                    <p style="text-align: justify;">La contaminación del aire representa el mayor riesgo ambiental para la salud (WHO, 2016). Diversos estudios experimentales, 
+                                        así como estudios epidemiológicos en humanos, han señalado que la exposición a contaminantes en el aire ambiente está asociada con una amplia gama de efectos adversos que afectan la calidad de vida de la población en general y de los grupos vulnerables, 
+                                        principalmente los niños, mujeres en gestación y adultos mayores, sobre todo si padecen de enfermedades preexistentes.
+                                    </p>
+                                    <p style="text-align: justify;">El Índice de Calidad del Aire (AQI por sus siglas en inglés) es un indicador que mide la concentración de ciertos contaminantes en el aire que respiramos. 
+                                        Su valor es asignado de acuerdo al contaminante que tenga un concentrado más alto al momento de realizar la medición. Este índice cuenta con una clasificación que nos indica la calidad del aire de acuerdo a la concentración de contaminantes en el ambiente, entre más alto el valor, más dañino es para el cuerpo humano, y de acuerdo a la gravedad, se deben de seguir una serie de medidas de precaución para poder cuidar nuestra salud</p>
+                                </div>
+                                <div class="tab-pane fade" id="profile1" role="tabpanel" aria-labelledby="profile1-tab">
+                                    <br>
+                                    <table class="table table-bordered" style="margin-left:auto; margin-right:auto; padding-top:8px; padding-left:55px; padding-right:55px;">
+                                        <thead>
+                                            <tr style="background-color:black; color:white;">
+                                                <th  colspan="3" style="text-align:center;">Índices de calidad del aire para PM 2.5</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="background-color:white;">
+                                                <td >Clasificación</td>
+                                                <td >AQI</td>
+                                                <td >24 hrs(&#956;g/m<sup>3</sup>)</td>
+                                            </tr>
+                                            <tr style="background-color:#38b208">
+                                              <td >Buena</td>
+                                              <td >0-50</td>
+                                              <td >0.0-12.0</td>
+                                            </tr>
+                                            <tr style="background-color:#edb02d">
+                                              <td >Aceptable</td>
+                                              <td>51-100</td>
+                                              <td>12.1-35.4</td>
+                                            </tr>
+                                            <tr style="background-color:#fc7928">
+                                              <td >Poco saludable</td>
+                                              <td>101-150</td>
+                                              <td>35.5 - 55.4</td>
+                                            </tr>
+                                            <tr style="background-color:#f93131">
+                                              <td >Mala</td>
+                                              <td>151-200</td>
+                                              <td>55.5 - 150.4</td>
+                                            </tr>
+                                            <tr style="background-color:#a8549d">
+                                              <td >Muy Mala</td>
+                                              <td>201-300</td>
+                                              <td>150.5 - 250.4</td>
+                                            </tr>
+                                            <tr style="background-color:#7E0023">
+                                                <td >Extremadamente Mala</td>
+                                                <td>301-500</td>
+                                                <td>250.5 - 500.4</td> 
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="profile2" role="tabpanel" aria-labelledby="profile1-tab">
+                                    <br>
+                                    <table class="table table-bordered" style="margin-left:auto; margin-right:auto; padding-top:8px; padding-left:55px; padding-right:55px;">
+                                        <thead>
+                                            <tr style="background-color:black; color:white;">
+                                                <th  colspan="3" style="text-align:center;">Índices de calidad del aire para PM 10</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="background-color:white;">
+                                                <td >Clasificación</td>
+                                                <td >AQI</td>
+                                                <td >24 hrs(&#956;g/m<sup>3</sup>)</td>
+                                            </tr>
+                                            <tr style="background-color:#38b208">
+                                              <td >Buena</td>
+                                              <td >0-50</td>
+                                              <td >0 - 54</td>
+                                            </tr>
+                                            <tr style="background-color:#edb02d">
+                                              <td >Aceptable</td>
+                                              <td>51-100</td>
+                                              <td>55 - 154</td>
+                                            </tr>
+                                            <tr style="background-color:#fc7928">
+                                              <td >Poco saludable</td>
+                                              <td>101-150</td>
+                                              <td>155 - 254</td>
+                                            </tr>
+                                            <tr style="background-color:#f93131">
+                                              <td >Mala</td>
+                                              <td>151-200</td>
+                                              <td>255 - 354</td>
+                                            </tr>
+                                            <tr style="background-color:#a8549d">
+                                              <td >Muy Mala</td>
+                                              <td>201-300</td>
+                                              <td>355 - 424</td>
+                                            </tr>
+                                            <tr style="background-color:#7E0023">
+                                                <td >Extremadamente Mala</td>
+                                                <td>301-500</td>
+                                                <td>425 - 604</td> 
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="profile5" role="tabpanel" aria-labelledby="profile4-tab">
+                                    <br>
+                                    <table class="table table-bordered" style="margin-left:auto; margin-right:auto; padding-top:8px; padding-left:55px; padding-right:55px;">
+                                        <thead>
+                                            <tr style="background-color:black; color:white;">
+                                                <th colspan='4'>Mensajes asociados a las categorías de calidad del aire y riesgos a la salud</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="background-color:white;">
+                                                <th>Calidad del aire</th>
+                                                <th>Nivel de riesgo asociado</th>
+                                                <th colspan='2'>Recomendaciones</th>
+                                            </tr>
+                                            <tr style="background-color:white;">
+                                                <td></td>
+                                                <td></td>
+                                                <td>Para grupos sensibles</td>
+                                                <td>Para toda la población</td>
+                                            </tr>
+                                            <tr style="background-color:#38b208">
+                                                <td>Buena</td>
+                                                <td>Bajo</td>
+                                                <td colspan='2'>Disfruta las actividades al aire libre</td>
+                                            </tr>
+                                            <tr style="background-color:#edb02d">
+                                                <td>Aceptable</td>
+                                                <td>Moderado</td>
+                                                <td>Considera reducir las actividades físicas vigorosas al aire libre</td>
+                                                <td>Disfruta las actividades al aire libre</td>
+                                            </tr>
+                                            <tr style="background-color:#fc7928">
+                                                <td>Poco saludable</td>
+                                                <td>Alto</td>
+                                                <td>Evita las actividades físicas (tanto moderadas como vigorosas) al aire libre</td>
+                                                <td>Reduce las actividades físicas vigorosas al aire libre</td>
+                                            </tr>
+                                            <tr style="background-color:#f93131">
+                                                <td>Mala</td>
+                                                <td>Alto</td>
+                                                <td>Evitar realizar actividades al aire libre. Permanecer en espacios interiores, si es necesario salir, usar un cubrebocas. Acudir al médico si se presentan síntomas respiratorios o cardíacos</td>
+                                                <td>Reduce las actividades físicas vigorosas al aire libre</td>
+                                            </tr>
+                                            <tr style="background-color:#a8549d">
+                                                <td>Muy Mala</td>
+                                                <td>Muy Alto</td>
+                                                <td>No realices actividades al aire libre. Acudir al médico si se presentan síntomas respiratorios o cardiacos</td>
+                                                <td>Evita las actividades físicas moderadas y vigorosas al aire libre.</td>
+                                            </tr>
+                                          <tr style="background-color:#7E0023">
+                                            <td>Extremadamente Mala</td>
+                                            <td>Extremadamente Alto</td>
+                                            <td colspan='2'>Permanece en espacios interiores. Acudir al médico si se presentan síntomas respiratorios o cardiacos</td>
+                                          </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

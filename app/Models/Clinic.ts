@@ -10,10 +10,13 @@ export default class Clinic extends BaseModel {
   public name:string
 
   @column()
-  public longitude:string
+  public longitude:number
 
   @column()
-  public latitude:string
+  public latitude:number
+
+  @column()
+  public neighborhood:string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

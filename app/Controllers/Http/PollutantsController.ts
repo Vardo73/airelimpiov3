@@ -1,88 +1,44 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import PollutantValidator from 'App/Validators/PollutantValidator';
 import Pollutant from 'App/Models/Pollutant';
-import { Pool } from 'mysql2/typings/mysql/lib/Pool';
-import { reporters } from 'tests/bootstrap';
 
 
 export default class PollutantsController {
 
     public async store({request,response}:HttpContextContract){
-        const newPollutantSchema=schema.create({
-            name:schema.string({},[
-                rules.required(),
-                rules.minLength(4)
-            ]),
-            description:schema.string({},[
-                rules.required(),
-                rules.minLength(4)
-            ])
-        })
 
-        try {
-            await request.validate({
-                schema:newPollutantSchema,
-                messages:{
-                    required:'El campo {{field}} es requerido para registrar el contaminante.',
-                    minLength:'Campo {{field}} muy corto.(min 4 caracteres)'
-                }
-            })
+        await request.validate(PollutantValidator)
 
-            const {name, description}=request.body();
+        const {name, description}=request.body();
 
-            await Pollutant.create({
-                name:name,
-                description:description
-            });
+        await Pollutant.create({
+            name:name,
+            description:description
+        });
 
-           return response.redirect().back();
-        } catch (error) {
-            response.badRequest(error.messages)
-        }
+       return response.redirect().back();
     }
 
-    public async edit({request,response}:HttpContextContract){
-        const newPollutantSchema=schema.create({
-            name:schema.string({},[
-                rules.required(),
-                rules.minLength(4)
-            ]),
-            description:schema.string({},[
-                rules.required(),
-                rules.minLength(4)
-            ])
-        })
+    public async update({request,response,params}:HttpContextContract){
+        await request.validate(PollutantValidator)
 
-        try {
-            await request.validate({
-                schema:newPollutantSchema,
-                messages:{
-                    required:'El campo {{field}} es requerido para registrar el contaminante.',
-                    minLength:'Campo {{field}} muy corto, (min 4 caracteres)'
-                }
-            })
+        const {name, description}=request.body();
 
-            const pollutant = await Pollutant.findOrFail(request.input('id'))
-            pollutant.name=request.input('name')
-            pollutant.description=request.input('description')
+        const pollutant = await Pollutant.findOrFail(params.id)
+        pollutant.name=name
+        pollutant.description=description
 
-            await pollutant.save();
+        await pollutant.save();
 
+        return response.redirect().back();
 
-            return 'Contaminante modificado'
-        } catch (error) {
-            response.badRequest(error.messages)
-        }
     }
 
-    public async delete({request,response}:HttpContextContract){
-        let id= request.input('id');
-        try {
-            const pollutant=await Pollutant.findOrFail(id)
-            await pollutant.delete()
-        } catch (error) {
-            response.badRequest(error.messages)
-        }
+    public async delete({response,params}:HttpContextContract){
+        const pollutant=await Pollutant.findOrFail(params.id)
+        await pollutant.delete()
+
+        return response.redirect().back();
     }
 
     public async show({view}:HttpContextContract){
@@ -90,8 +46,4 @@ export default class PollutantsController {
         return view.render('admin/pollutant',{pollutants});
     }
 
-    public async all(){
-        const pollutants=await Pollutant.all();
-        return pollutants
-    }
 }
