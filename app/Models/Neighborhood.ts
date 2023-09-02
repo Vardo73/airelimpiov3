@@ -27,7 +27,9 @@ export default class Neighborhood extends BaseModel {
 
   
   //relationship
-  @hasMany(()=>Station)
+  @hasMany(()=>Station, {
+    foreignKey: 'neighborhood_id'
+  })
   public stations:HasMany<typeof Station>
 
   @manyToMany(()=> Pollutant,{

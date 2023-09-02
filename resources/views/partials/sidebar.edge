@@ -109,17 +109,45 @@
                         </li>
                     </ul>
                 </li>
-                <li><a class="text-decoration-none px-3 py-2 d-block " data-bs-toggle="modal" data-bs-target="#SubscriberModal">
+                <li><a href="{{route('register')}}" class="text-decoration-none px-3 py-2 d-block " >
                         <i class="bi bi-person-lines-fill"></i>
-                        Suscribete
+                        Registrate
                     </a>
                 </li>
             </ul>
 
+            <hr class="hr-color mx-2">
+
+            <ul class="list-unstyled px-2 ">
+                <li class=" btn-group dropend d-block">
+                    <a class="text-decoration-none dropdown-toggle px-3 py-2 d-block "    href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-list"></i> Elementos
+                    </a>
+                    <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown" >
+                        <li><a class="dropdown-item" href="{{route('pollutant')}}">Contaminantes </a></li>
+                        <li><a class="dropdown-item" href="{{route('clinic')}}">Clinicas</a></li>
+                        <li><a class="dropdown-item" href="{{route('sponsor')}}">Patrocinadores</a></li>
+                        <li><a class="dropdown-item" href="{{route('model')}}">Modelos</a></li>
+                    </ul>
+                </li>
+                
+                <li class=" btn-group dropend d-block">
+                    <a class="text-decoration-none dropdown-toggle px-3 py-2 d-block "    href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-router"></i> Estaciones
+                    </a>
+                    <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown" >
+                        <li><a class="dropdown-item" href="">Purple Air </a></li>
+                        <li><a class="dropdown-item" href="">FWOP</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{route('register')}}" class="text-decoration-none px-3 py-2 d-block " >
+                    <i class="bi bi-person-fill"></i>
+                        Usuario
+                    </a>
+                </li>
+            </ul>
             <div id="footer" class="px-1 d-flex   ">
-                <div class="">
-                    <p class="text-white text-center">© 2021 Centro de Energía Renovable y Calidad Ambiental A.C.</p>
-                </div>
+                <p class="text-white text-center">© 2021 Centro de Energía Renovable y Calidad Ambiental A.C.</p>
             </div>
         </div>
     </div>
@@ -235,44 +263,6 @@
         </div>
     </div>
 
-    <!-- MODAL Subscribers -->
-    <div class="container-fluid">
-        <div class="modal fade" id="SubscriberModal"  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header justify-content-around" style="background:#0d6efd; color:#FFFFFF; ">
-                        <h2>Suscríbete:</h2>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row mx-auto">
-                            <p class="justify-content-around" style="text-align:center;">Recibe por correo electrónico alertas cuando los niveles de contaminación hayan rebasado la norma.</p>
-                            
-                            <div class="col col-6 d-grid gap-2 mx-auto">
-                                <label class="form-label" for="name ">Nombre:</label>
-                                <input class="form-control" type="text" name="name" id="name" required min="1" max="25">
-                            </div>
-                            <div class="col col-6 d-grid gap-2 mx-auto">
-                                <label class="form-label" for="lastname">Apellido:</label>
-                                <input class="form-control" type="text" name="lastname" id="lastname" required min="1" max="25">
-                            </div>
-                        </div>
-                        <div class="row mx-auto">
-                            <div class="col col-12 d-grid gap-2 mx-auto">
-                                <label class="form-label" for="email ">Email:</label>
-                                <input class="form-control" type="email" name="email" id="email" required min="1" max="25">
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row mx-auto">
-                            <div class="col col-12 d-grid gap-2 mx-auto">
-                                <input type="submit" class="btn btn-outline-primary" value="Aceptar" id="btnSubscriber" name="btnCreateStation" data-bs-dismiss="modal">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- MODAL Dirección -->
     <div class="container-fluid">

@@ -5,9 +5,11 @@ Route.get('/', async ({ view }) => {
 }).as('map')
 
 //View
-Route.get('pollutant','PollutantsController.show')
-Route.get('sponsor','SponsorsController.show')
-Route.get('clinic','ClinicsController.show')
+Route.get('pollutant','PollutantsController.show').as('pollutant')
+Route.get('sponsor','SponsorsController.show').as('sponsor')
+Route.get('clinic','ClinicsController.show').as('clinic')
+Route.get('register','UsersController.register').as('register')
+Route.get('model','ModelsController.show').as('model')
 
 
 Route.group(()=>{
@@ -41,3 +43,17 @@ Route.group(()=>{
   Route.delete('delete/:id','ClinicsController.delete').as('delete_clinic')
   Route.patch('update/:id','ClinicsController.update').as('update_clinic')
 }).prefix('clinic')
+
+
+Route.group(()=>{
+  Route.post('store','UsersController.store').as('store_user')
+  Route.delete('delete/:id','UsersController.delete').as('delete_user')
+  Route.patch('update/:id','UsersController.update').as('update_user')
+}).prefix('user')
+
+
+Route.group(()=>{
+  Route.post('store','ModelsController.store').as('store_model')
+  Route.delete('delete/:id','ModelsController.delete').as('delete_model')
+  Route.patch('update/:id','ModelsController.update').as('update_model')
+}).prefix('model')

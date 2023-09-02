@@ -1,0 +1,125 @@
+@layout('master')
+
+@section('model')
+
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Modelo</span></h2>
+    <hr/>
+</div>
+
+<br>
+
+<div class="container">
+    <div class="col col-12 align-self-end">
+        <div class="d-grid gap-2 mx-auto ">
+            <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#ModelModal">Agregar</button>
+        </div>
+    </div>
+    <br>
+        
+    <div class=" container-fluid table-responsive table-bordered">
+        <table class="table table-hover " name="tabAnual" id="tabAnual">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Contaminantes</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @each(model in models)
+                <tr>
+                    <td>{{ model.id}}</td>
+                    <td>{{ model.name }}</td>
+                    <td>{{ model.description }}</td>
+                    <td>
+                        <div class="inline">
+                            @each(pollutant in model.pollutants)
+                            
+                            <span class="badge rounded-pill bg-warning text-dark">{{ pollutant.name }}</span>
+                                
+                            @endeach
+                        </div>
+                    </td>
+                    <td>
+                        <div class="row mx-auto">
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <button  class="btn btn-info" id="btnEdit" onclick="showModel({{ model.id }})" data-bs-toggle="modal" data-bs-target="#ModeloModalEdit">Editar</button>
+                            </div>
+                            <div class="col col-6 d-grid gap-2 mx-auto" >
+                                <form action="{{route('delete_model',[model.id])}}?_method=DELETE" method="post" id="formDelete">
+                                    {{csrfField()}}
+                                    <button class="btn btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                @endeach
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- MODAL NUEVO MODELO -->
+<div class="container-fluid">
+    <div class="modal fade" id="ModelModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            <form action="{{route('store_model')}}" method="post">
+                {{csrfField()}}
+                <div class="modal-header">
+                    <h2>Agregar Modelo</h2>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label class="form-label" for="NomModelo">Nombre:</label>
+                        <input class="form-control" type="text" name="name" id="name" required min="1" max="25">
+                    </div>
+                    <div>
+                        <label  class="form-label" for="txtDesModelo">Descripción:</label>
+                        <textarea class="form-control" name="description" id="description" style="height: 100px" max="50"></textarea>
+                    </div>        
+                    <label  class="form-label" >¿Qué contaminantes monitorea?:</label><br>
+                    @each(pollutant in pollutants)
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name='pollutans' type="checkbox"  value={{ pollutant.id }}>
+                            <label class="form-check-label" for="inlineCheckbox1">{{ pollutant.name }}</label>
+                        </div>
+                    @endeach            
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-primary" id="btnCreateModel" name="btnCreateModel" data-bs-dismiss="modal">Crear</button>
+                    <button class="btn btn-outline-primary" id="btnCancelModel" name="btnCancelModel" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+             </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let form=document.getElementById('formDelete')
+    
+    if (form!=null) {
+        form.addEventListener('submit',(e)=>{
+            e.preventDefault()
+            Swal.fire({
+                title:'Está seguró de eliminar este elemento?',
+                showCancelButton:true,
+                confirmButtonText:'Eliminar',
+                denyButtonText:'Cancelar',
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    form.submit()
+                }
+            })
+        })  
+    }
+</script>
+@end

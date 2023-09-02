@@ -16,6 +16,8 @@ export default class Rol extends BaseModel {
   public updatedAt: DateTime
 
   //relationship
-  @hasMany(()=>User)
+  @hasMany(()=>User, {
+    foreignKey: 'rol_id'
+  })
   public users:HasMany<typeof User>
 }

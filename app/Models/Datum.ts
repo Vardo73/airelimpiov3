@@ -8,6 +8,12 @@ export default class Datum extends BaseModel {
   public id: number
 
   @column()
+  public type_id: 'required|exists:types,id'
+
+  @column()
+  public station_id: 'required|exists:stations,id'
+
+  @column()
   public average:number 
 
   @column.dateTime({ autoCreate: true })
@@ -19,7 +25,7 @@ export default class Datum extends BaseModel {
 
   //relationships
   @belongsTo(() => Type)
-  public rol:BelongsTo<typeof Type>
+  public type:BelongsTo<typeof Type>
 
 
   @belongsTo(()=> Station)

@@ -9,6 +9,15 @@ export default class User extends BaseModel {
   public id: number
 
   @column()
+  public username:string
+
+  @column()
+  public rol_id: 'required|exists:rols,id'
+
+  @column()
+  public name:string
+
+  @column()
   public email: string
 
   @column({ serializeAs: null })
@@ -37,5 +46,6 @@ export default class User extends BaseModel {
   @manyToMany(()=> Station,{
     pivotTable:'user_stations'
   })
+
   public stations: ManyToMany<typeof Station>
 }

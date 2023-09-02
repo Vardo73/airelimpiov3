@@ -1,3 +1,6 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class NeighborhoodsController {}
+export default class NeighborhoodsController {
+
+    
+}

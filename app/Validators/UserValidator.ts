@@ -5,8 +5,6 @@ export default class UserValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    rol:schema.number(),
-
     username:schema.string({},[
       rules.minLength(4),
       rules.maxLength(25)

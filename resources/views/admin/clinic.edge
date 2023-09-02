@@ -12,7 +12,7 @@
 
     <div class="col col-12 align-self-end">
         <div class="d-grid gap-2 mx-auto ">
-            <button class="btn btn-primary" id="modalNewLocation" data-bs-toggle="modal" data-bs-target="#ClinicModal">Agregar Nuevo</button>
+            <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#ClinicModal">Agregar Nuevo</button>
         </div>
     </div>
     <br>
@@ -109,6 +109,10 @@
                                 <label for="name">Nombre:</label>
                                 <input class="form-control" type="text" name="name" id="name" required min="1" max="45">
                             </div>  
+                            @if(flashMessages.has('errors.name'))
+                            <br>
+                            <p class="alert alert-danger">{{flashMessages.get('errors.name')}}</p>
+                            @end
                             <br>
                             <div class="row mx-auto">
                                 <div class="col col-6 d-grid gap-2 mx-auto">
@@ -120,11 +124,23 @@
                                     <input class="form-control" type="number" name="longitude" id="longitude" required >
                                 </div>
                             </div>
+                            @if(flashMessages.has('errors.longitude'))
+                            <br>
+                            <p class="alert alert-danger">{{flashMessages.get('errors.longitude')}}</p>
+                            @end
+                            @if(flashMessages.has('errors.latitude'))
+                            <br>
+                            <p class="alert alert-danger">{{flashMessages.get('errors.latitude')}}</p>
+                            @end
                             <br>
                             <div class="row mx-auto">
                                 <label for="neighborhood">Colonia:</label>
                                 <input class="form-control" type="text" name="neighborhood" id="neighborhood" required min="1" max="45">
                             </div>  
+                            @if(flashMessages.has('errors.neighborhood'))
+                            <br>
+                            <p class="alert alert-danger">{{flashMessages.get('errors.neighborhood')}}</p>
+                            @end
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Aceptar</button>

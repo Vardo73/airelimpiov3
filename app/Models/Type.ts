@@ -16,6 +16,8 @@ export default class Type extends BaseModel {
   public updatedAt: DateTime
 
   //relationship
-  @hasMany(()=>Datum)
+  @hasMany(()=>Datum, {
+    foreignKey: 'type_id'
+  })
   public datum:HasMany<typeof Datum>
 }

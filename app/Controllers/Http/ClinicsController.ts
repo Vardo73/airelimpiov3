@@ -10,7 +10,6 @@ export default class ClinicsController {
         return view.render('admin/clinic',{clinics})
     }
 
-
     public async store({request,response}:HttpContextContract){
 
         await request.validate(ClinicValidator)
@@ -26,7 +25,6 @@ export default class ClinicsController {
 
        return response.redirect().back()
     }
-
     
     public async update({request,response,params}:HttpContextContract){
         await request.validate(ClinicValidator)

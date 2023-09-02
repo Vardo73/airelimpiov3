@@ -11,6 +11,12 @@ export default class Station extends BaseModel {
   public id: number
 
   @column()
+  public model_id: 'required|exists:models,id'
+
+  @column()
+  public neighborhood_id: 'required|exists:neighborhoods,id'
+
+  @column()
   public name:string 
   
   @column()
@@ -37,7 +43,9 @@ export default class Station extends BaseModel {
 
 
   //relationships
-  @hasMany(()=>Datum)
+  @hasMany(()=>Datum, {
+    foreignKey: 'station_id'
+  })
   public datum:HasMany<typeof Datum>
 
   @belongsTo(() => Neighborhood)

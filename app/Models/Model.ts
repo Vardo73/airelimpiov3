@@ -21,12 +21,14 @@ export default class Model extends BaseModel {
 
 
   //relationship
-  @hasMany(()=>Station)
+  @hasMany(()=>Station, {
+    foreignKey: 'model_id'
+  })
   public stations:HasMany<typeof Station>
 
 
   @manyToMany(()=> Pollutant,{
     pivotTable:'model_pollutants'
   })
-  public pollutans: ManyToMany<typeof Pollutant>
+  public pollutants: ManyToMany<typeof Pollutant>
 }
