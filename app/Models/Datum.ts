@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo, BelongsTo} from '@ioc:Adonis/Lucid/Orm'
 import Type from './Type'
-import Station from './Station'
+import Monitor from './Monitor'
 
 export default class Datum extends BaseModel {
   @column({ isPrimary: true })
@@ -11,7 +11,7 @@ export default class Datum extends BaseModel {
   public type_id: 'required|exists:types,id'
 
   @column()
-  public station_id: 'required|exists:stations,id'
+  public monitor_id: 'required|exists:monitors,id'
 
   @column()
   public average:number 
@@ -28,6 +28,6 @@ export default class Datum extends BaseModel {
   public type:BelongsTo<typeof Type>
 
 
-  @belongsTo(()=> Station)
-  public station: BelongsTo<typeof Station>
+  @belongsTo(()=> Monitor)
+  public station: BelongsTo<typeof Monitor>
 }

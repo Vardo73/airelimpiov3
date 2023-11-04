@@ -13,8 +13,7 @@ export default class ModelValidator {
     description:schema.string({},[
       rules.minLength(4),
       rules.maxLength(25)
-    ]),
-    pollutans:schema.array().members(schema.string())
+    ])
   })
 
   
@@ -22,6 +21,6 @@ export default class ModelValidator {
     required:'El campo {{field}} es requerido para registrar el modelo.',
     minLength:'Campo {{field}} muy corto.(min {{options.minLength}} caracteres)',
     maxLength:'Campo {{field}} muy largo.(max {{options.maxLength}} caracteres)',
-    number:'Datos {{field}} no son de tipo '
+    number:'Datos {{field}} no son de tipo {{options.number}}'
   }
 }

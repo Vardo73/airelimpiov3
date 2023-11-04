@@ -39,7 +39,7 @@
                                 <button class="btn btn-info"  data-bs-toggle="modal" data-bs-target="#editPollutantModal{{pollutant.id}}">Editar</button>
                             </div>
                             <div class="col col-6 d-grid gap-2 mx-auto">
-                                <form action="{{route('delete_pollutant',[pollutant.id])}}?_method=DELETE" method="POST" id="formDelete">
+                                <form action="{{route('delete_pollutant',[pollutant.id])}}?_method=DELETE" method="POST" class="formDelete">
                                     {{csrfField()}}
                                     <button type="submit" class="btn btn-danger">Eliminar</button>
                                 </form>
@@ -82,7 +82,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="submit" class="btn btn-outline-primary">Aceptar</button>
-                                            <button class="btn btn-outline-primary "  data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-outline-primary "  data-bs-dismiss="modal">Cancelar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -130,7 +130,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-outline-primary" >Aceptar</button>
-                            <button class="btn btn-outline-primary btnCancel" name="btnCancelPollutant" id="btnCancelPollutant" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-outline-primary btnCancel" name="btnCancelPollutant" id="btnCancelPollutant" data-bs-dismiss="modal">Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -140,22 +140,24 @@
 </div>
 
 <script>
-    let form=document.getElementById('formDelete')
-    
-    if (form!=null) {
-        form.addEventListener('submit',(e)=>{
-            e.preventDefault()
-            Swal.fire({
-                title:'Está seguró de eliminar este elemento?',
-                showCancelButton:true,
-                confirmButtonText:'Eliminar',
-                denyButtonText:'Cancelar',
-            }).then((result)=>{
-                if(result.isConfirmed){
-                    form.submit()
-                }
+    window.onload= function(){
+        let forms=document.querySelectorAll('.formDelete')
+
+        forms.forEach(form=>{
+            form.addEventListener('submit',(e)=>{
+                e.preventDefault()
+                Swal.fire({
+                    title:'Está seguró de eliminar este elemento?',
+                    showCancelButton:true,
+                    confirmButtonText:'Eliminar',
+                    denyButtonText:'Cancelar',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        form.submit()
+                    }
+                })
             })
-        })  
+        })
     }
 </script>
 @end

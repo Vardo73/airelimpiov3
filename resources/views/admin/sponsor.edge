@@ -21,7 +21,7 @@
         @each(sponsor in sponsors)
         <div class="col">
             <div class="card" style="margin-bottom:2rem">
-                <h5 class="card-header">{{sponsor.id}}.- {{sponsor.name}}</h5>
+                <h5 class="card-header">{{sponsor.name}}</h5>
                 <div class="row g-0">
                     <div class="col-md-12" style="justify-content: center;display: flex;align-items: center;">
                         <img src="{{ sponsor.logo }}" alt="" class="img-fluid ">
@@ -30,7 +30,7 @@
                 <div class="row g-0 card-footer">
                     <div class="row mx-auto">
                         <div class="col col-12 d-grid gap-2 mx-auto" >
-                            <form action="{{route('delete_sponsor',[sponsor.id])}}?_method=DELETE" method="POST" id="formDelete">
+                            <form action="{{route('delete_sponsor',[sponsor.id])}}?_method=DELETE" method="POST" class="formDelete">
                                 {{csrfField()}}
                                 <button type="submit" class="btn btn-danger" >Eliminar</button>
                             </form>
@@ -76,7 +76,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal">Crear</button>
-                            <button class="btn btn-outline-primary"  data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-outline-primary"  data-bs-dismiss="modal">Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -88,22 +88,24 @@
 </div>
 
 <script>
-    let form=document.getElementById('formDelete')
-    
-    if (form!=null) {
-        form.addEventListener('submit',(e)=>{
-            e.preventDefault()
-            Swal.fire({
-                title:'Está seguró de eliminar este elemento?',
-                showCancelButton:true,
-                confirmButtonText:'Eliminar',
-                denyButtonText:'Cancelar',
-            }).then((result)=>{
-                if(result.isConfirmed){
-                    form.submit()
-                }
+    window.onload= function(){
+        let forms=document.querySelectorAll('.formDelete')
+
+        forms.forEach(form=>{
+            form.addEventListener('submit',(e)=>{
+                e.preventDefault()
+                Swal.fire({
+                    title:'Está seguró de eliminar este elemento?',
+                    showCancelButton:true,
+                    confirmButtonText:'Eliminar',
+                    denyButtonText:'Cancelar',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        form.submit()
+                    }
+                })
             })
-        })  
+        })
     }
 </script>
 

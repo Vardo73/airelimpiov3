@@ -18,12 +18,12 @@ export default class Ailment extends BaseModel {
 
   //relationships
   @manyToMany(()=> Clinic,{
-    pivotTable:'aliment_clinics'
+    pivotTable:'ailment_clinics'
   })
   public clinics: ManyToMany<typeof Clinic>
 
   @manyToMany(()=> Pollutant,{
-    pivotTable:'aliment_pollutants'
+    pivotTable:'ailment_pollutants'
   })
   public pollutants: ManyToMany<typeof Pollutant>
 

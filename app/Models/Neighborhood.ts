@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, manyToMany, ManyToMany, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import Pollutant from './Pollutant'
-import Station from './Station'
+import Monitor from './Monitor'
 
 export default class Neighborhood extends BaseModel {
   @column({ isPrimary: true })
@@ -27,10 +27,10 @@ export default class Neighborhood extends BaseModel {
 
   
   //relationship
-  @hasMany(()=>Station, {
+  @hasMany(()=>Monitor, {
     foreignKey: 'neighborhood_id'
   })
-  public stations:HasMany<typeof Station>
+  public monitors:HasMany<typeof Monitor>
 
   @manyToMany(()=> Pollutant,{
     pivotTable:'pollutant_neighborhoods'

@@ -47,10 +47,10 @@
                     <td>
                         <div class="row mx-auto">
                             <div class="col col-6 d-grid gap-2 mx-auto">
-                                <button  class="btn btn-info" id="btnEdit" onclick="showModel({{ model.id }})" data-bs-toggle="modal" data-bs-target="#ModeloModalEdit">Editar</button>
+                                <button  class="btn btn-info"   data-bs-toggle="modal" data-bs-target="#ModelModalEdit{{model.id}}">Editar</button>
                             </div>
                             <div class="col col-6 d-grid gap-2 mx-auto" >
-                                <form action="{{route('delete_model',[model.id])}}?_method=DELETE" method="post" id="formDelete">
+                                <form action="{{route('delete_model',[model.id])}}?_method=DELETE" method="post" class="formDelete">
                                     {{csrfField()}}
                                     <button class="btn btn-danger">Eliminar</button>
                                 </form>
@@ -58,6 +58,65 @@
                         </div>
                     </td>
                 </tr>
+
+                <div class="container-fluid">
+                    <div class="modal fade" id="ModelModalEdit{{model.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                            <form action="{{route('update_model',[model.id])}}?_method=PATCH" method="POST">
+                                {{csrfField()}}
+                                <div class="modal-header">
+                                    <h2>Editar Modelo</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+                                        <label class="form-label" for="NomModelo">Nombre:</label>
+                                        <input class="form-control" type="text" name="name" id="name" required min="1" max="25" value="{{ model.name }}">
+                                    </div> 
+                                    @if(flashMessages.has('errors.name'))
+                                    <br>
+                                    <p class="alert alert-danger">{{flashMessages.get('errors.name')}}</p>
+                                    @end
+                                    <div>
+                                        <label  class="form-label" for="txtDesModelo">Descripción:</label>
+                                        <textarea class="form-control" name="description" id="description" style="height: 100px" max="50">{{ model.description }}</textarea>
+                                    </div>         
+                                    @if(flashMessages.has('errors.description'))
+                                    <br>
+                                    <p class="alert alert-danger">{{flashMessages.get('errors.description')}}</p>
+                                    @end
+                                    <label  class="form-label" >¿Qué contaminantes monitorea?:</label>
+                                    
+                                    @each(pollutant in pollutants)
+                                        <span style="display: none;">{{flag=false}}</span>
+                                        @each(poll in model.pollutants)
+                                            @if(pollutant.id==poll.id)
+                                            <span style="display: none;">{{flag=true}}</span>
+                                            @endif
+                                        @endeach 
+                                        @if(flag === true)
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" name='pollutants' type="checkbox"  value={{ pollutant.id }} checked>
+                                                <label class="form-check-label" for="inlineCheckbox1">{{ pollutant.name }}</label>
+                                            </div>
+                                        @else
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" name='pollutants' type="checkbox"  value={{ pollutant.id }}>
+                                                <label class="form-check-label" for="inlineCheckbox1">{{ pollutant.name }}</label>
+                                            </div>
+                                        @endif
+                                    @endeach  
+   
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">Guardar</button>
+                            </form>
+                                    <button class="btn btn-outline-primary" type="button" data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @endeach
             </tbody>
         </table>
@@ -79,22 +138,36 @@
                     <div>
                         <label class="form-label" for="NomModelo">Nombre:</label>
                         <input class="form-control" type="text" name="name" id="name" required min="1" max="25">
-                    </div>
+                    </div> 
+                    @if(flashMessages.has('errors.name'))
+                    <br>
+                    <p class="alert alert-danger">{{flashMessages.get('errors.name')}}</p>
+                    @end
                     <div>
                         <label  class="form-label" for="txtDesModelo">Descripción:</label>
                         <textarea class="form-control" name="description" id="description" style="height: 100px" max="50"></textarea>
-                    </div>        
-                    <label  class="form-label" >¿Qué contaminantes monitorea?:</label><br>
+                    </div>         
+                    @if(flashMessages.has('errors.description'))
+                    <br>
+                    <p class="alert alert-danger">{{flashMessages.get('errors.description')}}</p>
+                    @end
+                    <label  class="form-label" >¿Qué contaminantes monitorea?:</label>
+                    <br>
+                    @if(pollutants.length<1)
+                    <div class="d-grid gap-2">
+                        <a type="button" class="btn btn-light " href="{{route('pollutants')}}">Registrar contaminantes</a>
+                    </div>
+                    @endif
                     @each(pollutant in pollutants)
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" name='pollutans' type="checkbox"  value={{ pollutant.id }}>
+                            <input class="form-check-input" name='pollutants' type="checkbox"  value={{ pollutant.id }}>
                             <label class="form-check-label" for="inlineCheckbox1">{{ pollutant.name }}</label>
                         </div>
-                    @endeach            
+                    @endeach      
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-outline-primary" id="btnCreateModel" name="btnCreateModel" data-bs-dismiss="modal">Crear</button>
-                    <button class="btn btn-outline-primary" id="btnCancelModel" name="btnCancelModel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-outline-primary"  data-bs-dismiss="modal">Crear</button>
+                    <button type="button" class="btn btn-outline-primary"  data-bs-dismiss="modal">Cancelar</button>
                 </div>
              </form>
             </div>
@@ -104,22 +177,24 @@
 
 
 <script>
-    let form=document.getElementById('formDelete')
-    
-    if (form!=null) {
-        form.addEventListener('submit',(e)=>{
-            e.preventDefault()
-            Swal.fire({
-                title:'Está seguró de eliminar este elemento?',
-                showCancelButton:true,
-                confirmButtonText:'Eliminar',
-                denyButtonText:'Cancelar',
-            }).then((result)=>{
-                if(result.isConfirmed){
-                    form.submit()
-                }
+   window.onload= function(){
+        let forms=document.querySelectorAll('.formDelete')
+
+        forms.forEach(form=>{
+            form.addEventListener('submit',(e)=>{
+                e.preventDefault()
+                Swal.fire({
+                    title:'Está seguró de eliminar este elemento?',
+                    showCancelButton:true,
+                    confirmButtonText:'Eliminar',
+                    denyButtonText:'Cancelar',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        form.submit()
+                    }
+                })
             })
-        })  
+        })
     }
 </script>
 @end

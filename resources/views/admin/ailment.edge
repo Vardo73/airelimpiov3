@@ -8,5 +8,173 @@
     <hr/>
 </div>
 
+<div class="container">
+    <div class="col col-12 align-self-end">
+        <div class="d-grid gap-2 mx-auto ">
+            <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#AilmentModal">Agregar</button>
+        </div>
+    </div>
+    <br>
 
+    <div class=" container-fluid table-responsive table-bordered">
+        <table class="table table-hover " name="tabAnual" id="tabAnual">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Padecimiento</th>
+                    <th scope="col">Contaminantes</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @each(ailment in ailments)
+                <tr>
+                    <td>{{ ailment.id}}</td>
+                    <td>{{ ailment.name }}</td>
+                    <td>
+                        <div class="inline">
+                            @each(pollutant in ailment.pollutants)
+                            
+                            <span class="badge rounded-pill bg-warning text-dark">{{ pollutant.name }}</span>
+                                
+                            @endeach
+                        </div>
+                    </td>
+                    <td>
+                        <div class="row mx-auto">
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <button  class="btn btn-info"   data-bs-toggle="modal" data-bs-target="#AilmentModalEdit{{ailment.id}}">Editar</button>
+                            </div>
+                            <div class="col col-6 d-grid gap-2 mx-auto" >
+                                <form action="{{route('delete_ailment',[ailment.id])}}?_method=DELETE" method="post" id="formDelete" class="formDelete">
+                                    {{csrfField()}}
+                                    <button class="btn btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <div class="container-fluid">
+                    <div class="modal fade" id="AilmentModalEdit{{ailment.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                            <form action="{{route('update_ailment',[ailment.id])}}?_method=PATCH" method="POST">
+                                {{csrfField()}}
+                                <div class="modal-header">
+                                    <h2>Editar padecimiento</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+                                        <label class="form-label" for="NomModelo">Nombre:</label>
+                                        <input class="form-control" type="text" name="name" id="name" required min="1" max="25" value="{{ ailment.name }}">
+                                    </div> 
+                                    @if(flashMessages.has('errors.name'))
+                                    <br>
+                                    <p class="alert alert-danger">{{flashMessages.get('errors.name')}}</p>
+                                    @end
+                                    <label  class="form-label" >¿Qué contaminantes monitorea?:</label><br>
+                                    @each(pollutant in pollutants)
+                                        <span style="display: none;">{{flag=false}}</span>
+                                        @each(poll in ailment.pollutants)
+                                            @if(pollutant.id==poll.id)
+                                            <span style="display: none;">{{flag=true}}</span>
+                                            @endif
+                                        @endeach 
+                                        @if(flag === true)
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" name='pollutants' type="checkbox"  value={{ pollutant.id }} checked>
+                                                <label class="form-check-label" for="inlineCheckbox1">{{ pollutant.name }}</label>
+                                            </div>
+                                        @else
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" name='pollutants' type="checkbox"  value={{ pollutant.id }}>
+                                                <label class="form-check-label" for="inlineCheckbox1">{{ pollutant.name }}</label>
+                                            </div>
+                                        @endif
+                                    @endeach        
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">Guardar</button>
+                            </form>
+                                    <button class="btn btn-outline-primary" type="button" data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                @endeach
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- MODAL NUEVO MODELO -->
+<div class="container-fluid">
+    <div class="modal fade" id="AilmentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            <form action="{{route('store_ailment')}}" method="post">
+                {{csrfField()}}
+                <div class="modal-header">
+                    <h2>Agregar Modelo</h2>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label class="form-label" for="name">Nombre:</label>
+                        <input class="form-control" type="text" name="name" id="name" required min="1" max="25">
+                    </div> 
+                    @if(flashMessages.has('errors.name'))
+                    <br>
+                    <p class="alert alert-danger">{{flashMessages.get('errors.name')}}</p>
+                    @end
+                    <label  class="form-label" > Contaminantes involucrados:</label>
+                    <br>
+                    @if(pollutants.length<1)
+                    <div class="d-grid gap-2">
+                        <a type="button" class="btn btn-light " href="{{route('pollutants')}}">Registrar contaminantes</a>
+                    </div>
+                    @endif
+                    @each(pollutant in pollutants)
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name='pollutants' type="checkbox"  value={{ pollutant.id }}>
+                            <label class="form-check-label" for="inlineCheckbox1">{{ pollutant.name }}</label>
+                        </div>
+                    @endeach        
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-outline-primary"  data-bs-dismiss="modal">Crear</button>
+                    <button type="button" class="btn btn-outline-primary"  data-bs-dismiss="modal">Cancelar</button>
+                </div>
+             </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    window.onload= function(){
+        let forms=document.querySelectorAll('.formDelete')
+
+        forms.forEach(form=>{
+            form.addEventListener('submit',(e)=>{
+                e.preventDefault()
+                Swal.fire({
+                    title:'Está seguró de eliminar este elemento?',
+                    showCancelButton:true,
+                    confirmButtonText:'Eliminar',
+                    denyButtonText:'Cancelar',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        form.submit()
+                    }
+                })
+            })
+        })
+    }
+</script>
 @end

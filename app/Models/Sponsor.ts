@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, manyToMany, ManyToMany} from '@ioc:Adonis/Lucid/Orm'
-import Station from './Station'
+import Monitor from './Monitor'
 
 
 export default class Sponsor extends BaseModel {
@@ -19,8 +19,8 @@ export default class Sponsor extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @manyToMany(()=> Station,{
-    pivotTable:'sponsor_stations'
+  @manyToMany(()=> Monitor,{
+    pivotTable:'sponsor_monitors'
   })
-  public stations: ManyToMany<typeof Station>
+  public monitors: ManyToMany<typeof Monitor>
 }

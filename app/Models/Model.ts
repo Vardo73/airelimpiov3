@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany, HasMany, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
-import Station from './Station'
+import Monitor from './Monitor'
 import Pollutant from './Pollutant'
 
 export default class Model extends BaseModel {
@@ -21,10 +21,10 @@ export default class Model extends BaseModel {
 
 
   //relationship
-  @hasMany(()=>Station, {
+  @hasMany(()=>Monitor, {
     foreignKey: 'model_id'
   })
-  public stations:HasMany<typeof Station>
+  public monitors:HasMany<typeof Monitor>
 
 
   @manyToMany(()=> Pollutant,{

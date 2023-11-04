@@ -124,10 +124,12 @@
                         <i class="bi bi-list"></i> Elementos
                     </a>
                     <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown" >
-                        <li><a class="dropdown-item" href="{{route('pollutant')}}">Contaminantes </a></li>
-                        <li><a class="dropdown-item" href="{{route('clinic')}}">Clinicas</a></li>
-                        <li><a class="dropdown-item" href="{{route('sponsor')}}">Patrocinadores</a></li>
-                        <li><a class="dropdown-item" href="{{route('model')}}">Modelos</a></li>
+                        <li><a class="dropdown-item" href="{{route('sponsors')}}">Patrocinadores</a></li>
+                        <li><a class="dropdown-item" href="{{route('pollutants')}}">Contaminantes </a></li>
+                        <li><a class="dropdown-item" href="{{route('models')}}">Modelos</a></li>
+                        <li><a class="dropdown-item" href="{{route('ailments')}}">Enfermedades</a></li>
+                        <li><a class="dropdown-item" href="{{route('neighborhoods')}}">Colonias</a></li>
+                        <li><a class="dropdown-item" href="{{route('clinics')}}">Clinicas</a></li>
                     </ul>
                 </li>
                 
@@ -136,11 +138,12 @@
                         <i class="bi bi-router"></i> Estaciones
                     </a>
                     <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown" >
-                        <li><a class="dropdown-item" href="">Purple Air </a></li>
+                        <li><a class="dropdown-item" href="{{route('monitors_purple')}}">Purple Air </a></li>
                         <li><a class="dropdown-item" href="">FWOP</a></li>
+                        <li><a class="dropdown-item" href="{{route('stations')}}">Meteorológicas</a></li>
                     </ul>
                 </li>
-                <li><a href="{{route('register')}}" class="text-decoration-none px-3 py-2 d-block " >
+                <li><a href="" class="text-decoration-none px-3 py-2 d-block " >
                     <i class="bi bi-person-fill"></i>
                         Usuario
                     </a>

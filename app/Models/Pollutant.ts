@@ -33,7 +33,7 @@ export default class Pollutant extends BaseModel {
   public neighborhoods: ManyToMany<typeof Neighborhood>
 
   @manyToMany(()=> Ailment,{
-    pivotTable:'aliment_pollutants'
+    pivotTable:'ailment_pollutants'
   })
   public ailments: ManyToMany<typeof Ailment>
 }

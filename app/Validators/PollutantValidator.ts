@@ -6,7 +6,7 @@ export default class CreatePollutantValidator {
 
   public schema = schema.create({
     name:schema.string({},[
-        rules.minLength(4),
+        rules.minLength(2),
         rules.maxLength(25)
     ]),
     description:schema.string({},[

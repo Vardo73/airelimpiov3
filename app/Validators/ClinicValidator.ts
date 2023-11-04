@@ -13,11 +13,13 @@ export default class CreateClinicValidator {
     neighborhood:schema.string({},[
       rules.minLength(4),
       rules.maxLength(50)
-    ])})
+    ])
+  })
 
   public messages: CustomMessages = {
     required:'El campo {{field}} es requerido para registrar el contaminante.',
     minLength:'Campo {{field}} muy corto.(min {{options.minLength}} caracteres)',
-    maxLength:'Campo {{field}} muy largo.(max {{options.maxLength}} caracteres)'
+    maxLength:'Campo {{field}} muy largo.(max {{options.maxLength}} caracteres)',
+    number:'Datos {{field}} no son de tipo {{options.number}}'
   }
 }

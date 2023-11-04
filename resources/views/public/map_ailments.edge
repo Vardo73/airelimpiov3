@@ -2,5 +2,31 @@
 
 @section('map_ailments')
 
-MAP AILMENTS
+<style>
+    body { margin: 0; padding: 0; }
+    #mapAilments { position: absolute;  width: 85%; height: 100%; z-index: 1;}
+        
+</style>
+
+
+<div id='mapAilments'></div>
+<script>
+
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2lzdGVtYXNjZXJjYSIsImEiOiJjbDRldWE2ZjAwMjI3M2JwOHpsb21jbHpxIn0.jLF2ydLoAdgrv68l8iM2VQ';
+
+let divMap=document.getElementById('mapAilments')
+
+
+let map = new mapboxgl.Map({
+    container: divMap,
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center:[-110.3531337,24.1689357],
+    zoom:10.5
+});
+
+map.addControl(new mapboxgl.NavigationControl());
+map.addControl(new mapboxgl.GeolocateControl());
+map.addControl(new mapboxgl.FullscreenControl());
+map.addControl(new mapboxgl.ScaleControl());
+
 @end

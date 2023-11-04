@@ -26,7 +26,7 @@ export default class Clinic extends BaseModel {
 
   //relationships
   @manyToMany(()=> Ailment,{
-    pivotTable:'aliment_clinics'
+    pivotTable:'ailment_clinics'
   })
   public ailments: ManyToMany<typeof Ailment>
 }
