@@ -26,6 +26,11 @@ export default class Model extends BaseModel {
   })
   public monitors:HasMany<typeof Monitor>
 
+  @hasMany(()=>Monitor, {
+    foreignKey: 'station_id'
+  })
+  public stations:HasMany<typeof Monitor>
+
 
   @manyToMany(()=> Pollutant,{
     pivotTable:'model_pollutants'

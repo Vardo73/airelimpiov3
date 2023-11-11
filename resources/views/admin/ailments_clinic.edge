@@ -40,14 +40,20 @@
                             <div class="">
                                 @each(ailment in year.ailments)
                                     @if(ailment.check == true)
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" name='ailments' type="checkbox"  value={{ ailment.id }} checked>
-                                            <label class="form-check-label" for="inlineCheckbox1">{{ ailment.name}} - {{ailment.total}}</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-text">
+                                            <input class="form-check-input mt-0" name='ailments' type="checkbox" value={{ ailment.id }} aria-label="{{ ailment.name }}" checked>
+                                            </div>
+                                            <input type="text" class="form-control" aria-label="Text input with checkbox" value={{ ailment.name }} disabled>
+                                            <input class="form-control" type="number" step="1" name="total" id="total" required min="0" value={{ailment.total}}>
                                         </div>
                                     @else
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" name='ailments' type="checkbox"  value={{ ailment.id }}>  
-                                            <label class="form-check-label" for="inlineCheckbox1">{{ ailment.name}} - {{ailment.total}}</label>                                      <label class="form-check-label" for="inlineCheckbox1">{{ ailment.name }}</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-text">
+                                            <input class="form-check-input mt-0" name='ailments' type="checkbox" value={{ ailment.id }} aria-label="{{ ailment.name }}" >
+                                            </div>
+                                            <input type="text" class="form-control" aria-label="Text input with checkbox" value={{ ailment.name }} disabled>
+                                            <input class="form-control" type="number" step="1" name="total" id="total" required min="0" value={{ailment.total}}>
                                         </div>
                                     @endif
                                 @endeach 
@@ -102,9 +108,12 @@
                             <br>
                             <div class="shadow-sm p-3 mb-1 bg-body rounded " >
                                 @each(ailment in ailments)
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" name='ailments' type="checkbox"  value={{ ailment.id }}>
-                                        <label class="form-check-label" for="inlineCheckbox1">{{ ailment.name }}</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-text">
+                                        <input class="form-check-input mt-0" name='ailments' type="checkbox" value={{ ailment.id }} aria-label="{{ ailment.name }}">
+                                        </div>
+                                        <input type="text" class="form-control" aria-label="Text input with checkbox" value={{ ailment.name }} disabled>
+                                        <input class="form-control" type="number" step="1" name="total" id="total" required min="0"  placeholder="No. de afectados">
                                     </div>
                                 @endeach
                             </div>

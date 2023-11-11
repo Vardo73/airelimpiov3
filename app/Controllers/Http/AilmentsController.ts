@@ -43,7 +43,6 @@ export default class AilmentsController {
                 ailments:[]
             }            
 
-
             ailments.forEach( ail => {
                 let ails_cli:{
                     ailment_id:number,
@@ -65,9 +64,10 @@ export default class AilmentsController {
                     if(ail.id==ail_cli.ailment_id && ail_cli.year==y.year){
                         flag=true;
                         total=ail_cli.total
-                        if(total== null) total=0;
+                        if(total== null) {total=0}
                     }
                 })
+
                 if(flag){
                     ails_cli={
                         ailment_id:ail.id,
@@ -86,42 +86,10 @@ export default class AilmentsController {
                     }
                 }
                 obj.ailments.push(ails_cli)
-                console.log(ails_cli)
             })
             arr.push(obj)
         })
-    
-
         return view.render('admin/ailments_clinic',{clinic,ailments,arr})
-    }
-
-    public async showAilmentsYear({view,params}:HttpContextContract){
-
-        const id=params.id;
-        const year=params.year;
-
-        console.log(year)
-
-       /* const clinic=await Clinic.findOrFail(params.id)
-        const ailments= await Ailment.all();
-
-        
-        const ailments_clinic= await Database.from('ailment_clinics')
-        .select('*')
-        .whereRaw('ailment_clinics.clinic_id=? ',[id])
-        .andWhereRaw('ailment_clinics.year=?',[year]);
-
-        //console.log(ailments_clinic)
-        
-        const years=await Database
-        .from('ailment_clinics')
-        .select('year')
-        .whereRaw('ailment_clinics.clinic_id=? ',[id])
-        .distinct('year')
-
-        let flag=false
-    
-        return view.render('admin/ailments_clinic',{clinic,ailments,ailments_clinic,years,flag,year})*/
     }
 
     public async store({request,response}:HttpContextContract){

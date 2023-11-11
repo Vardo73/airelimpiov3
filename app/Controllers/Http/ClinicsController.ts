@@ -72,16 +72,21 @@ export default class ClinicsController {
 
     public async addAilments({request,response,params,session}:HttpContextContract){
         try {
-            const {ailments, year}=request.body();
+            const {ailments, year, total}=request.body();
+
+            const totalfil = total.filter(elemento => elemento !== '0');
+
             const clinic=await Clinic.findOrFail(params.id)
+            
             
             if(typeof(ailments)=="string"){
                 const ailment = await Ailment.findOrFail(parseInt(ailments, 10))
-                await clinic.related('ailments').attach({[ailment.id]: { year }})
+                await clinic.related('ailments').attach({[ailment.id]: { year:year ,total:totalfil[0]}})
             }else{
-                ailments.forEach(async id  =>  {
-                    const ailment = await Ailment.findOrFail(parseInt(id, 10))
-                    await clinic.related('ailments').attach({[ailment.id]: { year }})
+                const join = ailments.map((valor, indice) => [valor, totalfil[indice]]);
+                join.forEach(async element  =>  {
+                    const ailment = await Ailment.findOrFail(parseInt(element[0], 10))
+                    await clinic.related('ailments').attach({[ailment.id]: { year:year,total: element[1]}})
                 });
             }
 

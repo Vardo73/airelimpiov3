@@ -23,4 +23,9 @@ export default class Sponsor extends BaseModel {
     pivotTable:'sponsor_monitors'
   })
   public monitors: ManyToMany<typeof Monitor>
+
+  @manyToMany(()=> Monitor,{
+    pivotTable:'sponsor_stations'
+  })
+  public stations: ManyToMany<typeof Monitor>
 }

@@ -29,5 +29,5 @@ export default class Datum extends BaseModel {
 
 
   @belongsTo(()=> Monitor)
-  public station: BelongsTo<typeof Monitor>
+  public monitor: BelongsTo<typeof Monitor>
 }
