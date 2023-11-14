@@ -49,6 +49,7 @@ Route.group(()=>{
   Route.post('add_ailments/:id','ClinicsController.addAilments').as('add_ailments')
   Route.delete('delete/:id','ClinicsController.delete').as('delete_clinic')
   Route.delete('delete_ailments_year/:id/:year','ClinicsController.deleteAilmentsYear').as('delete_ailments_year')
+  Route.patch('edit_ailments_year/:id/:year','ClinicsController.editAilmentsYear').as('edit_ailments_year')
   Route.patch('update/:id','ClinicsController.update').as('update_clinic')
 }).prefix('clinic')
 

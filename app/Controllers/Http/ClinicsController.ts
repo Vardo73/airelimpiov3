@@ -74,24 +74,37 @@ export default class ClinicsController {
         try {
             const {ailments, year, total}=request.body();
 
-            const totalfil = total.filter(elemento => elemento !== '0');
+            const years=await Database
+            .from('ailment_clinics')
+            .select('year')
+            .whereRaw('ailment_clinics.clinic_id=? ',[params.id])
+            .distinct('year')
+            .orderBy('year', 'asc')
+
+            if(!years.includes(year)){
+                session.flash('ER_DUP_ENTRY','Elementos ya creados para este año.')
+                return response.redirect('back')
+            }
+
 
             const clinic=await Clinic.findOrFail(params.id)
             
             
             if(typeof(ailments)=="string"){
                 const ailment = await Ailment.findOrFail(parseInt(ailments, 10))
-                await clinic.related('ailments').attach({[ailment.id]: { year:year ,total:totalfil[0]}})
+                await clinic.related('ailments').attach({[ailment.id]: { year:year ,total:total}})
             }else{
+
+                const totalfil = total.filter(elemento => elemento !== '0');
                 const join = ailments.map((valor, indice) => [valor, totalfil[indice]]);
                 join.forEach(async element  =>  {
                     const ailment = await Ailment.findOrFail(parseInt(element[0], 10))
                     await clinic.related('ailments').attach({[ailment.id]: { year:year,total: element[1]}})
                 });
             }
-
             return response.redirect().back()
         } catch (error) {
+            console.log(error)
             if (error.code === 'ER_DUP_ENTRY') {
                 session.flash('ER_DUP_ENTRY','Elementos ya creados para este año.')
                 return response.redirect('back')
@@ -99,7 +112,7 @@ export default class ClinicsController {
             return response.redirect().back()
         }
     }
-
+    
     public async deleteAilmentsYear({response,params}:HttpContextContract){
         const id=params.id
         const year=params.year
@@ -109,6 +122,34 @@ export default class ClinicsController {
         .whereRaw('ailment_clinics.clinic_id=? ',[id])
         .andWhereRaw('ailment_clinics.year=?',[year])
         .delete()
+
+        return response.redirect().back()
+    }
+
+
+    public async editAilmentsYear({request,response,params}:HttpContextContract){
+        const id=params.id
+        const year=params.year
+        const {ailments, total}=request.body();
+
+        console.log(request.body())
+
+        const clinic = await Clinic.findOrFail(id)
+
+        await clinic.related('ailments').pivotQuery().where('year', year).delete()
+
+        const totalfil = total.filter(elemento => elemento !== '0');
+
+        if(typeof(ailments)=="string"){
+            const ailment = await Ailment.findOrFail(parseInt(ailments, 10))
+            await clinic.related('ailments').attach({[ailment.id]: { year:year ,total:totalfil[0]}})
+        }else{
+            const join = ailments.map((valor, indice) => [valor, totalfil[indice]]);
+            join.forEach(async element  =>  {
+                const ailment = await Ailment.findOrFail(parseInt(element[0], 10))
+                await clinic.related('ailments').attach({[ailment.id]: { year:year,total: element[1]}})
+            });
+        }
 
         return response.redirect().back()
     }

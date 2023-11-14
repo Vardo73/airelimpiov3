@@ -36,24 +36,26 @@
                 </h2>
                 <div id="flush-collapse{{year.year}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{year.year}}" data-bs-parent="#accordionFlush{{year.year}}">
                     <div class="accordion-body">
+                    <form action="{{route('edit_ailments_year',[clinic.id,year.year])}}?_method=PATCH" method="post" class="formEdit">
+                        {{csrfField()}}
                         <div class="container-fluid">
                             <div class="">
                                 @each(ailment in year.ailments)
                                     @if(ailment.check == true)
                                         <div class="input-group mb-3">
                                             <div class="input-group-text">
-                                            <input class="form-check-input mt-0" name='ailments' type="checkbox" value={{ ailment.id }} aria-label="{{ ailment.name }}" checked>
+                                            <input class="form-check-input mt-0 checkAilment" name='ailments' type="checkbox" value={{ ailment.ailment_id }} aria-label="{{ ailment.name }}" checked >
                                             </div>
                                             <input type="text" class="form-control" aria-label="Text input with checkbox" value={{ ailment.name }} disabled>
-                                            <input class="form-control" type="number" step="1" name="total" id="total" required min="0" value={{ailment.total}}>
+                                            <input class="form-control ailment-total" type="number" step="1" name="total" id="total"  min="0" value={{ailment.total}}>
                                         </div>
                                     @else
                                         <div class="input-group mb-3">
                                             <div class="input-group-text">
-                                            <input class="form-check-input mt-0" name='ailments' type="checkbox" value={{ ailment.id }} aria-label="{{ ailment.name }}" >
+                                            <input class="form-check-input mt-0 checkAilment" name='ailments' type="checkbox" value={{ ailment.ailment_id }} aria-label="{{ ailment.name }}">
                                             </div>
-                                            <input type="text" class="form-control" aria-label="Text input with checkbox" value={{ ailment.name }} disabled>
-                                            <input class="form-control" type="number" step="1" name="total" id="total" required min="0" value={{ailment.total}}>
+                                            <input type="text" class="form-control " aria-label="Text input with checkbox" value={{ ailment.name }} disabled>
+                                            <input class="form-control ailment-total" type="number" step="1" name="total" id="total"  min="0" value={{ailment.total}} disabled>
                                         </div>
                                     @endif
                                 @endeach 
@@ -63,6 +65,7 @@
                                 <div class="col col-6 d-grid gap-2 mx-auto">
                                     <button type="submit" class="btn btn-primary" >Editar</button>
                                 </div>
+                            </form>
                                 <div class="col col-6 d-grid gap-2 mx-auto ">
                                     <form action="{{route('delete_ailments_year',[clinic.id,year.year])}}?_method=DELETE" method="post" class="formDelete">
                                         {{csrfField()}}
@@ -110,10 +113,10 @@
                                 @each(ailment in ailments)
                                     <div class="input-group mb-3">
                                         <div class="input-group-text">
-                                        <input class="form-check-input mt-0" name='ailments' type="checkbox" value={{ ailment.id }} aria-label="{{ ailment.name }}">
+                                        <input class="form-check-input mt-0 checkAilment" name='ailments' type="checkbox" value={{ ailment.id }} aria-label="{{ ailment.name }}"  >
                                         </div>
                                         <input type="text" class="form-control" aria-label="Text input with checkbox" value={{ ailment.name }} disabled>
-                                        <input class="form-control" type="number" step="1" name="total" id="total" required min="0"  placeholder="No. de afectados">
+                                        <input class="form-control ailment-total" type="number" step="1" name="total" id="total"  min="0"  placeholder="No. de afectados" disabled>
                                     </div>
                                 @endeach
                             </div>
@@ -131,9 +134,10 @@
 <script>
     //Obtener los botones de Eliminar
     window.onload= function(){
-        let forms=document.querySelectorAll('.formDelete')
+        let formsDelete=document.querySelectorAll('.formDelete')
+        let formsEdit=document.querySelectorAll('.formEdit')
 
-        forms.forEach(form=>{
+        formsDelete.forEach(form=>{
             form.addEventListener('submit',(e)=>{
                 e.preventDefault()
                 Swal.fire({
@@ -148,6 +152,38 @@
                 })
             })
         })
+
+
+        formsEdit.forEach(form=>{
+            form.addEventListener('submit',(e)=>{
+                e.preventDefault()
+                Swal.fire({
+                    title:'Está seguró de los cambios realizados?',
+                    showCancelButton:true,
+                    confirmButtonText:'Guardar',
+                    denyButtonText:'Cancelar',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        form.submit()
+                    }
+                })
+            })
+        })
+
+        const checkboxes = document.querySelectorAll('.checkAilment');
+    
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+
+                const container = checkbox.closest('.input-group');
+
+                const inputTotal = container.querySelector('.ailment-total');
+                inputTotal.disabled = !checkbox.checked;
+
+                inputTotal.value=0
+                
+            });
+        });
     }
 </script>
 @end

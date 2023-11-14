@@ -20,7 +20,8 @@ multer({storage:storage});
 export default class SponsorsController {
 
     public async show({view}:HttpContextContract){
-        const sponsors=await Sponsor.all();
+        const sponsors=await Sponsor.query()
+        .orderBy('id', 'asc');
         return view.render('admin/sponsor',{sponsors});
     }
 

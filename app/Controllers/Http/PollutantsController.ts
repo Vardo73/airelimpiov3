@@ -42,7 +42,8 @@ export default class PollutantsController {
     }
 
     public async show({view}:HttpContextContract){
-        const pollutants=await Pollutant.all();
+        const pollutants=await Pollutant.query()
+        .orderBy('id', 'asc');
         return view.render('admin/pollutant',{pollutants});
     }
 

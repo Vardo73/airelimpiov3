@@ -18,6 +18,7 @@ export default class AilmentsController {
     public async showAilments({view,params}:HttpContextContract){
         const id=params.id;
 
+
         const clinic=await Clinic.findOrFail(params.id)
         const ailments= await Ailment.all()
 
@@ -26,6 +27,7 @@ export default class AilmentsController {
         .select('year')
         .whereRaw('ailment_clinics.clinic_id=? ',[id])
         .distinct('year')
+        .orderBy('year', 'asc')
 
         const ailments_clinic= await Database.from('ailment_clinics')
         .select('*')
@@ -86,10 +88,11 @@ export default class AilmentsController {
                     }
                 }
                 obj.ailments.push(ails_cli)
+
             })
             arr.push(obj)
         })
-        return view.render('admin/ailments_clinic',{clinic,ailments,arr})
+        return view.render('admin/ailments_clinic',{clinic,ailments,arr,years})
     }
 
     public async store({request,response}:HttpContextContract){
