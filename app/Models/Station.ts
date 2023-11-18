@@ -37,7 +37,9 @@ export default class Station extends BaseModel {
   public data_station:HasMany<typeof DataStation>
 
 
-  @belongsTo(() => Model)
+  @belongsTo(() => Model,{
+    foreignKey: 'model_id',
+  })
   public model:BelongsTo<typeof Model>
 
 

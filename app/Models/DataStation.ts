@@ -49,7 +49,9 @@ export default class DataStation extends BaseModel {
   public updatedAt: DateTime
 
 
-  @belongsTo(()=> Station)
+  @belongsTo(()=> Station,{
+    foreignKey: 'station_id',
+  })
   public station: BelongsTo<typeof Station>
 
 

@@ -48,10 +48,14 @@ export default class Monitor extends BaseModel {
   })
   public datum:HasMany<typeof Datum>
 
-  @belongsTo(() => Neighborhood)
+  @belongsTo(() => Neighborhood,{
+    foreignKey: 'neighborhood_id',
+  })
   public neighborhood:BelongsTo<typeof Neighborhood>
 
-  @belongsTo(() => Model)
+  @belongsTo(() => Model,{
+    foreignKey: 'model_id',
+  })
   public model:BelongsTo<typeof Model>
 
   @manyToMany(()=>User,{

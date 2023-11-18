@@ -104,6 +104,7 @@ export default class AilmentsController {
         const ailment=await Ailment.create({
             name:name
         })
+        
         if(pollutants!=null){
             if(typeof(pollutants)=="string"){
                 const pollutant = await Pollutant.findOrFail(parseInt(pollutants, 10))

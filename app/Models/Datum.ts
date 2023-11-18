@@ -24,10 +24,14 @@ export default class Datum extends BaseModel {
 
 
   //relationships
-  @belongsTo(() => Type)
+  @belongsTo(() => Type,{
+    foreignKey: 'type_id',
+  })
   public type:BelongsTo<typeof Type>
 
 
-  @belongsTo(()=> Monitor)
+  @belongsTo(()=> Monitor,{
+    foreignKey: 'monitor_id',
+  })
   public monitor: BelongsTo<typeof Monitor>
 }

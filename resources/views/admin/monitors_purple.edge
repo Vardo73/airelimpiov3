@@ -1,0 +1,456 @@
+@layout('master')
+
+@section('monitors_purple')
+
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Monitores PurpleAir</span></h2>
+    <hr/>
+</div>
+
+<div class="container">
+    <div class="col col-12 align-self-end">
+        <div class="d-grid gap-2 mx-auto ">
+            <button class="btn btn-primary" id="modalNuevoStation" data-bs-toggle="modal" data-bs-target="#MonitorModal">Agregar Nuevo</button>
+        </div>
+    </div>
+    <br>
+</div>
+
+<div class="container-fluid">
+    <div class="accordion accordion-flush" id="accordionMonitors">
+        @each(monitor in monitors)
+            <div class="accordion-item" style="margin-bottom:1%">
+                <h2 class="accordion-header" id="flush-heading{{monitor.slug}}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{monitor.slug}}" aria-expanded="false" aria-controls="flush-collapse{{monitor.slug}}">
+                        {{monitor.name}}
+                    </button>
+                </h2>
+                <div id="flush-collapse{{monitor.slug}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{monitor.slug}}" data-bs-parent="#accordionFlush{{monitor.slug}}">
+                    <div class="accordion-body">
+                        <div class="row">
+                            <div class="col col-12">
+                                <div class="row" style="text-align: center;">
+                                    <h5>Credenciales</h5>
+                                </div>
+                                <div class=" container-fluid table-responsive table-bordered">
+                                    <table class="table table-hover " name="tabAnual" id="tabAnual">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">ApiKey</th>
+                                                <th scope="col">Modelo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ monitor.slug}}</td>
+                                                <td>{{ monitor.apikey }}</td>
+                                                <td>{{ monitor.model.name }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="row" style="text-align: center;">
+                                    <h5>Detalles</h5>
+                                </div>
+                                
+                                <div class=" container-fluid table-responsive table-bordered">
+                                    <table class="table table-hover " name="tabAnual" id="tabAnual">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Colonia</th>
+                                                <th scope="col">Ubicación</th>
+                                                <th scope="col">Patrocinadores</th>
+                                                <th scope="col">Activo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ monitor.neighborhood.name }}</td>
+                                                <td>{{ monitor.latitude }},{{ monitor.longitude }}</td>
+                                                <td>
+                                                    @each(sponsor in monitor.sponsors)
+                                                        {{sponsor.name }}
+                                                    @endeach
+                                                </td>
+                                                <td>
+                                                    <form action="{{route('active_monitor',[monitor.id])}}?_method=PATCH" method="POST" name="activeForm">
+                                                        {{csrfField()}}
+                                                        <div class="form-check form-switch">
+                                                            @if(monitor.active)
+                                                                <input class="form-check-input SwitchActive" type="checkbox" role="switch" checked value="true">
+                                                            @else
+                                                                <input class="form-check-input SwitchActive" type="checkbox" role="switch" value="false" >
+                                                            @endif
+                                                        </div>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="row mx-auto">
+                                    <div class="col col-6 d-grid gap-2 mx-auto">
+                                        <button name="{{ monitor.id }}" class="btn btn-info " data-bs-toggle="modal" data-bs-target="#MonitorEditModal{{monitor.id}}" >Editar</button>
+                                    </div>
+                                    <div class="col col-6 d-grid gap-2 mx-auto">
+                                        <form action="{{route('delete_monitor',[monitor.id])}}?_method=DELETE" method="post" id="formDelete" class="formDelete">
+                                            {{csrfField()}}
+                                            <button class="btn btn-danger w-100">Eliminar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--
+                            <div class="col col-3">
+                                <div class="accordion " id="accordionBanner" >
+                                    <div class="accordion-item" >
+                                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                            Banner
+                                          </button>
+                                        </h2>
+                                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne" >
+                                          <div class="accordion-body" >
+                                            <div id='PurpleAirWidget_{{ monitor.slug }}_module_AQI_conversion_C0_average_10_layer_standard'>Loading PurpleAir Widget...</div>
+                                            <script src='https://www.purpleair.com/pa.widget.js?key={{ monitor.apikey }}&module=AQI&conversion=C0&average=10&layer=standard&container=PurpleAirWidget_{{ monitor.slug }}_module_AQI_conversion_C0_average_10_layer_standard'></script>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            -->
+                        </div>
+                    </div>
+                </div>
+            </div> 
+
+            <!--MODAL EDIT MONITOR-->
+            <form action="{{route('update_monitor',[monitor.id])}}?_method=PATCH" method="post">
+                {{csrfField()}}
+                <div class="container-fluid">
+                    <div class="modal fade" id="MonitorEditModal{{monitor.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2>Editar Monitor</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row mx-auto">
+                                        @if(flashMessages.has('errors.slug'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.slug')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-6 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="slug">ID:</label>
+                                            <input class="form-control" type="text" name="slug" id="slug" required min="1" max="25" value={{monitor.slug}}>
+                                        </div>
+                                        @if(flashMessages.has('errors.name'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.name')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-6 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="name">Nombre:</label>
+                                            <input class="form-control" type="text" name="name" id="name" required min="1" max="25" value={{monitor.name}}>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row mx-auto">
+                                        @if(flashMessages.has('errors.apikey'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.apikey')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-12 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="apikey">ApiKey:</label>
+                                            <input class="form-control" type="text" name="apikey" id="apikey" min="1" max="25" value={{monitor.apikey}}>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row mx-auto">
+                                        @if(flashMessages.has('errors.neighborhood_id'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.neighborhood_id')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-4 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="suburb">Colonia:</label>
+                                            <select class="form-control" name="neighborhood_id" id="neighborhood_id" required>
+                                                @each(neighborhood in neighborhoods)
+                                                    @if(monitor.neighborhood.id == neighborhood.id)
+                                                        <option  value='{{ neighborhood.id }}' selected>{{ neighborhood.name }}</option>
+                                                    @else
+                                                        <option  value='{{ neighborhood.id }}'>{{ neighborhood.name }}</option>
+                                                    @endif
+                                                @endeach
+                                            </select>
+                                        </div>
+                                        @if(flashMessages.has('errors.latitude'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.latitude')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-4 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="latitude">Latitud:</label>
+                                            <input class="form-control" step="any" type="number" name="latitude" id="latitude" required value={{monitor.latitude}}>
+                                        </div>
+                                        @if(flashMessages.has('errors.longitude'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.longitude')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-4 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="longitude">Longitud:</label>
+                                            <input class="form-control" type="number" step="any" name="longitude" id="longitude" required value={{monitor.longitude}}>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row mx-auto">
+                                        @if(flashMessages.has('errors.model_id'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.model_id')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-6 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="model_id">Modelo de monitor:</label>
+                                            <select class="form-control" name="model_id" id="model_id" required>
+                                                <option  value='0' selected disabled>Modelo de monitor</option>
+                                                @each(model in models)
+                                                    @if(monitor.model.id == model.id)
+                                                        <option  value='{{ model.id }}' selected>{{ model.name }}</option>
+                                                    @else
+                                                        <option  value='{{ model.id }}'>{{ model.name }}</option>
+                                                    @endif
+                                                @endeach
+                                            </select>
+                                        </div>
+                                        @if(flashMessages.has('errors.active'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.active')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-6 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="active">Actividad:</label>
+                                            <select class="form-control" name="active" id="active" required>
+                                                @if(monitor.active)
+                                                    <option  value='1' selected >Activo</option>
+                                                    <option  value='0' >Inactivo</option>
+                                                @else
+                                                <option  value='1'  >Activo</option>
+                                                <option  value='0' selected>Inactivo</option>
+                                                @endif
+                                            </select>
+                                        </div> 
+                                    </div>
+                                    <br>
+                                    <div class="row mx-auto">
+                                        <label  class="form-label" >Patrocinadores:</label><br>
+                                        <div>
+                                            @each(sponsor in sponsors)
+                                                <span style="display: none;">{{flag=false}}</span>
+                                                @each(spon in monitor.sponsors)
+                                                    @if(sponsor.id==spon.id)
+                                                    <span style="display: none;">{{flag=true}}</span>
+                                                    @endif
+                                                @endeach 
+                                                @if(flag === true)
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" name='sponsors' type="checkbox"  value={{ sponsor.id }} checked>
+                                                        <label class="form-check-label" for="inlineCheckbox1">{{ sponsor.name }}</label>
+                                                    </div>
+                                                @else
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" name='sponsors' type="checkbox"  value={{ sponsor.id }}>
+                                                        <label class="form-check-label" for="inlineCheckbox1">{{ sponsor.name }}</label>
+                                                    </div>
+                                                @endif
+                                            @endeach 
+                                        </div> 
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-outline-primary"  data-bs-dismiss="modal">Guardar</button>
+                                    <button type="button" class="btn btn-outline-primary"  data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        @endeach
+    </div>
+</div>
+
+<!--MODAL REGISTRO DE ESTACION-->
+<form action="{{route('store_monitor')}}" method="post">
+    {{csrfField()}}
+    <div class="container-fluid">
+        <div class="modal fade" id="MonitorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Agregar Monitor</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mx-auto">
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="slug">ID:</label>
+                                <input class="form-control" type="text" name="slug" id="slug" required min="1" max="25">
+                            </div>
+                            @if(flashMessages.has('errors.name'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.name')}}
+                                </div>
+                            @endif
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="name">Nombre:</label>
+                                <input class="form-control" type="text" name="name" id="name" required min="1" max="25">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row mx-auto">
+                            @if(flashMessages.has('errors.apikey'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.apikey')}}
+                                </div>
+                            @endif
+                            <div class="col col-12 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="apikey">ApiKey:</label>
+                                <input class="form-control" type="text" name="apikey" id="apikey" min="1" max="25">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row mx-auto">
+                            @if(flashMessages.has('errors.neighborhood_id'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.neighborhood_id')}}
+                                </div>
+                            @endif
+                            <div class="col col-4 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="suburb">Colonia:</label>
+                                <select class="form-control" name="neighborhood_id" id="neighborhood_id" required>
+                                    <option  value='0' selected disabled>Colonia</option>
+                                    @each(neighborhood in neighborhoods)
+                                      <option  value='{{ neighborhood.id }}'>{{ neighborhood.name }}</option>
+                                    @endeach
+                                </select>
+                            </div>
+                            @if(flashMessages.has('errors.latitude'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.latitude')}}
+                                </div>
+                            @endif
+                            <div class="col col-4 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="latitude">Latitud:</label>
+                                <input class="form-control" step="any" type="number" name="latitude" id="latitude" required >
+                            </div>
+                            @if(flashMessages.has('errors.longitude'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.longitude')}}
+                                </div>
+                            @endif
+                            <div class="col col-4 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="longitude">Longitud:</label>
+                                <input class="form-control" type="number" step="any" name="longitude" id="longitude" required >
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row mx-auto">
+                            @if(flashMessages.has('errors.model_id'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.model_id')}}
+                                </div>
+                            @endif
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="model_id">Modelo de monitor:</label>
+                                <select class="form-control" name="model_id" id="model_id" required>
+                                    <option  value='0' selected disabled>Modelo de monitor</option>
+                                    @each(model in models)
+                                      <option  value='{{ model.id }}'>{{ model.name }}</option>
+                                    @endeach
+                                </select>
+                            </div>
+                            @if(flashMessages.has('errors.active'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.active')}}
+                                </div>
+                            @endif
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="active">Actividad:</label>
+                                <select class="form-control" name="active" id="active" required>
+                                    <option  value='1' selected >Activo</option>
+                                    <option  value='0'  >Inactivo</option>
+                                </select>
+                            </div> 
+                        </div>
+                        <br>
+                        <div class="row mx-auto">
+                            <label  class="form-label" >Patrocinadores:</label><br>
+                            <div>
+                                @each(sponsor in sponsors)
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" name='sponsors' type="checkbox"  value={{ sponsor.id }}>
+                                        <label class="form-check-label" for="inlineCheckbox1">{{ sponsor.name }}</label>
+                                    </div>
+                                @endeach   
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-outline-primary"  data-bs-dismiss="modal">Crear</button>
+                        <button type="button" class="btn btn-outline-primary"  data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<script>
+    window.onload= function(){
+        let forms=document.querySelectorAll('.formDelete')
+        let checkActive=document.querySelectorAll('.SwitchActive')
+
+        forms.forEach(form=>{
+            form.addEventListener('submit',(e)=>{
+                e.preventDefault()
+                Swal.fire({
+                    title:'Está seguró de eliminar este elemento?',
+                    showCancelButton:true,
+                    confirmButtonText:'Eliminar',
+                    denyButtonText:'Cancelar',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        form.submit()
+                    }
+                })
+            })
+        })
+
+        checkActive.forEach(check=>{
+            check.addEventListener('change', function(e) {
+                e.preventDefault()
+
+                let form_a = check.closest('form');
+
+                let input = document.createElement('input');
+                input.type = 'text';
+                input.name = 'active';
+                input.value = check.value;
+                input.style.display = 'none';
+
+                form_a.appendChild(input);
+                form_a.submit()
+            });
+        })
+
+    }
+</script>
+
+@end

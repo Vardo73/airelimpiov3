@@ -40,7 +40,9 @@ export default class User extends BaseModel {
   }
 
   //relationships
-  @belongsTo(() => Rol)
+  @belongsTo(() => Rol,{
+    foreignKey: 'rol_id',
+  })
   public rol:BelongsTo<typeof Rol>
 
   @manyToMany(()=> Monitor,{

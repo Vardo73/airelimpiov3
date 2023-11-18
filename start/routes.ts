@@ -13,7 +13,8 @@ Route.get('clinics','ClinicsController.show').as('clinics')
 Route.get('models','ModelsController.show').as('models')
 Route.get('neighborhoods','NeighborhoodsController.show').as('neighborhoods')
 Route.get('ailments','AilmentsController.show').as('ailments')
-Route.get('monitors','MonitorsController.showPurple').as('monitors_purple')
+Route.get('monitors_purple','MonitorsController.showPurple').as('monitors_purple')
+Route.get('monitors_fwop','MonitorsController.showFWOP').as('monitors_fwop')
 Route.get('stations','StationsController.show').as('stations')
 Route.get('ailments_clinic/:id','AilmentsController.showAilments').as('ailments_clinic')
 
@@ -78,3 +79,11 @@ Route.group(()=>{
   Route.delete('delete/:id','NeighborhoodsController.delete').as('delete_neighborhoods')
   Route.patch('update/:id','NeighborhoodsController.update').as('update_neighborhoods')
 }).prefix('neighborhood')
+
+
+Route.group(()=>{
+  Route.post('store','MonitorsController.store').as('store_monitor')
+  Route.delete('delete/:id','MonitorsController.delete').as('delete_monitor')
+  Route.patch('update/:id','MonitorsController.update').as('update_monitor')
+  Route.patch('active/:id','MonitorsController.active').as('active_monitor')
+}).prefix('monitor')

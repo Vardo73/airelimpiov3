@@ -73,7 +73,7 @@
                                     <br>
                                     <p class="alert alert-danger">{{flashMessages.get('errors.name')}}</p>
                                     @end
-                                    <label  class="form-label" >¿Qué contaminantes monitorea?:</label><br>
+                                    <label  class="form-label" >¿Qué contaminantes monitorea?: (opcional)</label><br>
                                     @each(pollutant in pollutants)
                                         <span style="display: none;">{{flag=false}}</span>
                                         @each(poll in ailment.pollutants)
@@ -112,7 +112,7 @@
 </div>
 
 
-<!-- MODAL NUEVO MODELO -->
+<!-- MODAL NUEVO AILMENT -->
 <div class="container-fluid">
     <div class="modal fade" id="AilmentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
