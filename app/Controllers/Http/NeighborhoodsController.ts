@@ -78,4 +78,41 @@ export default class NeighborhoodsController {
 
         return response.redirect().back()
     }
+
+    //public view
+
+    public async showMap({view}:HttpContextContract){
+
+        return view.render('public/map_neighborhoods')
+    }
+
+
+
+    public async bannerNeighborhood({view}:HttpContextContract){
+      
+        try {
+
+            const neighborhoods = await Neighborhood.query()
+            .preload('pollutants')
+            .exec();
+
+            console.log(neighborhoods[0].pollutants)
+
+            let banners:{html:any,latitude:number,longitude:number}[]=[]
+
+            await neighborhoods.forEach(async neighborhood=>{
+                let html=await view.render('partials/banner_neighborhood',{neighborhood})
+
+                 let element={
+                     html:html, 
+                     latitude:neighborhood.latitude, 
+                     longitude: neighborhood.longitude
+                 }
+                 banners.push(element)
+            })
+             return banners
+        } catch (error) {
+         console.log(error)
+        }
+    }
 }

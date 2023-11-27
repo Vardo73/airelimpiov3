@@ -1,0 +1,86 @@
+@layout('master')
+
+@section('map_monitors')
+
+<style>
+    body { margin: 0; padding: 0; }
+    #mapMonitors { position: absolute;  width:85%; height: 100%; z-index: 1;}
+        
+    .marker{
+        border-right: 1px solid white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .textoPin{
+        color: black;
+        font-family: Nunito, Arial;
+        width:100px;
+        font-size: 20px;
+        font-weight: 600;
+        text-align:center;
+    }
+    .contPin{
+        display: flex;
+        align-items: center;
+    }
+    
+    .mapboxgl-popup {
+        max-width: 200px;
+        font-size: 12px;
+    }
+</style>
+
+
+<div id='mapMonitors'></div>
+<script>
+
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2lzdGVtYXNjZXJjYSIsImEiOiJjbDRldWE2ZjAwMjI3M2JwOHpsb21jbHpxIn0.jLF2ydLoAdgrv68l8iM2VQ';
+
+let divMap=document.getElementById('mapMonitors')
+
+
+let map = new mapboxgl.Map({
+    container: divMap,
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center:[-110.2991337,24.1489357],
+    zoom:11.5
+});
+
+map.addControl(new mapboxgl.NavigationControl());
+map.addControl(new mapboxgl.GeolocateControl());
+map.addControl(new mapboxgl.FullscreenControl());
+map.addControl(new mapboxgl.ScaleControl());
+
+
+
+
+fetch('/banner_monitor')
+.then(response => {
+    if (!response.ok) {
+      throw new Error(`Error de red - Código de estado: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+     
+    data.forEach(monitor => {
+
+      let popup=new mapboxgl.Popup({ offset: 25 }).setMaxWidth('200')
+      let coordinates=[monitor.longitude,monitor.latitude];
+      popup.setHTML(monitor.html)
+
+
+      new mapboxgl.Marker()
+        .setLngLat(coordinates)
+        .setPopup(popup) 
+        .addTo(map);
+    });
+  })
+  .catch(error => {
+    console.error('Error en la petición de monitores:', error);
+  });
+</script>
+@end

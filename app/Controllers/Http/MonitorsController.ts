@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import View from '@ioc:Adonis/Core/View'
 import Model from 'App/Models/Model';
 import Monitor from 'App/Models/Monitor';
 import Neighborhood from 'App/Models/Neighborhood';
@@ -152,5 +153,38 @@ export default class MonitorsController {
 
         return response.redirect().back()
 
+    }
+
+
+    //public view
+
+    public async showMap({view}:HttpContextContract){
+        return view.render('public/map_monitors')
+    }
+
+    public async bannerMonitor({view}:HttpContextContract){
+       
+       try {
+            const monitors=await Monitor.query()
+            .preload('model')
+            .preload('neighborhood')
+            .preload('sponsors')
+            .exec();
+
+            let banners:{html:any,latitude:number,longitude:number}[]=[]
+            monitors.forEach(async monitor=>{
+                let html=await view.render('partials/banner_monitor',{monitor})
+                let element={
+                    html:html, 
+                    latitude:monitor.latitude, 
+                    longitude: monitor.longitude
+                }
+                banners.push(element)
+            })
+
+            return banners
+       } catch (error) {
+        console.log(error)
+       }
     }
 }

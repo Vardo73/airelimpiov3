@@ -1,10 +1,13 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 //View
-Route.get('/', async ({ view }) => {
-  return view.render('public/map_stations')
-}).as('map')
 //Public
+Route.get('/','MonitorsController.showMap').as('map_monitors')
+Route.get('banner_monitor','MonitorsController.bannerMonitor').as('banner_monitor')
+Route.get('banner_clinic','ClinicsController.bannerClinic').as('banner_clinic')
+Route.get('banner_neighborhood','NeighborhoodsController.bannerNeighborhood').as('banner_neighborhood')
+Route.get('map_neighborhoods','NeighborhoodsController.showMap').as('map_neighborhoods')
+Route.get('map_clinics','ClinicsController.showMap').as('map_clinics')
 Route.get('register','UsersController.register').as('register')
 //Admin
 Route.get('pollutants','PollutantsController.show').as('pollutants')

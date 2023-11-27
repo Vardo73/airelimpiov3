@@ -126,7 +126,6 @@ export default class ClinicsController {
         return response.redirect().back()
     }
 
-
     public async editAilmentsYear({request,response,params}:HttpContextContract){
         const id=params.id
         const year=params.year
@@ -152,6 +151,52 @@ export default class ClinicsController {
         }
 
         return response.redirect().back()
+    }
+
+    //public view
+
+    public async showMap({view}:HttpContextContract){
+        
+        return view.render('public/map_clinics')
+    }
+
+
+    public async bannerClinic({view}:HttpContextContract){
+      
+        try {
+            const year=await Database
+            .from('ailment_clinics')
+            .select('year')
+            .distinct('year')
+            .orderBy('year', 'desc')
+            .first()
+
+            const clinics = await Clinic.query()
+            .preload('ailments', (query) => {
+              query.pivotColumns(['year', 'total'])
+              query.wherePivot('year', year?.year);
+            })
+            .exec();
+
+
+            let banners:{html:any,latitude:number,longitude:number}[]=[]
+
+            await clinics.forEach(async clinic=>{
+
+                let html=await view.render('partials/banner_clinic',{clinic,year})
+
+                 let element={
+                     html:html, 
+                     latitude:clinic.latitude, 
+                     longitude: clinic.longitude
+                 }
+                 banners.push(element)
+            })
+ 
+             return banners
+        } catch (error) {
+         console.log(error)
+        }
     }
 }
 

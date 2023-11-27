@@ -20,7 +20,7 @@ export default class Ailment extends BaseModel {
   @manyToMany(()=> Clinic,{
     pivotTable:'ailment_clinics',
     pivotTimestamps: true,
-    pivotColumns: ['total']
+    pivotColumns: ['total','year']
   })
   public clinics: ManyToMany<typeof Clinic>
 
