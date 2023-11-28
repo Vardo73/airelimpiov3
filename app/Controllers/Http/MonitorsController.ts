@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import View from '@ioc:Adonis/Core/View'
 import Model from 'App/Models/Model';
 import Monitor from 'App/Models/Monitor';
 import Neighborhood from 'App/Models/Neighborhood';
 import Sponsor from 'App/Models/Sponsor';
+import PurpleAirService from 'App/Services/PurpleAirService';
 import MonitorValidator from 'App/Validators/MonitorValidator';
 
 export default class MonitorsController {
@@ -165,19 +165,18 @@ export default class MonitorsController {
     public async bannerMonitor({view}:HttpContextContract){
        
        try {
-            const monitors=await Monitor.query()
-            .preload('model')
-            .preload('neighborhood')
-            .preload('sponsors')
-            .exec();
+
+        const purpleAirService = await new PurpleAirService(); 
+        let monitors= await purpleAirService.queryCurrentAll()
+
 
             let banners:{html:any,latitude:number,longitude:number}[]=[]
-            monitors.forEach(async monitor=>{
+            monitors?.map(async monitor=>{
                 let html=await view.render('partials/banner_monitor',{monitor})
                 let element={
                     html:html, 
-                    latitude:monitor.latitude, 
-                    longitude: monitor.longitude
+                    latitude:monitor.monitor.latitude, 
+                    longitude: monitor.monitor.longitude
                 }
                 banners.push(element)
             })

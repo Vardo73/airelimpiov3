@@ -1,8 +1,8 @@
 <section>
     <div  class="card">
         <div class="card-header" style=" text-align:center; background:#0d6efd; color:#FFFFFF; ">
-            <h5 style="font-size: 15px;">{{monitor.name}}</h5>
-            <span style="text-align:center; background:#0d6efd; color:#FFFFFF;">Col. {{monitor.neighborhood.name}}</span>
+            <h5 style="font-size: 15px;">{{monitor.monitor.name}}</h5>
+            <span style="text-align:center; background:#0d6efd; color:#FFFFFF;">Col. {{monitor.monitor.neighborhood.name}}</span>
         </div>
         <div class="card-body">
 
@@ -11,15 +11,15 @@
                     <span>PM 2.5 &#956;g/m<sup>3</sup></span>
                 </div>
                 <div class="col col-6">
-                <span>PM 10 &#956;g/m<sup>3</sup></span>
+                    <span>PM 10 &#956;g/m<sup>3</sup></span>
                 </div>
             </div>
             <div class="row" style="text-align:center;">
                 <div class="col col-6">
-                    <span></span>
+                    <span>{{monitor["PM_2.5"]}}</span>
                 </div>
                 <div class="col col-6">
-                <span></span>
+                    <span>{{monitor["PM_10"]}}</span>
                 </div>
             </div>
             <hr/>
