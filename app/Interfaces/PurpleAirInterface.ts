@@ -88,13 +88,13 @@ export interface SensorData {
       pm1_0_atm: number;
       pm1_0_atm_a: number;
       pm1_0_atm_b: number;
-      pm2_5_atm: number;
+      'pm2.5_atm': number;
       pm2_5_atm_a: number;
       pm2_5_atm_b: number;
       pm2_5_cf_1: number;
       pm2_5_cf_1_a: number;
       pm2_5_cf_1_b: number;
-      pm10_0_atm: number;
+      'pm10.0_atm': number;
       pm10_0_atm_a: number;
       pm10_0_atm_b: number;
       pm10_0_cf_1: number;

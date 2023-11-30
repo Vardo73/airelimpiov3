@@ -157,7 +157,6 @@ export default class MonitorsController {
 
 
     //public view
-
     public async showMap({view}:HttpContextContract){
         return view.render('public/map_monitors')
     }
@@ -167,17 +166,19 @@ export default class MonitorsController {
        try {
 
         const purpleAirService = await new PurpleAirService(); 
-        let monitors= await purpleAirService.queryCurrentAll()
+        let monitors= await purpleAirService.queryCurrentBanner()
 
 
             let banners:{html:any,latitude:number,longitude:number}[]=[]
             monitors?.map(async monitor=>{
                 let html=await view.render('partials/banner_monitor',{monitor})
                 let element={
-                    html:html, 
+                    html:html,
+                    color:monitor.color,
                     latitude:monitor.monitor.latitude, 
                     longitude: monitor.monitor.longitude
                 }
+
                 banners.push(element)
             })
 

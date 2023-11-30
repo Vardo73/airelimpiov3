@@ -55,8 +55,6 @@ map.addControl(new mapboxgl.FullscreenControl());
 map.addControl(new mapboxgl.ScaleControl());
 
 
-
-
 fetch('/banner_monitor')
 .then(response => {
     if (!response.ok) {
@@ -66,17 +64,19 @@ fetch('/banner_monitor')
   })
   .then(data => {
      
-    data.forEach(monitor => {
+    data.map(monitor => {
 
       let popup=new mapboxgl.Popup({ offset: 25 }).setMaxWidth('200')
       let coordinates=[monitor.longitude,monitor.latitude];
       popup.setHTML(monitor.html)
+      
 
-
-      new mapboxgl.Marker()
+      new mapboxgl.Marker({color:monitor.color})
         .setLngLat(coordinates)
         .setPopup(popup) 
         .addTo(map);
+
+
     });
   })
   .catch(error => {
