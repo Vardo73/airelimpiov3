@@ -1,0 +1,294 @@
+@layout('master')
+
+@section('historics')
+
+<style>
+    th,td{
+        text-align: center;
+        font-size: 12px; 
+    }
+
+    table tr td.tdG {
+        background-color: #38B208;
+    }
+    table tr td.tdA{
+        background-color: #EDB02D;
+    }
+    table tr td.tdM {
+        background-color: #FC7928;
+    }
+    table tr td.tdMM {
+        background-color: #F93131;
+    }
+    table tr td.tdEM {
+        background-color: #A8549D;
+    }
+    table tr td.tdMMM {
+        background-color: #7E0023;
+    }
+    @media only screen and (max-width: 680px) {
+        .indice{
+            font-size: 7px;
+        }
+    }
+</style>
+
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Historicos {{monitor.name}}</span></h2>
+    <hr/>
+</div>
+<br>
+<div class="container">
+
+    <div class="m-0 row mx-auto justify-content-center align-items-center">
+        <div class="col col-4 mx-auto ">
+            <label class="form-label" for="selectMonitor">Estación:</label>
+            <select class="form-control" name="selectMonitor" id="selectMonitor" required>
+                @each(monitor in monitors)
+                    @if(monitor.slug == slug)
+                        <option  value='{{ monitor.slug }}' selected>{{ monitor.name }}</option>
+                    @else
+                        <option  value='{{ monitor.slug }}' >{{ monitor.name }}</option>
+                    @endif
+                @endeach
+            </select>
+        </div>
+    </div>
+    
+    <br>
+    <div id="carouselAverage" class="carousel slide" data-bs-ride="false">
+        @if(averages.length>0)
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <!-- INDICE PM 2.5 -->
+                    <div class="m-0 row mx-auto justify-content-center align-items-center indice">
+                        <span class="badge text-bg-secondary" style="max-width: 8rem; ">Índice:</span>
+                        <span class="badge text-dark" style="max-width: 8rem; background-color:#38B208; ">0-12</span>
+                        <span class="badge text-dark" style="max-width: 8rem; background-color:#EDB02D; ">12.1–35.4</span>
+                        <span class="badge text-dark" style="max-width: 8rem; background-color:#FC7928; ">35.5-55.4</span>
+                        <span class="badge text-dark" style="max-width: 8rem; background-color:#F93131; ">55.5-150.4</span>
+                        <span class="badge text-dark" style="max-width: 8rem; background-color:#A8549D; ">150.5-250.4</span>
+                        <span class="badge text-dark" style="max-width: 8rem; background-color:#7E0023; ">250.5+</span>
+                    </div>
+                    <br>
+                    <!-- TABLA PM2.5-->
+                    <div >
+                        <h4 style="text-align: center;"><span style="color: #2aa5d6;">PM 2.5 (&#956;g/m<sup>3</sup>)</span></h4>
+                    </div>
+                    <div class=" row mx-auto justify-content-center align-items-center d-block table-responsive">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">0</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3</th>
+                                <th scope="col">4</th>
+                                <th scope="col">5</th>
+                                <th scope="col">6</th>
+                                <th scope="col">7</th>
+                                <th scope="col">8</th>
+                                <th scope="col">9</th>
+                                <th scope="col">10</th>
+                                <th scope="col">11</th>
+                                <th scope="col">12</th>
+                                <th scope="col">13</th>
+                                <th scope="col">14</th>
+                                <th scope="col">15</th>
+                                <th scope="col">16</th>
+                                <th scope="col">17</th>
+                                <th scope="col">18</th>
+                                <th scope="col">19</th>
+                                <th scope="col">20</th>
+                                <th scope="col">21</th>
+                                <th scope="col">22</th>
+                                <th scope="col">23</th>
+                            </tr>
+                            </thead>
+                            <tbody>   
+                                @each(average in averages)
+                                <tr id="rowsTab">
+                                    <th scope="row" >{{ average.date}}</th>
+                                    <div class="pm2">
+                                        <td class="tdpm2">{{average['PM_2.5']['0'] !== undefined ? average['PM_2.5']['0'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['1'] !== undefined ? average['PM_2.5']['1'] : '-'}}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['2'] !== undefined ? average['PM_2.5']['2'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['3'] !== undefined ? average['PM_2.5']['3'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['4'] !== undefined ? average['PM_2.5']['4'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['5'] !== undefined ? average['PM_2.5']['5'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['6'] !== undefined ? average['PM_2.5']['6'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['7'] !== undefined ? average['PM_2.5']['7'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['8'] !== undefined ? average['PM_2.5']['8'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['9'] !== undefined ? average['PM_2.5']['9'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['10'] !== undefined ? average['PM_2.5']['10'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['11'] !== undefined ? average['PM_2.5']['11'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['12'] !== undefined ? average['PM_2.5']['12'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['13'] !== undefined ? average['PM_2.5']['13'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['14'] !== undefined ? average['PM_2.5']['14'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['15'] !== undefined ? average['PM_2.5']['15'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['16'] !== undefined ? average['PM_2.5']['16'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['17'] !== undefined ? average['PM_2.5']['17'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['18'] !== undefined ? average['PM_2.5']['18'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['19'] !== undefined ? average['PM_2.5']['19'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['20'] !== undefined ? average['PM_2.5']['20'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['21'] !== undefined ? average['PM_2.5']['21'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['22'] !== undefined ? average['PM_2.5']['22'] : '-' }}</td>
+                                        <td class="tdpm2">{{average['PM_2.5']['23'] !== undefined ? average['PM_2.5']['23'] : '-' }}</td>
+                                    </div>
+                                </tr>
+                                @endeach 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    
+                    <!-- INDICE PM 10 -->
+                    <div class="m-0 row mx-auto justify-content-center align-items-center indice">
+                        <span class="badge text-bg-secondary" style="max-width: 8rem; ">Índice:</span>
+                        <span class="badge text-dark" style="max-width: 8rem; background-color:#38B208; ">0-54</span>
+                        <span class="badge text-dark" style="max-width: 8rem; background-color:#EDB02D; ">55-154</span>
+                        <span class="badge text-dark" style="max-width: 8rem; background-color:#FC7928; ">155-254</span>
+                        <span class="badge text-dark" style="max-width: 8rem; background-color:#F93131; ">255-354</span>
+                        <span class="badge text-dark" style="max-width: 8rem; background-color:#A8549D; ">355-424</span>
+                        <span class="badge text-dark" style="max-width: 8rem; background-color:#7E0023; ">425+</span>
+                    </div>
+                    <br>
+                    <!-- TABLA PM 10-->
+                    <div >
+                        <h4 style="text-align: center;"><span style="color: #2aa5d6;">PM 10 (&#956;g/m<sup>3</sup>)</span></h4>
+                    </div>
+                    <div class="row mx-auto justify-content-center align-items-center d-block table-responsive">
+                        <table class="table table-bordered table-sm"  >
+                            <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">0</th>
+                                <th scope="col">1</th>
+                                <th scope="col">2</th>
+                                <th scope="col">3</th>
+                                <th scope="col">4</th>
+                                <th scope="col">5</th>
+                                <th scope="col">6</th>
+                                <th scope="col">7</th>
+                                <th scope="col">8</th>
+                                <th scope="col">9</th>
+                                <th scope="col">10</th>
+                                <th scope="col">11</th>
+                                <th scope="col">12</th>
+                                <th scope="col">13</th>
+                                <th scope="col">14</th>
+                                <th scope="col">15</th>
+                                <th scope="col">16</th>
+                                <th scope="col">17</th>
+                                <th scope="col">18</th>
+                                <th scope="col">19</th>
+                                <th scope="col">20</th>
+                                <th scope="col">21</th>
+                                <th scope="col">22</th>
+                                <th scope="col">23</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @each(average in averages)
+                                <tr id="rowsTab">
+                                    <th scope="row" style="white-space: nowrap; width: auto;">{{ average.date}}</th>
+                                    <div class="pm10">
+                                        <td class="tdpm10">{{average['PM_10']['0'] !== undefined ? average['PM_10']['0'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['1'] !== undefined ? average['PM_10']['1'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['2'] !== undefined ? average['PM_10']['2'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['3'] !== undefined ? average['PM_10']['3'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['4'] !== undefined ? average['PM_10']['4'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['5'] !== undefined ? average['PM_10']['5'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['6'] !== undefined ? average['PM_10']['6'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['7'] !== undefined ? average['PM_10']['7'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['8'] !== undefined ? average['PM_10']['8'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['9'] !== undefined ? average['PM_10']['9'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['10'] !== undefined ? average['PM_10']['10'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['11'] !== undefined ? average['PM_10']['11'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['12'] !== undefined ? average['PM_10']['12'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['13'] !== undefined ? average['PM_10']['13'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['14'] !== undefined ? average['PM_10']['14'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['15'] !== undefined ? average['PM_10']['15'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['16'] !== undefined ? average['PM_10']['16'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['17'] !== undefined ? average['PM_10']['17'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['18'] !== undefined ? average['PM_10']['18'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['19'] !== undefined ? average['PM_10']['19'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['20'] !== undefined ? average['PM_10']['20'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['21'] !== undefined ? average['PM_10']['21'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['22'] !== undefined ? average['PM_10']['22'] : '-' }}</td>
+                                        <td class="tdpm10">{{average['PM_10']['23'] !== undefined ? average['PM_10']['23'] : '-'  }}</td>
+                                    </div>
+                                </tr>
+                                @endeach   
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselAverage" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon spanF" aria-hidden="true" style="margin-bottom:110%; margin-right:50%;background-color:black; "></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselAverage" data-bs-slide="next" style="color:black;">
+              <span class="carousel-control-next-icon spanF" aria-hidden="true" style=" margin-bottom:110%; margin-left:50%; background-color:black;"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+        @else
+        <div style="margin:7%">
+            <h2 style="text-align: center;"><span style="color: #2aa5d6;">Sin datos de los últimos 5 días.</span></h2>
+        </div>
+        @endif
+    </div>
+</div>
+
+<script>
+    window.onload=function(){
+
+    let td=document.querySelectorAll('td')
+    td.forEach(element=>{
+        let average=parseFloat(element.textContent)
+
+        if (element.classList.contains('tdpm2')) {
+            //PM 2.5
+            if(average>250.5){
+                element.classList.add('tdMMM')
+            }else if(average>150.5){
+                element.classList.add('tdEM')
+            }else if(average>55.5){
+                element.classList.add('tdMM')
+            }else if(average>35.5){
+                element.classList.add('tdM')
+            }else if(average>12.1){
+                element.classList.add('tdA')
+            }else{
+                element.classList.add('tdG')
+            }
+        }else if(element.classList.contains('tdpm10')){
+            //PM 10
+            if(average>425){
+                element.classList.add('tdMMM')
+            }else if(average>355){
+                element.classList.add('tdEM')
+            }else if(average>255){
+                element.classList.add('tdMM')
+            }else if(average>155){
+                element.classList.add('tdM')
+            }else if(average>55){
+                element.classList.add('tdA')
+            }else{
+                element.classList.add('tdG')
+            }
+        }
+    })
+    }
+    document.getElementById('selectMonitor')
+    .addEventListener('change',()=>{
+        let station=document.getElementById('selectMonitor').value;
+        window.location.replace(`/historics/${station}`);
+    })
+</script>
+
+@end

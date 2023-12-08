@@ -8,10 +8,10 @@ export default class Datum extends BaseModel {
   public id: number
 
   @column()
-  public type_id: 'required|exists:types,id'
+  public type_id: number
 
   @column()
-  public monitor_id: 'required|exists:monitors,id'
+  public monitor_id: number
 
   @column()
   public average:number 

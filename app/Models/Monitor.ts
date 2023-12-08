@@ -11,10 +11,10 @@ export default class Monitor extends BaseModel {
   public id: number
 
   @column()
-  public model_id: 'required|exists:models,id'
+  public model_id: number
 
   @column()
-  public neighborhood_id: 'required|exists:neighborhoods,id'
+  public neighborhood_id: number
 
   @column()
   public name:string 

@@ -7,7 +7,7 @@ export default class DataStation extends BaseModel {
   public id: number
 
   @column()
-  public station_id:'required|exists:stations,id' 
+  public station_id: number
 
   @column()
   public solarRadiation:number 

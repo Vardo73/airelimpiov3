@@ -9,7 +9,7 @@ export default class Station extends BaseModel {
   public id: number
 
   @column()
-  public model_id: 'required|exists:models,id'
+  public model_id: number
 
   @column()
   public name:string 

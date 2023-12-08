@@ -3,6 +3,9 @@ import Env from '@ioc:Adonis/Core/Env'
 import { ErrorResponse, SensorData } from 'App/Interfaces/PurpleAirInterface'; 
 import Monitor from 'App/Models/Monitor';
 import Type from 'App/Models/Type';
+import Database from '@ioc:Adonis/Lucid/Database';
+import Datum from 'App/Models/Datum';
+
 
 const MODEL_PURPLE='PURPLE_AIR'
 const getColor = (pm2, pm10) => {
@@ -24,47 +27,48 @@ const getColor = (pm2, pm10) => {
 export default class PurpleAirService{
 
   public async queryCurrentHour(){
-    try {
+    await Database.transaction(async (trx) => {
+      try {
+        const PM_2=await Type.findByOrFail('name','PM_2.5')
+        const PM_10=await Type.findByOrFail('name','PM_10')
 
-      console.log("ENTRÓ Al SERVICIO")
-      const PM_2=await Type.findByOrFail('name','PM_2.5')
-      const PM_10=await Type.findByOrFail('name','PM_10')
-
-      console.log("CONSULTA DE TIPOS")
-
-      const monitors=await Monitor.query()
-      .preload('model')
-      .whereHas('model', (query) => {
-        query.where('name', MODEL_PURPLE);
-      })
-      .where('active', true)
-      .exec();
-
-      console.log("CONSULTA DE MONITORES")
-
-      await Promise.allSettled(
-        monitors.map(async monitor=>{
-          
-          console.log(`MONITOR ${monitor.name}`)
-          
-          const average = await this.fetchPurpleAir(monitor)
-        
-          let pm2 = average.sensor["pm2.5_atm"];
-          let pm10 = average.sensor["pm10.0_atm"];
-
-          //AGREGAR A DATA
-          await this.createDatum(PM_2, monitor, pm2);
-          await this.createDatum(PM_10, monitor, pm10);
-
-          console.log(`DATA GUARDADA ${monitor.name}`)
+        const monitors=await Monitor.query()
+        .preload('model')
+        .whereHas('model', (query) => {
+          query.where('name', MODEL_PURPLE);
         })
-      );
-      
-    } catch (error) {
-      console.error('Error en la petición:', error);
-    }
-  }
+        .where('active', true)
+        .exec();
 
+        await Promise.allSettled(
+          monitors.map(async monitor=>{
+              
+            const average = await this.fetchPurpleAir(monitor)
+            
+            let pm2 = average.sensor["pm2.5_atm"];
+            let pm10 = average.sensor["pm10.0_atm"];
+
+            //AGREGAR A DATA
+
+            await monitor.related('datum')
+            .createMany([
+              {
+                type_id:PM_2.id,
+                average: pm2
+              },
+              {
+                type_id:PM_10.id,
+                average: pm10
+              }
+            ]);
+          })
+        );
+      } catch (error) {
+        console.error('Error en la petición:', error);
+        trx.rollback();
+      }
+    })
+  }
 
   private async fetchPurpleAir(monitor:Monitor){
     try {
@@ -83,28 +87,11 @@ export default class PurpleAirService{
         const errorData = (await response.json()) as ErrorResponse;
         throw new Error(`Error de red - Código de estado: ${response.status}, Mensaje: ${errorData.message}`);
       }   
-      console.log(`CONSULTA A ${monitor.name} EXITOSA`)
       return (await response.json()) as SensorData;
 
     } catch (error) {
       console.error(`Error en la consulta a ${monitor.name}: ${error}`);
       return { sensor: { 'pm2.5_atm': 0, 'pm10.0_atm': 0 } };
-    }
-  }
-
-
-  private async createDatum(type: Type, monitor: Monitor, value: number) {
-    try {
-      const datum = await type.related('datum').create({
-        average: value
-      });
-  
-      await datum.related('monitor').associate(monitor);
-      console.log(`Dato creado para ${monitor.name}`);
-      return datum;
-    } catch (error) {
-      console.error(`Error al crear el dato para ${monitor.name}: ${error}`);
-      throw new Error(`Error al crear el dato para ${monitor.name}`);
     }
   }
 

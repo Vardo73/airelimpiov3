@@ -1,10 +1,15 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Database from '@ioc:Adonis/Lucid/Database';
+import { format } from 'date-fns';
+import Datum from 'App/Models/Datum';
 import Model from 'App/Models/Model';
 import Monitor from 'App/Models/Monitor';
 import Neighborhood from 'App/Models/Neighborhood';
 import Sponsor from 'App/Models/Sponsor';
 import PurpleAirService from 'App/Services/PurpleAirService';
 import MonitorValidator from 'App/Validators/MonitorValidator';
+const PM_2='1',PM_10='2';
+const MODEL_PURPLE='PURPLE_AIR'
 
 export default class MonitorsController {
 
@@ -168,23 +173,84 @@ export default class MonitorsController {
         const purpleAirService = await new PurpleAirService(); 
         let monitors= await purpleAirService.queryCurrentBanner()
 
-
-            let banners:{html:any,latitude:number,longitude:number}[]=[]
-            monitors?.map(async monitor=>{
-                let html=await view.render('partials/banner_monitor',{monitor})
-                let element={
-                    html:html,
-                    color:monitor.color,
-                    latitude:monitor.monitor.latitude, 
-                    longitude: monitor.monitor.longitude
-                }
-
-                banners.push(element)
-            })
+        let banners:{html:string,color:string,latitude:number,longitude:number}[]=[]
+        monitors?.map(async monitor=>{
+            let html=await view.render('partials/banner_monitor',{monitor})
+            let element={
+                html:html,
+                color:monitor.color,
+                latitude:monitor.monitor.latitude, 
+                longitude: monitor.monitor.longitude
+            }
+            banners.push(element)
+        })
 
             return banners
        } catch (error) {
         console.log(error)
        }
+    }
+
+    public async historics({view,params,response}:HttpContextContract){
+        try{
+            const slug=params.slug
+            const monitor=await Monitor.findByOrFail('slug',slug)
+            
+            const monitors=await Monitor.query()
+            .preload('model')
+            .whereHas('model', (query) => {
+                query.where('name', MODEL_PURPLE);
+            })
+            .where('active', true)
+            .exec();
+
+
+            if (!monitor.active) return response.redirect().toPath('/')
+            
+
+            const averages_all = await Datum.query()
+            .select(
+                Database.raw('DATE(created_at) as date'),
+                Database.raw('HOUR(created_at) as hour'),
+                Database.raw('ROUND(AVG(average), 2) as average'),
+                'type_id'
+            )
+            .where('monitor_id', monitor.id)
+            .whereIn('type_id', [PM_2,PM_10])
+            .where('created_at', '>=', Database.raw('CURDATE() - INTERVAL 5 DAY'))
+            .groupBy(['date', 'hour','type_id'])
+            .orderBy('date', 'desc')
+            .orderBy('hour', 'asc')
+
+            let averages:{
+                date:string;
+                "PM_2.5":{[hour: string]: number }
+                "PM_10":{[hour: string]: number }
+            }[]=[]
+
+            averages_all.forEach(result => {
+                const date:string = format(new Date(result.$extras.date), 'dd/MM/yyyy');
+                const hour:string= result.$extras.hour;
+                const average:number = result.average;
+                const typeId:string = result.type_id;
+
+                let existingItem = averages.find(item => item.date === date);
+                
+                if (!existingItem) {
+                    existingItem = { date, "PM_2.5": {}, "PM_10": {} };
+                    averages.push(existingItem);
+                }
+
+                if (typeId == PM_2) {
+                    existingItem["PM_2.5"][hour] = average;
+                } else if (typeId == PM_10) {
+                    existingItem.PM_10[hour] = average;
+                }
+            });
+
+            return view.render('public/historics',{slug,monitor,averages,monitors})
+        }catch(error){
+            console.log(error)
+        }
     }
 }

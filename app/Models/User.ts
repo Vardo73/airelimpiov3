@@ -12,7 +12,7 @@ export default class User extends BaseModel {
   public username:string
 
   @column()
-  public rol_id: 'required|exists:rols,id'
+  public rol_id: number
 
   @column()
   public name:string

@@ -9,6 +9,7 @@ Route.get('banner_neighborhood','NeighborhoodsController.bannerNeighborhood').as
 Route.get('map_neighborhoods','NeighborhoodsController.showMap').as('map_neighborhoods')
 Route.get('map_clinics','ClinicsController.showMap').as('map_clinics')
 Route.get('register','UsersController.register').as('register')
+Route.get('historics/:slug','MonitorsController.historics').as('historics')
 //Admin
 Route.get('pollutants','PollutantsController.show').as('pollutants')
 Route.get('sponsors','SponsorsController.show').as('sponsors')
