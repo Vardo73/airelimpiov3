@@ -8,6 +8,7 @@
     <hr/>
 </div>
 
+@if(auth.user.rol_id!=2)
 <div class="container">
     <div class="col col-12 align-self-end">
         <div class="d-grid gap-2 mx-auto ">
@@ -16,6 +17,7 @@
     </div>
     <br>
 </div>
+@endif
 
 <div class="container-fluid">
     <div class="accordion accordion-flush" id="accordionMonitors">
@@ -93,6 +95,7 @@
                                 </div>
                                 
                                 <div class="row mx-auto">
+                                    @if(auth.user.rol_id!=2)
                                     <div class="col col-6 d-grid gap-2 mx-auto">
                                         <button name="{{ monitor.id }}" class="btn btn-info " data-bs-toggle="modal" data-bs-target="#MonitorEditModal{{monitor.id}}" >Editar</button>
                                     </div>
@@ -102,6 +105,11 @@
                                             <button class="btn btn-danger w-100">Eliminar</button>
                                         </form>
                                     </div>
+                                    @else
+                                    <div class="col col-12 d-grid gap-2 mx-auto">
+                                        <button name="{{ monitor.id }}" class="btn btn-info " data-bs-toggle="modal" data-bs-target="#MonitorEditModal{{monitor.id}}" >Editar</button>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                             <!--

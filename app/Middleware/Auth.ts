@@ -13,7 +13,7 @@ export default class AuthMiddleware {
   /**
    * The URL to redirect to when request is Unauthorized
    */
-  protected redirectTo = '/ca-admin'
+  protected redirectTo = '/'
 
   /**
    * Authenticates the current HTTP request against a custom set of defined
@@ -65,10 +65,6 @@ export default class AuthMiddleware {
     next: () => Promise<void>,
     customGuards: (keyof GuardsList)[]
   ) {
-    /**
-     * Uses the user defined guards or the default guard mentioned in
-     * the config file
-     */
     const guards = customGuards.length ? customGuards : [auth.name]
     await this.authenticate(auth, guards)
     await next()

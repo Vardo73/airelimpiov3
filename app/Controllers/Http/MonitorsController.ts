@@ -8,7 +8,7 @@ import Neighborhood from 'App/Models/Neighborhood';
 import Sponsor from 'App/Models/Sponsor';
 import PurpleAirService from 'App/Services/PurpleAirService';
 import MonitorValidator from 'App/Validators/MonitorValidator';
-const PM_2='1',PM_10='2';
+const PM_2=1,PM_10=2;
 const MODEL_PURPLE='PURPLE_AIR'
 
 export default class MonitorsController {
@@ -115,8 +115,6 @@ export default class MonitorsController {
 
     public async update({request,response,params}:HttpContextContract){
 
-        //await request.validate(MonitorValidator)
-
         const {slug,name,apikey,neighborhood_id,longitude, latitude,model_id, active,sponsors}=request.body();
 
         const neighborhood=await Neighborhood.findOrFail(parseInt(neighborhood_id, 10))
@@ -162,7 +160,8 @@ export default class MonitorsController {
 
 
     //public view
-    public async showMap({view}:HttpContextContract){
+    public async showMap({view,auth}:HttpContextContract){
+        
         return view.render('public/map_monitors')
     }
 
@@ -217,7 +216,7 @@ export default class MonitorsController {
             )
             .where('monitor_id', monitor.id)
             .whereIn('type_id', [PM_2,PM_10])
-            .where('created_at', '>=', Database.raw('CURDATE() - INTERVAL 5 DAY'))
+            .where('created_at', '>=', Database.raw('CURDATE() - INTERVAL 11 DAY'))
             .groupBy(['date', 'hour','type_id'])
             .orderBy('date', 'desc')
             .orderBy('hour', 'asc')
@@ -232,7 +231,7 @@ export default class MonitorsController {
                 const date:string = format(new Date(result.$extras.date), 'dd/MM/yyyy');
                 const hour:string= result.$extras.hour;
                 const average:number = result.average;
-                const typeId:string = result.type_id;
+                const typeId:number = result.type_id;
 
                 let existingItem = averages.find(item => item.date === date);
                 

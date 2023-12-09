@@ -15,6 +15,7 @@
 
 
 <div id='mapMonitors'></div>
+
 <script>
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2lzdGVtYXNjZXJjYSIsImEiOiJjbDRldWE2ZjAwMjI3M2JwOHpsb21jbHpxIn0.jLF2ydLoAdgrv68l8iM2VQ';
@@ -58,9 +59,11 @@ fetch('/banner_monitor')
 
 
     });
+
   })
   .catch(error => {
     console.error('Error en la petición de monitores:', error);
   });
+
 </script>
 @end

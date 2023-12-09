@@ -1,0 +1,52 @@
+@layout('master')
+
+@section('historics_clinic')
+
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Histórico de la clinica {{clinic.name}}</span></h2>
+    <hr/>
+</div>
+
+<br>
+<!--  AILMENTS -->
+<div class="container-fluid">
+    <div class="accordion accordion-flush" id="accordionAilmentsClinic">
+        @each(year in arr)
+            <div class="accordion-item" style="margin-bottom:1%">
+                <h2 class="accordion-header" id="flush-heading{{year.year}}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{year.year}}" aria-expanded="false" aria-controls="flush-collapse{{year.year}}">
+                        {{year.year}}
+                    </button>
+                </h2>
+                <div id="flush-collapse{{year.year}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{year.year}}" data-bs-parent="#accordionFlush{{year.year}}">
+                    <div class="accordion-body">
+                        <div class="container-fluid">
+                            <div class="">
+                                <table class="table table-bordered" style="margin-left:auto; margin-right:auto; padding-top:8px; padding-left:55px; padding-right:55px;">
+                                    <thead>
+                                        <tr style="background-color:#white; color:#0d6efd;">
+                                            <th style="text-align:center;">Padecimiento</th>
+                                            <th style="text-align:center;">No. Casos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @each(ailment in year.ailments)
+                                        <tr>
+                                            <td style="text-align:center;">{{ailment.name}}</td>
+                                            <td style="text-align:center;">{{ailment.total}}</td>
+                                        </tr>
+                                        @endeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        @endeach  
+    </div>
+</div>
+
+
+@end

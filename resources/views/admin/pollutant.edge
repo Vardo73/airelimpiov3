@@ -10,13 +10,15 @@
 
 <br>
 <div class="container">
+
+    @if(auth.user.rol_id!=2)
     <div class="col col-12 align-self-end">
         <div class="d-grid gap-2 mx-auto ">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newPollutantModal">Agregar Nuevo</button>
         </div>
     </div>
     <br>
-    
+    @endif
     <div class=" container-fluid table-responsive table-bordered">
         <table class="table table-hover " name="tabAnual" id="tabAnual">
             <thead>
@@ -35,15 +37,22 @@
                     <td>{{ pollutant.description }}</td>
                     <td>
                         <div class="row mx-auto">
+                            @if(auth.user.rol_id!=2)
                             <div class="col col-6 d-grid gap-2 mx-auto">
                                 <button class="btn btn-info"  data-bs-toggle="modal" data-bs-target="#editPollutantModal{{pollutant.id}}">Editar</button>
                             </div>
+
                             <div class="col col-6 d-grid gap-2 mx-auto">
                                 <form action="{{route('delete_pollutant',[pollutant.id])}}?_method=DELETE" method="POST" class="formDelete">
                                     {{csrfField()}}
                                     <button type="submit" class="btn btn-danger">Eliminar</button>
                                 </form>
                             </div>
+                            @else
+                            <div class="col col-12 d-grid gap-2 mx-auto">
+                                <button class="btn btn-info"  data-bs-toggle="modal" data-bs-target="#editPollutantModal{{pollutant.id}}">Editar</button>
+                            </div>
+                            @endif
                         </div>
                     </td>
                 </tr>

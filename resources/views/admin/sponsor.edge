@@ -11,12 +11,14 @@
 
 <br>
 <div class="container">
-    <div class="col col-12 align-self-end">
-        <div class="d-grid gap-2 mx-auto ">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SponsorModal">Agregar</button>
+    @if(auth.user.rol_id!=2)
+        <div class="col col-12 align-self-end">
+            <div class="d-grid gap-2 mx-auto ">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SponsorModal">Agregar</button>
+            </div>
         </div>
-    </div>
-    <br>
+        <br>
+    @endif
     <div class="row row-cols-3  ">
         @each(sponsor in sponsors)
         <div class="col">
@@ -28,6 +30,7 @@
                     </div>
                 </div>
                 <div class="row g-0 card-footer">
+                    @if(auth.user.rol_id!=2)
                     <div class="row mx-auto">
                         <div class="col col-12 d-grid gap-2 mx-auto" >
                             <form action="{{route('delete_sponsor',[sponsor.id])}}?_method=DELETE" method="POST" class="formDelete">
@@ -36,6 +39,7 @@
                             </form>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         <br>

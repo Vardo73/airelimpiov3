@@ -155,11 +155,9 @@ export default class ClinicsController {
 
     //public view
 
-    public async showMap({view}:HttpContextContract){
-        
+    public async showMap({view}:HttpContextContract){  
         return view.render('public/map_clinics')
     }
-
 
     public async bannerClinic({view}:HttpContextContract){
       
@@ -197,6 +195,87 @@ export default class ClinicsController {
         } catch (error) {
          console.log(error)
         }
+    }
+
+
+    public async historics({view,params}:HttpContextContract){
+        const id=params.id;
+
+
+        const clinic=await Clinic.findOrFail(params.id)
+        const ailments= await Ailment.all()
+
+        const years=await Database
+        .from('ailment_clinics')
+        .select('year')
+        .whereRaw('ailment_clinics.clinic_id=? ',[id])
+        .distinct('year')
+        .orderBy('year', 'asc')
+
+        const ailments_clinic= await Database.from('ailment_clinics')
+        .select('*')
+        .whereRaw('ailment_clinics.clinic_id=? ',[id])
+        .groupBy('year','ailment_id');
+
+        let arr:object[]=[];
+
+        years.forEach( y => {
+            let obj:{
+                year:number,
+                ailments:object[]
+            }={
+                year:y.year,
+                ailments:[]
+            }            
+
+            ailments.forEach( ail => {
+                let ails_cli:{
+                    ailment_id:number,
+                    name:string,
+                    year:number,
+                    total:number,
+                    check:boolean
+                }={
+                    ailment_id:0,
+                    name:'',
+                    year:0,
+                    total:0,
+                    check:false
+                }
+                let flag=false;
+                let total=0
+
+                ailments_clinic.forEach(ail_cli => {
+                    if(ail.id==ail_cli.ailment_id && ail_cli.year==y.year){
+                        flag=true;
+                        total=ail_cli.total
+                        if(total== null) {total=0}
+                    }
+                })
+
+                if(flag){
+                    ails_cli={
+                        ailment_id:ail.id,
+                        name:ail.name,
+                        year:y.year,
+                        total:total,
+                        check:true
+                    }
+                }else{
+                    ails_cli={
+                        ailment_id:ail.id,
+                        name:ail.name,
+                        year:y.year,
+                        total:0,
+                        check:false
+                    }
+                }
+                obj.ailments.push(ails_cli)
+
+            })
+            arr.push(obj)
+        })
+        return view.render('public/historics_clinic',{clinic,ailments,arr,years})
     }
 }
 

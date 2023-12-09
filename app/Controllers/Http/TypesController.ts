@@ -2,7 +2,15 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Type from 'App/Models/Type';
 
-
+/*
+SOLO 3 ROLES:
+    -ADMIN:
+        -PPERMISOS TOTALES
+    -GUEST:
+        - ACCESOS DE LECTURA A LA PARTE DE ADMIN
+    -USER: 
+        -SOLO VISTAS A LA PARTE PUBLICA
+*/
 export default class TypesController {
 
     public async store({request,response}:HttpContextContract){

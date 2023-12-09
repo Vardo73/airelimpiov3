@@ -41,8 +41,6 @@
     @include('partials/sidebar')
     <main>
       <!--Views-->
-      @!section('login')
-      @!section('register')
       @!section('pollutant')
       @!section('sponsor')
       @!section('clinic')
@@ -53,12 +51,16 @@
       @!section('station')
       @!section('monitors_purple')
       @!section('monitors_fwop')
-      @!section('historics')
+      @!section('dashboard')
+      @!section('users')
         
       <!--public-->
+      @!section('register')
       @!section('map_monitors')
       @!section('map_neighborhoods')
       @!section('map_clinics')
+      @!section('historics')
+      @!section('historics_clinic')
     </main>
   </section>
 
