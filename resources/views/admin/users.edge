@@ -1,5 +1,388 @@
 @layout('master')
 @section('users')
 
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Gestor de usuarios</span></h2>
+    <hr/>
+</div>
+<br>
+<div class="container-fluid">
+    <ul class="nav nav-tabs" >
+        <li class="nav-item" >
+          <button class="nav-link active" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin" type="button" role="tab" aria-controls="admin" aria-selected="true">ADMINS</button>
+        </li>
+        <li class="nav-item" >
+          <button class="nav-link" id="guest-tab" data-bs-toggle="tab" data-bs-target="#guest" type="button" role="tab" aria-controls="guest" aria-selected="false">INVITADOS</i></button>
+        </li>
+        <li class="nav-item" >
+          <button class="nav-link" id="public-tab" data-bs-toggle="tab" data-bs-target="#public" type="button" role="tab" aria-controls="public" aria-selected="false">PÚBLICO</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active " id="admin" role="tabpanel" aria-labelledby="admin-tab">
+            <br>
+            <div class="container-fluid table-responsive table-bordered">
+                <table class="table table-hover " name="tabAnual" id="tabAnual">    
+                    <thead>
+                        <tr>
+                            <th style="text-align:center;">ID</th>
+                            <th style="text-align:center;">Username</th>
+                            <th style="text-align:center;">Nombre</th>
+                            <th style="text-align:center;">Correo</th>
+                            <th style="text-align:center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @each(user in users)
+                        @if(user.rol_id==1)
+                        <tr>
+                            <td style="text-align:center;">{{user.id}}</td>
+                            <td style="text-align:center;">{{user.username}}</td>
+                            <td style="text-align:center;">{{user.name}}</td>
+                            <td style="text-align:center;">{{user.email}}</td>
+                            <td>
+                                <div class="row mx-auto">
+                                    @if(auth.user.rol_id!=2)
+                                    <div class="col col-6 d-grid gap-2 mx-auto">
+                                        <button  class="btn btn-info"   data-bs-toggle="modal" data-bs-target="#UserModalEdit{{user.id}}">Editar</button>
+                                    </div>
+                                    <div class="col col-6 d-grid gap-2 mx-auto" >
+                                        <form action="{{route('delete_user',[user.id])}}?_method=DELETE" method="post" class="formDelete">
+                                            {{csrfField()}}
+                                            <button class="btn btn-danger">Eliminar</button>
+                                        </form>
+                                    </div>
+                                    @else
+                                    <div class="col col-12 d-grid gap-2 mx-auto">
+                                        <button  class="btn btn-info"   data-bs-toggle="modal" data-bs-target="#UserModalEdit{{user.id}}">Editar</button>
+                                    </div>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
 
+                        <div class="container-fluid">
+                            <div class="modal fade" id="UserModalEdit{{user.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2>Editar Usuario</h2>
+                                        </div>
+                                        <form action="{{route('update_user',[user.id])}}?_method=PATCH" method="POST">
+                                            {{csrfField()}}
+                                            <div class="modal-body">
+                                                <div class="row mx-auto">
+                                                    @if(flashMessages.has('errors.username'))
+                                                        <div class="alert alert-danger" role="alert">
+                                                            {{flashMessages.get('errors.username')}}
+                                                        </div>
+                                                    @endif
+                                                    <div class="col col-12 d-grid gap-2 mx-auto">
+                                                        <label class="form-label" for="username">Username:</label>
+                                                        <input class="form-control" type="text" name="username" id="username" required value={{user.username}}>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row mx-auto">
+                                                    @if(flashMessages.has('errors.name'))
+                                                        <div class="alert alert-danger" role="alert">
+                                                            {{flashMessages.get('errors.name')}}
+                                                        </div>
+                                                    @endif
+                                                    <div class="col col-12 d-grid gap-2 mx-auto">
+                                                        <label class="form-label" for="name">Nombre:</label>
+                                                        <input class="form-control" type="text" name="name" id="name" required value={{user.name}}>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row mx-auto">
+                                                    @if(flashMessages.has('errors.email'))
+                                                        <div class="alert alert-danger" role="alert">
+                                                            {{flashMessages.get('errors.email')}}
+                                                        </div>
+                                                    @endif
+                                                    <div class="col col-12 d-grid gap-2 mx-auto">
+                                                        <label class="form-label" for="email">Correo:</label>
+                                                        <input class="form-control" type="text" name="email" id="email" required value={{user.email}}>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-outline-primary">Aceptar</button>
+                                                <button type="button" class="btn btn-outline-primary "  data-bs-dismiss="modal">Cancelar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @end
+                        @endeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="guest" role="tabpanel" aria-labelledby="guest-tab">
+            <br>
+            <div class="container-fluid table-responsive table-bordered">
+                <table class="table table-hover " name="tabAnual" id="tabAnual">  
+                    <thead>
+                        <tr>
+                            <th style="text-align:center;">ID</th>
+                            <th style="text-align:center;">Username</th>
+                            <th style="text-align:center;">Nombre</th>
+                            <th style="text-align:center;">Correo</th>
+                            <th style="text-align:center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @each(user in users)
+                        @if(user.rol_id==2)
+                        <tr>
+                            <td style="text-align:center;">{{user.id}}</td>
+                            <td style="text-align:center;">{{user.username}}</td>
+                            <td style="text-align:center;">{{user.name}}</td>
+                            <td style="text-align:center;">{{user.email}}</td>
+                            <td>
+                                <div class="row mx-auto">
+                                    @if(auth.user.rol_id!=2)
+                                    <div class="col col-6 d-grid gap-2 mx-auto">
+                                        <button  class="btn btn-info"   data-bs-toggle="modal" data-bs-target="#UserModalEdit{{user.id}}">Editar</button>
+                                    </div>
+                                    <div class="col col-6 d-grid gap-2 mx-auto" >
+                                        <form action="{{route('delete_user',[user.id])}}?_method=DELETE" method="post" class="formDelete">
+                                            {{csrfField()}}
+                                            <button class="btn btn-danger">Eliminar</button>
+                                        </form>
+                                    </div>
+                                    @else
+                                    <div class="col col-12 d-grid gap-2 mx-auto">
+                                        <button  class="btn btn-info"   data-bs-toggle="modal" data-bs-target="#UserModalEdit{{user.id}}">Editar</button>
+                                    </div>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                        <div class="container-fluid">
+                            <div class="modal fade" id="UserModalEdit{{user.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2>Editar Usuario</h2>
+                                        </div>
+                                        <form action="{{route('update_user',[user.id])}}?_method=PATCH" method="POST">
+                                            {{csrfField()}}
+                                            <div class="modal-body">
+                                                <div class="row mx-auto">
+                                                    @if(flashMessages.has('errors.username'))
+                                                        <div class="alert alert-danger" role="alert">
+                                                            {{flashMessages.get('errors.username')}}
+                                                        </div>
+                                                    @endif
+                                                    <div class="col col-6 d-grid gap-2 mx-auto">
+                                                        <label class="form-label" for="username">Username:</label>
+                                                        <input class="form-control" type="text" name="username" id="username" required value={{user.username}}>
+                                                    </div>
+                                                    @if(flashMessages.has('errors.rol'))
+                                                        <div class="alert alert-danger" role="alert">
+                                                            {{flashMessages.get('errors.rol')}}
+                                                        </div>
+                                                    @endif
+                                                    <div class="col col-6 d-grid gap-2 mx-auto">
+                                                        <label class="form-label" for="role">Rol:</label>
+                                                        <select class="form-control" name="rol" id="rol" required>
+                                                            @each(rol in rols)
+                                                                @if(user.rol_id == rol.id)
+                                                                    <option  value='{{ rol.id }}' selected>{{ rol.name }}</option>
+                                                                @else
+                                                                    <option  value='{{ rol.id }}' >{{ rol.name }}</option>
+                                                                @endif
+                                                            @endeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row mx-auto">
+                                                    @if(flashMessages.has('errors.name'))
+                                                        <div class="alert alert-danger" role="alert">
+                                                            {{flashMessages.get('errors.name')}}
+                                                        </div>
+                                                    @endif
+                                                    <div class="col col-12 d-grid gap-2 mx-auto">
+                                                        <label class="form-label" for="name">Nombre:</label>
+                                                        <input class="form-control" type="text" name="name" id="name" required value={{user.name}}>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row mx-auto">
+                                                    @if(flashMessages.has('errors.email'))
+                                                        <div class="alert alert-danger" role="alert">
+                                                            {{flashMessages.get('errors.email')}}
+                                                        </div>
+                                                    @endif
+                                                    <div class="col col-12 d-grid gap-2 mx-auto">
+                                                        <label class="form-label" for="email">Correo:</label>
+                                                        <input class="form-control" type="text" name="email" id="email" required value={{user.email}}>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-outline-primary">Aceptar</button>
+                                                <button type="button" class="btn btn-outline-primary "  data-bs-dismiss="modal">Cancelar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @end
+                        @endeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="public" role="tabpanel" aria-labelledby="public-tab">
+            <br>
+            <div class="container-fluid table-responsive table-bordered">
+                <table class="table table-hover ">   
+                    <thead>
+                        <tr>
+                            <th style="text-align:center;">ID</th>
+                            <th style="text-align:center;">Username</th>
+                            <th style="text-align:center;">Nombre</th>
+                            <th style="text-align:center;">Correo</th>
+                            <th style="text-align:center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @each(user in users)
+                        @if(user.rol_id==3)
+                        <tr>
+                            <td style="text-align:center;">{{user.id}}</td>
+                            <td style="text-align:center;">{{user.username}}</td>
+                            <td style="text-align:center;">{{user.name}}</td>
+                            <td style="text-align:center;">{{user.email}}</td>
+                            <td>
+                                <div class="row mx-auto">
+                                    @if(auth.user.rol_id!=2)
+                                    <div class="col col-6 d-grid gap-2 mx-auto">
+                                        <button  class="btn btn-info"   data-bs-toggle="modal" data-bs-target="#UserModalEdit{{user.id}}">Editar</button>
+                                    </div>
+                                    <div class="col col-6 d-grid gap-2 mx-auto" >
+                                        <form action="{{route('delete_user',[user.id])}}?_method=DELETE" method="post" class="formDelete">
+                                            {{csrfField()}}
+                                            <button class="btn btn-danger">Eliminar</button>
+                                        </form>
+                                    </div>
+                                    @else
+                                    <div class="col col-12 d-grid gap-2 mx-auto">
+                                        <button  class="btn btn-info"   data-bs-toggle="modal" data-bs-target="#UserModalEdit{{user.id}}">Editar</button>
+                                    </div>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                        <div class="container-fluid">
+                            <div class="modal fade" id="UserModalEdit{{user.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2>Editar Usuario</h2>
+                                        </div>
+                                        <form action="{{route('update_user',[user.id])}}?_method=PATCH" method="POST">
+                                            {{csrfField()}}
+                                            <div class="modal-body">
+                                                <div class="row mx-auto">
+                                                    @if(flashMessages.has('errors.username'))
+                                                        <div class="alert alert-danger" role="alert">
+                                                            {{flashMessages.get('errors.username')}}
+                                                        </div>
+                                                    @endif
+                                                    <div class="col col-6 d-grid gap-2 mx-auto">
+                                                        <label class="form-label" for="username">Username:</label>
+                                                        <input class="form-control" type="text" name="username" id="username" required value={{user.username}}>
+                                                    </div>
+                                                    @if(flashMessages.has('errors.name'))
+                                                        <div class="alert alert-danger" role="alert">
+                                                            {{flashMessages.get('errors.name')}}
+                                                        </div>
+                                                    @endif
+                                                    <div class="col col-6 d-grid gap-2 mx-auto">
+                                                        <label class="form-label" for="role">Rol:</label>
+                                                        <select class="form-control" name="rol" id="rol" required>
+                                                            @each(rol in rols)
+                                                                @if(user.rol_id == rol.id)
+                                                                    <option  value='{{ rol.id }}' selected>{{ rol.name }}</option>
+                                                                @else
+                                                                    <option  value='{{ rol.id }}' >{{ rol.name }}</option>
+                                                                @endif
+                                                            @endeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row mx-auto">
+                                                    @if(flashMessages.has('errors.name'))
+                                                        <div class="alert alert-danger" role="alert">
+                                                            {{flashMessages.get('errors.name')}}
+                                                        </div>
+                                                    @endif
+                                                    <div class="col col-12 d-grid gap-2 mx-auto">
+                                                        <label class="form-label" for="name">Nombre:</label>
+                                                        <input class="form-control" type="text" name="name" id="name" required value={{user.name}}>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row mx-auto">
+                                                    @if(flashMessages.has('errors.email'))
+                                                        <div class="alert alert-danger" role="alert">
+                                                            {{flashMessages.get('errors.email')}}
+                                                        </div>
+                                                    @endif
+                                                    <div class="col col-12 d-grid gap-2 mx-auto">
+                                                        <label class="form-label" for="email">Correo:</label>
+                                                        <input class="form-control" type="text" name="email" id="email" required value={{user.email}}>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-outline-primary">Aceptar</button>
+                                                <button type="button" class="btn btn-outline-primary "  data-bs-dismiss="modal">Cancelar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @end
+                        @endeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload= function(){
+         let forms=document.querySelectorAll('.formDelete')
+ 
+        forms.forEach(form=>{
+            form.addEventListener('submit',(e)=>{
+                e.preventDefault()
+                Swal.fire({
+                    title:'Está seguró de eliminar este elemento?',
+                    showCancelButton:true,
+                    confirmButtonText:'Eliminar',
+                    denyButtonText:'Cancelar',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        form.submit()
+                    }
+                })
+            })
+        })
+    }
+</script>
 @end

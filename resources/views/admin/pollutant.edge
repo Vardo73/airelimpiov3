@@ -31,33 +31,33 @@
             </thead>
             <tbody>
                 @each(pollutant in pollutants)
-                <tr>
-                    <td>{{ pollutant.id}}</td>
-                    <td>{{ pollutant.name }}</td>
-                    <td>{{ pollutant.description }}</td>
-                    <td>
-                        <div class="row mx-auto">
-                            @if(auth.user.rol_id!=2)
-                            <div class="col col-6 d-grid gap-2 mx-auto">
-                                <button class="btn btn-info"  data-bs-toggle="modal" data-bs-target="#editPollutantModal{{pollutant.id}}">Editar</button>
-                            </div>
+                    <tr>
+                        <td>{{ pollutant.id}}</td>
+                        <td>{{ pollutant.name }}</td>
+                        <td>{{ pollutant.description }}</td>
+                        <td>
+                            <div class="row mx-auto">
+                                @if(auth.user.rol_id!=2)
+                                <div class="col col-6 d-grid gap-2 mx-auto">
+                                    <button class="btn btn-info"  data-bs-toggle="modal" data-bs-target="#editPollutantModal{{pollutant.id}}">Editar</button>
+                                </div>
 
-                            <div class="col col-6 d-grid gap-2 mx-auto">
-                                <form action="{{route('delete_pollutant',[pollutant.id])}}?_method=DELETE" method="POST" class="formDelete">
-                                    {{csrfField()}}
-                                    <button type="submit" class="btn btn-danger">Eliminar</button>
-                                </form>
+                                <div class="col col-6 d-grid gap-2 mx-auto">
+                                    <form action="{{route('delete_pollutant',[pollutant.id])}}?_method=DELETE" method="POST" class="formDelete">
+                                        {{csrfField()}}
+                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                    </form>
+                                </div>
+                                @else
+                                <div class="col col-12 d-grid gap-2 mx-auto">
+                                    <button class="btn btn-info"  data-bs-toggle="modal" data-bs-target="#editPollutantModal{{pollutant.id}}">Editar</button>
+                                </div>
+                                @endif
                             </div>
-                            @else
-                            <div class="col col-12 d-grid gap-2 mx-auto">
-                                <button class="btn btn-info"  data-bs-toggle="modal" data-bs-target="#editPollutantModal{{pollutant.id}}">Editar</button>
-                            </div>
-                            @endif
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
 
-                <!-- MODAL Edit CONTAMINANTE -->
+                    <!-- MODAL Edit CONTAMINANTE -->
                     <div class="container-fluid">
                         <div class="modal fade" id="editPollutantModal{{pollutant.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">

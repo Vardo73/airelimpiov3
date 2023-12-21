@@ -1,5 +1,189 @@
 @layout('master')
 @section('dashboard')
 
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Panel</span></h2>
+    <hr/>
+</div>
 
+<div class="container">
+    <ul class="nav nav-tabs" >
+        <li class="nav-item" >
+          <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">General</button>
+        </li>
+        <li class="nav-item" >
+          <button class="nav-link" id="monitors-tab" data-bs-toggle="tab" data-bs-target="#monitors" type="button" role="tab" aria-controls="monitors" aria-selected="false">Monitores</i></button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active " id="general" role="tabpanel" aria-labelledby="general-tab">
+            <br>
+            <div class="row mx-auto">
+                <div class="col col-4 d-grid gap-2 mx-auto">
+                    <label for="username">Username:</label>
+                    <h5 class="" name="usernmae" id="username" >{{auth.user.username }}</h5>
+                </div>
+                <div class="col col-4 d-grid gap-2 mx-auto">
+                    <label for="name">Nombre:</label>
+                    <h5 class="" name="name" id="name" >{{auth.user.name}}</h5>
+                </div>
+                <div class="col col-4 d-grid gap-2 mx-auto">
+                    <label for="email">Correo:</label>
+                    <h5 class="" name="email" id="email" >{{auth.user.email}}</h5>
+                </div>
+            </div>
+            <br>
+            <div class="row mx-auto">
+                <div class="col col-6 d-grid gap-2 mx-auto">
+                    <button  class="btn btn-info"   data-bs-toggle="modal" data-bs-target="#UserModalEdit">Editar</button>
+                </div>
+                <div class="col col-6 d-grid gap-2 mx-auto" >
+                    <form action="{{route('delete_user_panel',[auth.user.id])}}?_method=DELETE" method="post" class="formDelete">
+                        {{csrfField()}}
+                        <button class="btn btn-danger  w-100">Eliminar cuenta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade container-fluid" id="monitors" role="tabpanel" aria-labelledby="monitors-tab">
+            <br>
+            <p style="text-align: center;">Seleccione los monitores de los cuales desea ser notificado por correo.</p>
+            <br>
+            <form action="{{route('add_monitors',[auth.user.id])}}?_method=PATCH" method="post" class="formEdit">
+                {{csrfField()}}
+            <div class="row">
+                @each(monitor in monitors)
+
+                    <span style="display: none;">{{flag=false}}</span>
+                    @each(monitor_user in user_monitors)
+                        @if(monitor.id==monitor_user.monitor_id)
+                        <span style="display: none;">{{flag=true}}</span>
+                        @endif
+                    @endeach 
+                    @if(flag === true)
+                    <div class="col-4 mb-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name='monitors' type="checkbox" value="{{ monitor.id }}" checked>
+                            <label class="form-check-label" for="inlineCheckbox1">{{ monitor.name }}</label>
+                        </div>
+                    </div>
+                    @else
+                    <div class="col-4 mb-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name='monitors' type="checkbox" value="{{ monitor.id }}">
+                            <label class="form-check-label" for="inlineCheckbox1">{{ monitor.name }}</label>
+                        </div>
+                    </div>
+                    @endif
+                @endeach   
+            </div> 
+            <br>
+            <div class="row mx-auto">
+                <div class="col col-12 d-grid gap-2 mx-auto">
+                    <button type="submit" class="btn btn-primary" >Editar</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="modal fade" id="UserModalEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Editar</h2>
+                </div>
+                <form action="{{route('update_user',[auth.user.id])}}?_method=PATCH" method="POST">
+                    {{csrfField()}}
+                    <div class="modal-body">
+                        <div class="row mx-auto">
+                            @if(flashMessages.has('errors.username'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.username')}}
+                                </div>
+                            @endif
+                            <div class="col col-12 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="username">Username:</label>
+                                <input class="form-control" type="text" name="username" id="username" required value='{{auth.user.username}}'>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row mx-auto">
+                            @if(flashMessages.has('errors.name'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.name')}}
+                                </div>
+                            @endif
+                            <div class="col col-12 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="name">Nombre:</label>
+                                <input class="form-control" type="text" name="name" id="name"  value='{{auth.user.name}}'>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row mx-auto">
+                            @if(flashMessages.has('errors.email'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.email')}}
+                                </div>
+                            @endif
+                            <div class="col col-12 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="email">Correo:</label>
+                                <input class="form-control" type="text" name="email" id="email" required value='{{auth.user.email}}'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-outline-primary">Aceptar</button>
+                        <button type="button" class="btn btn-outline-primary "  data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    window.onload= function(){
+         let forms=document.querySelectorAll('.formDelete')
+        let formsEdit=document.querySelectorAll('.formEdit')
+ 
+        forms.forEach(form=>{
+            form.addEventListener('submit',(e)=>{
+                e.preventDefault()
+                Swal.fire({
+                    title:'Está seguró de eliminar su cuenta?',
+                    showCancelButton:true,
+                    confirmButtonText:'Eliminar',
+                    denyButtonText:'Cancelar',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        form.submit()
+                    }
+                })
+            })
+        });
+
+        formsEdit.forEach(form=>{
+            form.addEventListener('submit',(e)=>{
+                e.preventDefault()
+                Swal.fire({
+                    title:'Está seguró de los cambios realizados?',
+                    showCancelButton:true,
+                    confirmButtonText:'Guardar',
+                    denyButtonText:'Cancelar',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        form.submit()
+                    }
+                })
+            })
+        });
+    }
+</script>
 @end

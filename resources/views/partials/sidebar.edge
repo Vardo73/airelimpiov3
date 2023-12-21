@@ -144,6 +144,7 @@
                         <li><a class="dropdown-item" href="{{route('models')}}">Modelos</a></li>
                         <li><a class="dropdown-item" href="{{route('ailments')}}">Enfermedades</a></li>
                         <li><a class="dropdown-item" href="{{route('neighborhoods')}}">Colonias</a></li>
+                        <li><a class="dropdown-item" href="{{route('users')}}">Usuarios</a></li>
                         <li><a class="dropdown-item" href="{{route('clinics')}}">Clinicas</a></li>
                     </ul>
                 </li>
@@ -165,6 +166,9 @@
                         {{ auth.user.username }}
                     </a>
                     <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown" >
+                        <li>
+                            <a class="dropdown-item" href="{{route('dashboard')}}">Panel</a>
+                        </li>
                         <li>
                             <form action="{{route('logout')}}" method="post">
                                 {{ csrfField() }}
@@ -346,7 +350,7 @@
                                   <button class="nav-link" id="profile2-tab" data-bs-toggle="tab" data-bs-target="#profile2" type="button" role="tab" aria-controls="profile2" aria-selected="false"><i class="bi bi-2-square"></i></button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                  <button class="nav-link" id="profile5-tab" data-bs-toggle="tab" data-bs-target="#profile5" type="button" role="tab" aria-controls="profile5" aria-selected="false"><i class="bi bi-3-square"></i></button>
+                                  <button class="nav-link" id="profile3-tab" data-bs-toggle="tab" data-bs-target="#profile3" type="button" role="tab" aria-controls="profile3" aria-selected="false"><i class="bi bi-3-square"></i></button>
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
@@ -408,7 +412,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="tab-pane fade" id="profile2" role="tabpanel" aria-labelledby="profile1-tab">
+                                <div class="tab-pane fade" id="profile2" role="tabpanel" aria-labelledby="profile2-tab">
                                     <br>
                                     <table class="table table-bordered" style="margin-left:auto; margin-right:auto; padding-top:8px; padding-left:55px; padding-right:55px;">
                                         <thead>
@@ -455,7 +459,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="tab-pane fade" id="profile5" role="tabpanel" aria-labelledby="profile4-tab">
+                                <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile3-tab">
                                     <br>
                                     <table class="table table-bordered" style="margin-left:auto; margin-right:auto; padding-top:8px; padding-left:55px; padding-right:55px;">
                                         <thead>

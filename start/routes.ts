@@ -8,21 +8,24 @@ Route.get('banner_clinic','ClinicsController.bannerClinic').as('banner_clinic')
 Route.get('banner_neighborhood','NeighborhoodsController.bannerNeighborhood').as('banner_neighborhood')
 Route.get('map_neighborhoods','NeighborhoodsController.showMap').as('map_neighborhoods')
 Route.get('map_clinics','ClinicsController.showMap').as('map_clinics')
-Route.get('register','UsersController.register').as('register').middleware('guest')
 Route.get('historics/:slug','MonitorsController.historics').as('historics').where('slug', /^[0-9]+$/)
 Route.get('historics_clinic/:id','ClinicsController.historics').as('historic_clinic')
-//Admin
-Route.get('pollutants','PollutantsController.show').as('pollutants').middleware('auth')
-Route.get('sponsors','SponsorsController.show').as('sponsors').middleware('auth')
-Route.get('clinics','ClinicsController.show').as('clinics').middleware('auth')
-Route.get('models','ModelsController.show').as('models').middleware('auth')
-Route.get('neighborhoods','NeighborhoodsController.show').as('neighborhoods').middleware('auth')
-Route.get('ailments','AilmentsController.show').as('ailments').middleware('auth')
-Route.get('monitors_purple','MonitorsController.showPurple').as('monitors_purple').middleware('auth')
-Route.get('monitors_fwop','MonitorsController.showFWOP').as('monitors_fwop').middleware('auth')
-Route.get('stations','StationsController.show').as('stations').middleware('auth')
-Route.get('ailments_clinic/:id','AilmentsController.showAilments').as('ailments_clinic').where('id', /^[0-9]+$/).middleware('auth')
-
+//GUEST
+Route.get('register','UsersController.register').as('register').middleware('guest')
+//AUTH
+Route.get('dashboard','UsersController.dashboard').as('dashboard').middleware(['auth:web'])
+//ADMIN
+Route.get('pollutants','PollutantsController.show').as('pollutants').middleware(['auth:web']).middleware(['role:ADMIN,GUEST'])
+Route.get('sponsors','SponsorsController.show').as('sponsors').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('clinics','ClinicsController.show').as('clinics').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('models','ModelsController.show').as('models').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('neighborhoods','NeighborhoodsController.show').as('neighborhoods').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('ailments','AilmentsController.show').as('ailments').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('monitors_purple','MonitorsController.showPurple').as('monitors_purple').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('monitors_fwop','MonitorsController.showFWOP').as('monitors_fwop').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('stations','StationsController.show').as('stations').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('users','UsersController.show').as('users').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('ailments_clinic/:id','AilmentsController.showAilments').as('ailments_clinic').where('id', /^[0-9]+$/).middleware('auth').middleware(['role:ADMIN,GUEST'])
 
 
 Route.group(()=>{
@@ -61,9 +64,11 @@ Route.group(()=>{
 Route.group(()=>{
   Route.post('store','UsersController.store').as('store_user')
   Route.delete('delete/:id','UsersController.delete').as('delete_user').where('id', /^[0-9]+$/)
+  Route.delete('panel_delete/:id','UsersController.delete_panel').as('delete_user_panel').where('id', /^[0-9]+$/)
   Route.patch('update/:id','UsersController.update').as('update_user').where('id', /^[0-9]+$/)
   Route.post('login','UsersController.login').as('login')
   Route.post('logout','UsersController.logout').as('logout')
+  Route.patch('add_monitors/:id','UsersController.addMonitors').as('add_monitors').where('id', /^[0-9]+$/)
 }).prefix('user')
 
 Route.group(()=>{
