@@ -116,7 +116,6 @@ export default class UsersController {
         try {
             
             const {monitors}=request.body();
-            console.log(request.body())
 
             const user=await User.findOrFail(params.id);
 

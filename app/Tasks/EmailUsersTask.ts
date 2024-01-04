@@ -1,22 +1,31 @@
-import { BaseTask, CronTimeV2 } from 'adonis5-scheduler/build/src/Scheduler/Task'
+import PurpleAirService from 'App/Services/PurpleAirService';
+import SendgridService from 'App/Services/SendgridService';
+import { BaseTask } from 'adonis5-scheduler/build/src/Scheduler/Task'
 
 export default class EmailUsersTask extends BaseTask {
   public static get schedule() {
-		// Use CronTimeV2 generator:
-    return CronTimeV2.everySecond()
-		// or just use return cron-style string (simple cron editor: crontab.guru)
+		return '0 */30 * * * *'
+		//return '0 38 * * * *'
   }
-  /**
-   * Set enable use .lock file for block run retry task
-   * Lock file save to `build/tmp/adonis5-scheduler/locks/your-class-name`
-   */
   public static get useLock() {
     return false
   }
 
   public async handle() {
-    this.logger.info('Handled')
-    // Remove this promise and insert your code:
-    await new Promise((res) => setTimeout(res, 2000))
+    try {
+      const purpleAirService = await new PurpleAirService(); 
+      const users=await purpleAirService.taskQuery()
+
+      if (!users || users.length === 0) {
+        return;
+      }
+
+      const emailService= new SendgridService()
+
+      emailService.sendEmailUsers(users)
+    } catch (error) {
+
+      console.log(error,'EmailUserTask.ts')
+    }
   }
 }

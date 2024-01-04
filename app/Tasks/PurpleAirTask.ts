@@ -11,7 +11,7 @@ export default class PurpleAirTask extends BaseTask {
   }
 
   public async handle() {
-    const purpleAirService = await new PurpleAirService(); 
-    await purpleAirService.queryCurrentHour()
+    //const purpleAirService = await new PurpleAirService(); 
+    //await purpleAirService.queryCurrentHour()
   }
 }

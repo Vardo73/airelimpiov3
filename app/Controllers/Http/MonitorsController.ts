@@ -160,7 +160,7 @@ export default class MonitorsController {
 
 
     //public view
-    public async showMap({view,auth}:HttpContextContract){
+    public async showMap({view}:HttpContextContract){
         
         return view.render('public/map_monitors')
     }
@@ -183,7 +183,6 @@ export default class MonitorsController {
             }
             banners.push(element)
         })
-
             return banners
        } catch (error) {
         console.log(error)
@@ -203,10 +202,8 @@ export default class MonitorsController {
             .where('active', true)
             .exec();
 
-
             if (!monitor.active) return response.redirect().toPath('/')
             
-
             const averages_all = await Datum.query()
             .select(
                 Database.raw('DATE(created_at) as date'),

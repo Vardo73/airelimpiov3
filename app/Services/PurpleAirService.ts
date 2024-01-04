@@ -4,10 +4,11 @@ import { ErrorResponse, SensorData } from 'App/Interfaces/PurpleAirInterface';
 import Monitor from 'App/Models/Monitor';
 import Type from 'App/Models/Type';
 import Database from '@ioc:Adonis/Lucid/Database';
-import Datum from 'App/Models/Datum';
+import User from 'App/Models/User';
 
 
 const MODEL_PURPLE='PURPLE_AIR'
+
 const getColor = (pm2, pm10) => {
   const colorRanges = [
     { range: [250.4, 425], color: '#7E0023' },
@@ -72,7 +73,6 @@ export default class PurpleAirService{
 
   private async fetchPurpleAir(monitor:Monitor){
     try {
-      
       let url = `https://api.purpleair.com/v1/sensors/${monitor.slug}`;
 
       const response = await fetch(url, {
@@ -82,9 +82,10 @@ export default class PurpleAirService{
           'X-API-Key': Env.get('APP_KEY_READ_PURPLE'),
         },
       });
-              
+
       if (!response.ok) {
         const errorData = (await response.json()) as ErrorResponse;
+        console.log(errorData)
         throw new Error(`Error de red - Código de estado: ${response.status}, Mensaje: ${errorData.message}`);
       }   
       return (await response.json()) as SensorData;
@@ -97,7 +98,6 @@ export default class PurpleAirService{
 
   public async queryCurrentBanner(){
     try {
-
       const monitors=await Monitor.query()
       .preload('model')
       .preload('neighborhood')
@@ -112,7 +112,6 @@ export default class PurpleAirService{
         
         const average = await this.fetchPurpleAir(monitor)
         
-            
         let pm2 = average.sensor["pm2.5_atm"];
         let pm10 = average.sensor["pm10.0_atm"];
         
@@ -122,14 +121,58 @@ export default class PurpleAirService{
           PM_10:pm10,
           color:getColor(pm2, pm10)
         }
-
       })
-
       const info = await Promise.all(infoPromises);
-
       return info;
     } catch (error) {
       console.error('Error en la petición:', error);
     }
   }
+
+  public async taskQuery(){
+    try {
+      const monitors=await Monitor.query()
+      .preload('model')
+      //.preload('neighborhood')
+      .whereHas('model', (query) => {
+        query.where('name', MODEL_PURPLE);
+      })
+      .where('active', true)
+      .exec();
+
+      const infoPromises=monitors.map(async monitor=>{
+          
+        const average = await this.fetchPurpleAir(monitor)
+        
+        let pm2 = average.sensor["pm2.5_atm"];
+        let pm10 = average.sensor["pm10.0_atm"];
+        let emailsSet = new Set<string>();
+
+        if (pm2 > 35.5 || pm10>155){
+          const users=  await User.query()
+          .whereHas('monitors', (query) => {
+            query.where('monitor_id',monitor.id);
+          })
+          .preload('monitors')
+          .exec();
+
+          if(users.length>0){
+            users.forEach(user => {
+              emailsSet.add(user.email);
+            });
+          }
+        }
+
+        const emails = Array.from(emailsSet);
+        return emails
+      })
+      const info = await Promise.all(infoPromises);
+      const uniqueEmails = Array.from(new Set(info.flat()));
+
+      return uniqueEmails;
+    } catch (error) {
+      console.error('Error en la petición:', error);
+    }
+  }
+
 }

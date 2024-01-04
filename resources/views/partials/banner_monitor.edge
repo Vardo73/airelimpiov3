@@ -23,9 +23,11 @@
                 </div>
             </div>
             <hr/>
+            @if(monitor.monitor.sponsors[0])
             <div style="text-align:center; ">
                 <img src="{{monitor.monitor.sponsors[0].logo}}" alt="" width="110">
             </div>
+            @endif
             <br>
             <div class='d-grid gap-2' style="text-align:center;">
                 <a class='btn btn-primary' href="{{route('historics',[monitor.monitor.slug])}}">Histórico</a>
