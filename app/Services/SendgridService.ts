@@ -43,4 +43,33 @@ export default class SendgridService{
             console.log(error)
         }
     }
+
+    public async sendEmailReport(data:Promise<void>[]){
+        try {
+            const view = View.getRenderer()
+            const transporter= this.createTrans()
+            const date=this.dateYesterday()
+            await transporter.sendMail({
+                from:'"Sistemas" <sistemas@cerca.org.mx>',
+                to:"salud.calidadambiental@cerca.org.mx, comunicacion@cerca.org.mx",
+                subject:"Promedios diarios",
+                html: await view.render('partials/email_report',{data,date})
+            })
+        } catch (error) {
+            console.log('ERROR sendMail REPORTE DIARIO')
+            console.log(error)
+        }
+    }
+
+    private dateYesterday(): string {
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+    
+        const day = yesterday.getDate().toString().padStart(2, '0');
+        const month = (yesterday.getMonth() + 1).toString().padStart(2, '0'); 
+        const year = yesterday.getFullYear();
+    
+        return `${day}/${month}/${year}`;
+    }
 }

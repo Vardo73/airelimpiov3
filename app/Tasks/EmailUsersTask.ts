@@ -5,7 +5,6 @@ import { BaseTask } from 'adonis5-scheduler/build/src/Scheduler/Task'
 export default class EmailUsersTask extends BaseTask {
   public static get schedule() {
 		return '0 */30 * * * *'
-		//return '0 38 * * * *'
   }
   public static get useLock() {
     return false

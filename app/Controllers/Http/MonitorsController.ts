@@ -224,6 +224,7 @@ export default class MonitorsController {
                 "PM_10":{[hour: string]: number }
             }[]=[]
 
+
             averages_all.forEach(result => {
                 const date:string = format(new Date(result.$extras.date), 'dd/MM/yyyy');
                 const hour:string= result.$extras.hour;
