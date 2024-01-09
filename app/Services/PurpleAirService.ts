@@ -175,4 +175,35 @@ export default class PurpleAirService{
     }
   }
 
+
+  public async taskQueryTwitter(){
+    try {
+      const monitors=await Monitor.query()
+      .preload('model')
+      .preload('neighborhood')
+      .whereHas('model', (query) => {
+        query.where('name', MODEL_PURPLE);
+      })
+      .where('active', true)
+      .exec();
+
+      const infoPromises=monitors.map(async monitor=>{
+          
+        const average = await this.fetchPurpleAir(monitor)
+        
+        let pm2 = average.sensor["pm2.5_atm"];
+        let pm10 = average.sensor["pm10.0_atm"];
+
+        if (pm2 > 35.5 || pm10>155){
+          return monitor.neighborhood.name
+        }
+      })
+
+      const info = await Promise.all(infoPromises);
+      return info
+
+    } catch (error) {
+      console.error('Error en la petición:', error);
+    }
+  }
 }
