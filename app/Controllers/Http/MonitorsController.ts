@@ -272,7 +272,7 @@ export default class MonitorsController {
             .preload('type')
             .where('monitor_id', monitor.id)
             .orderBy('created_at', 'desc')
-            .limit(20)
+            .limit(200)
             .exec();
 
 
