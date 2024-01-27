@@ -34,6 +34,7 @@
             height: 60px;
             font-size: 12px;
         }
+       
     </style>
     
     <div class="main-container d-flex" id="main-side">
@@ -56,6 +57,7 @@
                         <li><a class="dropdown-item" href="{{route('map_monitors')}}">Monitores</a></li>
                         <li><a class="dropdown-item" href="{{route('map_clinics')}}">Padecimientos </a></li>
                         <li><a class="dropdown-item" href="{{route('map_neighborhoods')}}">Contaminante</a></li>
+                        <!--<li><a class="dropdown-item" href="">Clima</a></li>-->
                     </ul>
                 </li>
                 <!-- Informate -->
@@ -146,6 +148,7 @@
                         <li><a class="dropdown-item" href="{{route('neighborhoods')}}">Colonias</a></li>
                         <li><a class="dropdown-item" href="{{route('users')}}">Usuarios</a></li>
                         <li><a class="dropdown-item" href="{{route('clinics')}}">Clinicas</a></li>
+                        <li><a class="dropdown-item" href="{{route('json_fwop')}}">Json FWOP</a></li>
                     </ul>
                 </li>
                 
@@ -156,7 +159,7 @@
                     <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown" >
                         <li><a class="dropdown-item" href="{{route('monitors_purple')}}">Purple Air </a></li>
                         <li><a class="dropdown-item" href="{{route('monitors_fwop')}}">FWOP</a></li>
-                        <li><a class="dropdown-item" href="{{route('stations')}}">Meteorológicas</a></li>
+                        <li><a class="dropdown-item" href="{{route('stations')}}">Weather Underground</a></li>
                     </ul>
                 </li>
                 @endif

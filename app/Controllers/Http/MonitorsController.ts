@@ -10,6 +10,7 @@ import PurpleAirService from 'App/Services/PurpleAirService';
 import MonitorValidator from 'App/Validators/MonitorValidator';
 const PM_2=1,PM_10=2;
 const MODEL_PURPLE='PURPLE_AIR'
+const FWOP='FWOP'
 
 export default class MonitorsController {
 
@@ -166,30 +167,30 @@ export default class MonitorsController {
     }
 
     public async bannerMonitor({view}:HttpContextContract){
-       
-       try {
+        try{
 
-        const purpleAirService = await new PurpleAirService(); 
-        let monitors= await purpleAirService.queryCurrentBanner()
+            const purpleAirService = await new PurpleAirService(); 
+            let monitors= await purpleAirService.queryCurrentBanner()
 
-        let banners:{html:string,color:string,latitude:number,longitude:number}[]=[]
-        monitors?.map(async monitor=>{
-            let html=await view.render('partials/banner_monitor',{monitor})
-            let element={
-                html:html,
-                color:monitor.color,
-                latitude:monitor.monitor.latitude, 
-                longitude: monitor.monitor.longitude
-            }
-            banners.push(element)
-        })
+            let banners:{html:string,color:string,latitude:number,longitude:number}[]=[]
+            monitors?.map(async monitor=>{
+                let html=await view.render('partials/banner_monitor',{monitor})
+                let element={
+                    html:html,
+                    color:monitor.color,
+                    latitude:monitor.monitor.latitude, 
+                    longitude: monitor.monitor.longitude
+                }
+                banners.push(element)
+            })
+
             return banners
-       } catch (error) {
+        } catch (error) {
         console.log(error)
        }
     }
 
-    public async historics({view,params,response}:HttpContextContract){
+    public async historics_purple_air({view,params,response}:HttpContextContract){
         try{
             const slug=params.slug
             const monitor=await Monitor.findByOrFail('slug',slug)
@@ -245,8 +246,55 @@ export default class MonitorsController {
                 }
             });
 
-            return view.render('public/historics',{slug,monitor,averages,monitors})
+            return view.render('public/historics_purple_air',{slug,monitor,averages,monitors})
         }catch(error){
+            console.log(error)
+        }
+    }
+ 
+    public async historics_fwop({view,params,response}:HttpContextContract){
+        try {
+            
+            const slug=params.slug
+            const monitor=await Monitor.findByOrFail('slug',slug)
+            
+            const monitors=await Monitor.query()
+            .preload('model')
+            .whereHas('model', (query) => {
+                query.where('name', FWOP);
+            })
+            .where('active', true)
+            .exec();
+
+            if (!monitor.active) return response.redirect().toPath('/')
+
+            const averages_all = await Datum.query()
+            .preload('type')
+            .where('monitor_id', monitor.id)
+            .orderBy('created_at', 'desc')
+            .limit(20)
+            .exec();
+
+
+            let averages:{
+                date:string;
+                type:string
+                average: number 
+            }[]=[]
+
+
+            averages_all.forEach(result => {
+                const date:string = format(new Date(result.createdAt.toJSDate()), 'dd/MM/yyyy');
+                const average:number = result.average;
+                const type:string = result.type.name;
+
+                let element={date:date,type:type,average:average}
+                averages.push(element)
+            });
+
+
+            return view.render('public/historics_fwop',{slug,monitor,averages,monitors})
+        } catch (error) {
             console.log(error)
         }
     }

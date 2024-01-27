@@ -1,6 +1,12 @@
 @layout('master')
 
 @section('clinic')
+<style>
+    .scrollable-div {
+        height: 75%; 
+        overflow-y: auto; 
+    }
+</style>
 
 <div class="container">
     <hr/>
@@ -8,7 +14,7 @@
     <hr/>
 </div>
 <br>
-<div class="container">
+<div class="container scrollable-div">
     @if(auth.user.rol_id!=2)
     <div class="col col-12 align-self-end">
         <div class="d-grid gap-2 mx-auto ">

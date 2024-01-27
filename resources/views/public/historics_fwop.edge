@@ -1,0 +1,162 @@
+@layout('master')
+
+@section('historics')
+
+<style>
+    .scrollable-div {
+        height: 75%; 
+        overflow-y: auto; 
+    }
+    th,td{
+        text-align: center;
+    }
+
+    table tr td.tdG {
+        background-color: #38B208;
+    }
+    table tr td.tdA{
+        background-color: #EDB02D;
+    }
+    table tr td.tdM {
+        background-color: #FC7928;
+    }
+    table tr td.tdMM {
+        background-color: #F93131;
+    }
+    table tr td.tdEM {
+        background-color: #A8549D;
+    }
+    table tr td.tdMMM {
+        background-color: #7E0023;
+    }
+    @media only screen and (max-width: 680px) {
+        .indice{
+            font-size: 7px;
+        }
+    }
+</style>
+
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Historicos {{monitor.name}}</span></h2>
+    <hr/>
+</div>
+<br>
+
+<div class="container scrollable-div">
+    <div class="m-0 row mx-auto justify-content-center align-items-center">
+        <div class="col col-4 mx-auto ">
+            <label class="form-label" for="selectMonitor">Estación:</label>
+            <select class="form-control" name="selectMonitor" id="selectMonitor" required>
+                @each(monitor in monitors)
+                    @if(monitor.slug == slug)
+                        <option  value='{{ monitor.slug }}' selected>{{ monitor.name }}</option>
+                    @else
+                        <option  value='{{ monitor.slug }}' >{{ monitor.name }}</option>
+                    @endif
+                @endeach
+            </select>
+        </div>
+    </div>
+    
+    <br>
+
+    <div class="m-0 row mx-auto justify-content-center align-items-center indice">
+        <span class="badge text-bg-secondary" style="max-width: 8rem; ">Índice PM 2.5:</span>
+        <span class="badge text-dark" style="max-width: 8rem; background-color:#38B208; ">0-12</span>
+        <span class="badge text-dark" style="max-width: 8rem; background-color:#EDB02D; ">12.1–35.4</span>
+        <span class="badge text-dark" style="max-width: 8rem; background-color:#FC7928; ">35.5-55.4</span>
+        <span class="badge text-dark" style="max-width: 8rem; background-color:#F93131; ">55.5-150.4</span>
+        <span class="badge text-dark" style="max-width: 8rem; background-color:#A8549D; ">150.5-250.4</span>
+        <span class="badge text-dark" style="max-width: 8rem; background-color:#7E0023; ">250.5+</span>
+    </div>
+    <div class="m-0 row mx-auto justify-content-center align-items-center indice">
+        <span class="badge text-bg-secondary" style="max-width: 8rem; ">Índice PM 10:</span>
+        <span class="badge text-dark" style="max-width: 8rem; background-color:#38B208; ">0-54</span>
+        <span class="badge text-dark" style="max-width: 8rem; background-color:#EDB02D; ">55-154</span>
+        <span class="badge text-dark" style="max-width: 8rem; background-color:#FC7928; ">155-254</span>
+        <span class="badge text-dark" style="max-width: 8rem; background-color:#F93131; ">255-354</span>
+        <span class="badge text-dark" style="max-width: 8rem; background-color:#A8549D; ">355-424</span>
+        <span class="badge text-dark" style="max-width: 8rem; background-color:#7E0023; ">425+</span>
+    </div>
+    <br>
+
+    <div class=" container-fluid table-responsive table-bordered">
+        <table class="table table-hover " name="tabAnual" id="tabAnual">
+            <thead>
+                <tr>
+                    <th scope="col">Contaminante</th>
+                    <th scope="col">Promedio del día</th>
+                    <th scope="col">Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                @each(average in averages)
+                <tr>
+                    <td>{{ average.type}}</td>
+                    @if(average.type=='PM_2.5')
+                    <td class="tdpm2" >{{ average.average}}</td>
+                    @else
+                    <td class="tdpm10">{{ average.average}}</td>
+                    @endif
+                    <td>{{ average.date }}</td>
+                </tr>
+                @endeach
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    window.onload=function(){
+
+    let td=document.querySelectorAll('td')
+        console.log(td)
+    td.forEach(element=>{
+
+        if (element.classList.contains('tdpm2')) {
+
+            let average=parseFloat(element.textContent)
+            //PM 2.5
+            if(average>250.5){
+                element.classList.add('tdMMM')
+            }else if(average>150.5){
+                element.classList.add('tdEM')
+            }else if(average>55.5){
+                element.classList.add('tdMM')
+            }else if(average>35.5){
+                element.classList.add('tdM')
+            }else if(average>12.1){
+                element.classList.add('tdA')
+            }else{
+                element.classList.add('tdG')
+            }
+        }else if(element.classList.contains('tdpm10')){
+
+            let average=parseFloat(element.textContent)
+            //PM 10
+            if(average>425){
+                element.classList.add('tdMMM')
+            }else if(average>355){
+                element.classList.add('tdEM')
+            }else if(average>255){
+                element.classList.add('tdMM')
+            }else if(average>155){
+                element.classList.add('tdM')
+            }else if(average>55){
+                element.classList.add('tdA')
+            }else{
+                element.classList.add('tdG')
+            }
+        }
+    })
+    }
+    document.getElementById('selectMonitor')
+    .addEventListener('change',()=>{
+        let station=document.getElementById('selectMonitor').value;
+        window.location.replace(`/historics_fwop/${station}`);
+    })
+</script>
+
+@end

@@ -140,3 +140,9 @@ export interface SensorData {
       };
     };
 }
+
+
+export interface StationData {
+  message: string;
+  errorCode: number;
+}

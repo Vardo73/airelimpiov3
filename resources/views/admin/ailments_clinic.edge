@@ -2,6 +2,12 @@
 
 @section('ailments_clinic')
 
+<style>
+    .scrollable-div {
+      height: 75%; 
+      overflow-y: auto; 
+    }
+</style>
 
 <div class="container">
     <hr/>
@@ -33,8 +39,8 @@
 </div>
 <br>
 <!--  AILMENTS -->
-<div class="container-fluid">
-    <div class="accordion accordion-flush" id="accordionAilmentsClinic">
+<div class="container-fluid scrollable-div" >
+    <div class="accordion accordion-flush " id="accordionAilmentsClinic">
         @each(year in arr)
             <div class="accordion-item" style="margin-bottom:1%">
                 <h2 class="accordion-header" id="flush-heading{{year.year}}">

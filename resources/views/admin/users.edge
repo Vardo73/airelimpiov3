@@ -1,13 +1,20 @@
 @layout('master')
 @section('users')
 
+<style>
+    .scrollable-div {
+        height: 75%; 
+        overflow-y: auto; 
+    }
+</style>
+
 <div class="container">
     <hr/>
         <h2 style="text-align: center;"><span style="color: #2aa5d6;">Gestor de usuarios</span></h2>
     <hr/>
 </div>
 <br>
-<div class="container-fluid">
+<div class="container-fluid ">
     <ul class="nav nav-tabs" >
         <li class="nav-item" >
           <button class="nav-link active" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin" type="button" role="tab" aria-controls="admin" aria-selected="true">ADMINS</button>
@@ -19,7 +26,7 @@
           <button class="nav-link" id="public-tab" data-bs-toggle="tab" data-bs-target="#public" type="button" role="tab" aria-controls="public" aria-selected="false">PÚBLICO</button>
         </li>
     </ul>
-    <div class="tab-content" id="myTabContent">
+    <div class="tab-content scrollable-div" id="myTabContent">
         <div class="tab-pane fade show active " id="admin" role="tabpanel" aria-labelledby="admin-tab">
             <br>
             <div class="container-fluid table-responsive table-bordered">

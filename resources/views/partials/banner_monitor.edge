@@ -6,6 +6,7 @@
         </div>
         <div class="card-body">
 
+            @if(monitor.monitor.model.name=='PURPLE_AIR')
             <div class="row" style="background-color:#white; color:#0d6efd; text-align:center; ">
                 <div class="col col-6">
                     <span>PM 2.5 &#956;g/m<sup>3</sup></span>
@@ -22,6 +23,14 @@
                     <span>{{monitor["PM_10"]}}</span>
                 </div>
             </div>
+            @else
+            <div class="row" style="text-align:center;">
+                <div class="col col-12">
+                    <span>Monitor sin lecturas en timpo real. Accede al histórico.</span>
+                </div>
+            </div>
+            @endif
+
             <hr/>
             @if(monitor.monitor.sponsors[0])
             <div style="text-align:center; ">
@@ -30,7 +39,12 @@
             @endif
             <br>
             <div class='d-grid gap-2' style="text-align:center;">
-                <a class='btn btn-primary' href="{{route('historics',[monitor.monitor.slug])}}">Histórico</a>
+
+                @if(monitor.monitor.model.name=='PURPLE_AIR')
+                <a class='btn btn-primary' href="{{route('historics_purple_air',[monitor.monitor.slug])}}">Histórico</a>
+                @else
+                <a class='btn btn-primary' href="{{route('historics_fwop',[monitor.monitor.slug])}}">Histórico</a>
+                @endif
             </div>
         </div>
     </div>

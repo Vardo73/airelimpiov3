@@ -20,11 +20,9 @@ export default class TwitterTask extends BaseTask {
         return;
       }
 
-      let neighborhoods=this.transformArray(neighborhoodArr)
-
-      let msg=`Se registró un ascenso de la contaminaci\u00F3n en la(s) colonia(s) ${neighborhoods}.\n` 
-					+`Para m\u00E1s informaci\u00F3n consulta airelimpiobcs.org.mx \n`
-					+`#airelimpioBCS #monitoresCERCA #BCScalidaddeaire #elairedeBCS`
+      let msg=`Se ha registrado un ascenso de la contaminaci\u00F3n del aire.\n`+
+      `Para m\u00E1s informaci\u00F3n consulta airelimpiobcs.org.mx\n`+
+      +`#airelimpioBCS #monitoresCERCA #BCScalidaddeaire`
 
 		  const twitterService= new TwitterService();
 
@@ -32,14 +30,5 @@ export default class TwitterTask extends BaseTask {
     } catch (error) {
       console.log(error)
     }
-  }
-
-
-  private transformArray(arr): string {
-    return arr.length === 0
-      ? ""
-      : arr.length === 1
-      ? arr[0]
-      : `${arr.slice(0, -1).join(', ')} y ${arr[arr.length - 1]}`;
   }
 }

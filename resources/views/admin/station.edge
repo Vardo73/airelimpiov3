@@ -1,6 +1,12 @@
 @layout('master')
 
 @section('station')
+<style>
+    .scrollable-div {
+        height: 75%; 
+        overflow-y: auto; 
+    }
+</style>
 
 <div class="container">
     <hr/>
@@ -9,4 +15,327 @@
 </div>
 
 
+
+@if(auth.user.rol_id!=2)
+<div class="container">
+    <div class="col col-12 align-self-end">
+        <div class="d-grid gap-2 mx-auto ">
+            <button class="btn btn-primary" id="modalNuevoStation" data-bs-toggle="modal" data-bs-target="#StationModal">Agregar Nuevo</button>
+        </div>
+    </div>
+    <br>
+</div>
+@endif
+
+
+<div class="container-fluid scrollable-div">
+    <div class="accordion accordion-flush" id="accordionStations">
+        @each(station in stations)
+            <div class="accordion-item" style="margin-bottom:1%">
+                <h2 class="accordion-header" id="flush-heading{{station.slug}}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{station.slug}}" aria-expanded="false" aria-controls="flush-collapse{{station.slug}}">
+                        {{station.name}}
+                    </button>
+                </h2>
+                <div id="flush-collapse{{station.slug}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{station.slug}}" data-bs-parent="#accordionFlush{{station.slug}}">
+                    <div class="accordion-body">
+                        <div class="row">
+                            <div class="col col-12">
+                                <div class="row" style="text-align: center;">
+                                    <h5>Credenciales</h5>
+                                </div>
+                                <div class=" container-fluid table-responsive table-bordered">
+                                    <table class="table table-hover " name="tabAnual" id="tabAnual">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Modelo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ station.slug}}</td>
+                                                <td>{{ station.model.name }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="row" style="text-align: center;">
+                                    <h5>Detalles</h5>
+                                </div>
+                                
+                                <div class=" container-fluid table-responsive table-bordered">
+                                    <table class="table table-hover " name="tabAnual" id="tabAnual">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Ubicación</th>
+                                                <th scope="col">Patrocinadores</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ station.latitude }},{{ station.longitude }}</td>
+                                                <td>
+                                                    @each(sponsor in station.sponsors)
+                                                        {{sponsor.name }}
+                                                    @endeach
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="row mx-auto">
+                                    @if(auth.user.rol_id!=2)
+                                    <div class="col col-6 d-grid gap-2 mx-auto">
+                                        <button name="{{ station.id }}" class="btn btn-info " data-bs-toggle="modal" data-bs-target="#StationEditModal{{station.id}}" >Editar</button>
+                                    </div>
+                                    <div class="col col-6 d-grid gap-2 mx-auto">
+                                        <form action="{{route('delete_station',[station.id])}}?_method=DELETE" method="post" id="formDelete" class="formDelete">
+                                            {{csrfField()}}
+                                            <button class="btn btn-danger w-100">Eliminar</button>
+                                        </form>
+                                    </div>
+                                    @else
+                                    <div class="col col-12 d-grid gap-2 mx-auto">
+                                        <button name="{{ station.id }}" class="btn btn-info " data-bs-toggle="modal" data-bs-target="#StationEditModal{{station.id}}" >Editar</button>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+
+            <!--MODAL EDIT ESTATCIÓN-->
+            <form action="{{route('update_station',[station.id])}}?_method=PATCH" method="post">
+                {{csrfField()}}
+                <div class="container-fluid">
+                    <div class="modal fade" id="StationEditModal{{station.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2>Editar Estación</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row mx-auto">
+                                        @if(flashMessages.has('errors.slug'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.slug')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-6 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="slug">ID:</label>
+                                            <input class="form-control" type="text" name="slug" id="slug" required min="1" max="25" value={{station.slug}}>
+                                        </div>
+                                        @if(flashMessages.has('errors.name'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.name')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-6 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="name">Nombre:</label>
+                                            <input class="form-control" type="text" name="name" id="name" required min="1" max="25" value='{{station.name}}'>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row mx-auto">
+                                        @if(flashMessages.has('errors.latitude'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.latitude')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-6 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="latitude">Latitud:</label>
+                                            <input class="form-control" step="any" type="number" name="latitude" id="latitude" required value={{station.latitude}}>
+                                        </div>
+                                        @if(flashMessages.has('errors.longitude'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.longitude')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-6 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="longitude">Longitud:</label>
+                                            <input class="form-control" type="number" step="any" name="longitude" id="longitude" required value={{station.longitude}}>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row mx-auto">
+                                        @if(flashMessages.has('errors.model_id'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{flashMessages.get('errors.model_id')}}
+                                            </div>
+                                        @endif
+                                        <div class="col col-12 d-grid gap-2 mx-auto">
+                                            <label class="form-label" for="model_id">Modelo de estación:</label>
+                                            <select class="form-control" name="model_id" id="model_id" required>
+                                                <option  value='0' selected disabled>Modelo de estación</option>
+                                                @each(model in models)
+                                                    @if(station.model.id == model.id)
+                                                        <option  value='{{ model.id }}' selected>{{ model.name }}</option>
+                                                    @else
+                                                        <option  value='{{ model.id }}'>{{ model.name }}</option>
+                                                    @endif
+                                                @endeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row mx-auto">
+                                        <label  class="form-label" >Patrocinadores:</label><br>
+                                        <div>
+                                            @each(sponsor in sponsors)
+                                                <span style="display: none;">{{flag=false}}</span>
+                                                @each(spon in station.sponsors)
+                                                    @if(sponsor.id==spon.id)
+                                                    <span style="display: none;">{{flag=true}}</span>
+                                                    @endif
+                                                @endeach 
+                                                @if(flag === true)
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" name='sponsors' type="checkbox"  value={{ sponsor.id }} checked>
+                                                        <label class="form-check-label" for="inlineCheckbox1">{{ sponsor.name }}</label>
+                                                    </div>
+                                                @else
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" name='sponsors' type="checkbox"  value={{ sponsor.id }}>
+                                                        <label class="form-check-label" for="inlineCheckbox1">{{ sponsor.name }}</label>
+                                                    </div>
+                                                @endif
+                                            @endeach 
+                                        </div> 
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-outline-primary"  data-bs-dismiss="modal">Guardar</button>
+                                    <button type="button" class="btn btn-outline-primary"  data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        @endeach
+    </div>
+</div>
+
+
+
+<!--MODAL REGISTRO DE ESTACION-->
+<form action="{{route('store_station')}}" method="post">
+    {{csrfField()}}
+    <div class="container-fluid">
+        <div class="modal fade" id="StationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Agregar Estación</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mx-auto">
+                            @if(flashMessages.has('errors.slug'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.slug')}}
+                                </div>
+                            @endif
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="slug">ID:</label>
+                                <input class="form-control" type="text" name="slug" id="slug" required min="1" max="25">
+                            </div>
+                            @if(flashMessages.has('errors.name'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.name')}}
+                                </div>
+                            @endif
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="name">Nombre:</label>
+                                <input class="form-control" type="text" name="name" id="name" required min="1" max="25">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row mx-auto">
+                            @if(flashMessages.has('errors.latitude'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.latitude')}}
+                                </div>
+                            @endif
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="latitude">Latitud:</label>
+                                <input class="form-control" step="any" type="number" name="latitude" id="latitude" required >
+                            </div>
+                            @if(flashMessages.has('errors.longitude'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.longitude')}}
+                                </div>
+                            @endif
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="longitude">Longitud:</label>
+                                <input class="form-control" type="number" step="any" name="longitude" id="longitude" required >
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row mx-auto">
+                            @if(flashMessages.has('errors.model_id'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{flashMessages.get('errors.model_id')}}
+                                </div>
+                            @endif
+                            <div class="col col-12 d-grid gap-2 mx-auto">
+                                <label class="form-label" for="model_id">Modelo de estación:</label>
+                                <select class="form-control" name="model_id" id="model_id" required>
+                                    <option  value='0' selected disabled>Modelo</option>
+                                    @each(model in models)
+                                      <option  value='{{ model.id }}'>{{ model.name }}</option>
+                                    @endeach
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row mx-auto">
+                            <label  class="form-label" >Patrocinadores:</label><br>
+                            <div>
+                                @each(sponsor in sponsors)
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" name='sponsors' type="checkbox"  value={{ sponsor.id }}>
+                                        <label class="form-check-label" for="inlineCheckbox1">{{ sponsor.name }}</label>
+                                    </div>
+                                @endeach   
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-outline-primary"  data-bs-dismiss="modal">Crear</button>
+                        <button type="button" class="btn btn-outline-primary"  data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+<script>
+    window.onload= function(){
+        let forms=document.querySelectorAll('.formDelete')
+
+        forms.forEach(form=>{
+            form.addEventListener('submit',(e)=>{
+                e.preventDefault()
+                Swal.fire({
+                    title:'Está seguró de eliminar este elemento?',
+                    showCancelButton:true,
+                    confirmButtonText:'Eliminar',
+                    denyButtonText:'Cancelar',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        form.submit()
+                    }
+                })
+            })
+        })
+    }
+</script>
 @end

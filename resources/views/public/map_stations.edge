@@ -1,10 +1,10 @@
 @layout('master')
 
-@section('map_monitors')
+@section('map_stations')
 
 <style>
     body { margin: 0; padding: 0; }
-    #mapMonitors { position: absolute;  width:85%; height: 100%; z-index: 1;}
+    #mapStations { position: absolute;  width:85%; height: 100%; z-index: 1;}
         
     
     .mapboxgl-popup {
@@ -14,13 +14,13 @@
 </style>
 
 
-<div id='mapMonitors'></div>
+<div id='mapStations'></div>
 
 <script>
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2lzdGVtYXNjZXJjYSIsImEiOiJjbDRldWE2ZjAwMjI3M2JwOHpsb21jbHpxIn0.jLF2ydLoAdgrv68l8iM2VQ';
 
-let divMap=document.getElementById('mapMonitors')
+let divMap=document.getElementById('mapStations')
 
 
 let map = new mapboxgl.Map({
@@ -36,7 +36,8 @@ map.addControl(new mapboxgl.FullscreenControl());
 map.addControl(new mapboxgl.ScaleControl());
 
 
-fetch('/banner_monitor')
+
+fetch('/banner_station')
 .then(response => {
     if (!response.ok) {
       throw new Error(`Error de red - Código de estado: ${response.status}`);
@@ -45,14 +46,14 @@ fetch('/banner_monitor')
 })
 .then(data => {
      
-    data.map(monitor => {
+    data.map(station => {
 
       let popup=new mapboxgl.Popup({ offset: 25 }).setMaxWidth('200')
-      let coordinates=[monitor.longitude,monitor.latitude];
-      popup.setHTML(monitor.html)
+      let coordinates=[station.longitude,station.latitude];
+      popup.setHTML(station.html)
       
 
-      new mapboxgl.Marker({color:monitor.color})
+      new mapboxgl.Marker()
         .setLngLat(coordinates)
         .setPopup(popup) 
         .addTo(map);

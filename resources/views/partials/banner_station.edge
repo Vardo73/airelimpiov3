@@ -1,0 +1,36 @@
+<section>
+    <div  class="card">
+        <div class="card-header" style=" text-align:center; background:#0d6efd; color:#FFFFFF; ">
+            <h5 style="font-size: 15px;">{{station.station.name}}</h5>
+        </div>
+        <div class="card-body">
+
+            <div class="row" style="background-color:#white; color:#0d6efd; text-align:center; ">
+                <div class="col col-6">
+                    <span>PM 2.5 &#956;g/m<sup>3</sup></span>
+                </div>
+                <div class="col col-6">
+                    <span>PM 10 &#956;g/m<sup>3</sup></span>
+                </div>
+            </div>
+            <div class="row" style="text-align:center;">
+                <div class="col col-6">
+                    <span>{{}}</span>
+                </div>
+                <div class="col col-6">
+                    <span>{{}}</span>
+                </div>
+            </div>
+            <hr/>
+            @if(station.station.sponsors[0])
+            <div style="text-align:center; ">
+                <img src="{{station.station.sponsors[0].logo}}" alt="" width="110">
+            </div>
+            @endif
+            <br>
+            <!--<div class='d-grid gap-2' style="text-align:center;">
+                <a class='btn btn-primary' href="{{route('historics',[station.station.slug])}}">Histórico</a>
+            </div>-->
+        </div>
+    </div>
+</section>

@@ -1,0 +1,49 @@
+@layout('master')
+
+@section('json_fwop')
+
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Json F.W.O.P.</span></h2>
+    <hr/>
+</div>
+<div class="container">
+    <br>
+    <form action="{{route('read_json_fwop')}}" method="post" enctype="multipart/form-data">
+        {{csrfField()}}
+        <div class="row">
+            <div class="col">
+                <label class="form-label" for="jsonfileFwop">Suba el archivo en formato json:</label>
+                <input class="form-control" type="file" name="jsonfileFwop" id="jsonfileFwop" accept=".json" onchange="fileSelected()"> 
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <button type="submit" class='form-control btn btn-primary' id="btnJsonFwop" disabled="true">Aceptar</button>
+            </div>
+        </div>
+    </form>
+    <br>
+    <p class="alert alert-info">Recuerda tener registrados los monitores previamente para la alta de los datos.</p>
+    @if(flashMessages.has('notification'))
+    <br>
+    <p class="alert alert-{{flashMessages.get('notification').status}}">{{flashMessages.get('notification').message}}</p>
+    @end
+</div>
+
+
+<script>
+    function fileSelected() {
+        let jsonfileFwop=document.getElementById('jsonfileFwop');
+        let btnJsonFwop=document.getElementById('btnJsonFwop');
+
+        if (jsonfileFwop.files.length > 0) {
+            btnJsonFwop.disabled = false;
+        } else {
+            btnJsonFwop.disabled = true;
+        }
+    }
+</script>
+
+@end

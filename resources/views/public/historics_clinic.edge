@@ -2,6 +2,13 @@
 
 @section('historics_clinic')
 
+<style>
+    .scrollable-div {
+     height: 75%; 
+     overflow-y: auto; 
+   }
+</style>
+
 <div class="container">
     <hr/>
         <h2 style="text-align: center;"><span style="color: #2aa5d6;">Histórico de la clinica {{clinic.name}}</span></h2>
@@ -10,7 +17,7 @@
 
 <br>
 <!--  AILMENTS -->
-<div class="container-fluid">
+<div class="container-fluid scrollable-div">
     <div class="accordion accordion-flush" id="accordionAilmentsClinic">
         @each(year in arr)
             <div class="accordion-item" style="margin-bottom:1%">

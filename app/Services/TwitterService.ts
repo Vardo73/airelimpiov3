@@ -14,8 +14,12 @@ export default class TwitterService{
     }
 
     public async post(tweet:string){
-        console.log('Entra metodo mandar post')
-        const postTwit=await this.userClient.v2.tweet(tweet);
-        console.log(postTwit)
+        try{
+            const postTwit=await this.userClient.v2.tweet(tweet);
+            console.log(postTwit)
+        }
+        catch(error){
+            console.log(error)
+        }
     }
 }

@@ -2,6 +2,13 @@
 
 @section('monitors_fwop')
 
+<style>
+    .scrollable-div {
+        height: 75%; 
+        overflow-y: auto; 
+    }
+</style>
+
 <div class="container">
     <hr/>
         <h2 style="text-align: center;"><span style="color: #2aa5d6;">Monitores FWOP</span></h2>
@@ -19,7 +26,7 @@
     <br>
 </div>
 
-<div class="container-fluid">
+<div class="container-fluid scrollable-div">
     <div class="accordion accordion-flush" id="accordionMonitors">
         @each(monitor in monitors)
             <div class="accordion-item" style="margin-bottom:1%">

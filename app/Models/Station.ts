@@ -15,7 +15,7 @@ export default class Station extends BaseModel {
   public name:string 
   
   @column()
-  public slug:number 
+  public slug:string 
   
   @column()
   public longitude:number 

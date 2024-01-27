@@ -8,7 +8,10 @@ Route.get('banner_clinic','ClinicsController.bannerClinic').as('banner_clinic')
 Route.get('banner_neighborhood','NeighborhoodsController.bannerNeighborhood').as('banner_neighborhood')
 Route.get('map_neighborhoods','NeighborhoodsController.showMap').as('map_neighborhoods')
 Route.get('map_clinics','ClinicsController.showMap').as('map_clinics')
-Route.get('historics/:slug','MonitorsController.historics').as('historics').where('slug', /^[0-9]+$/)
+//Route.get('map_stations','StationsController.showMap').as('map_stations')
+//Route.get('banner_station','StationsController.bannerStation').as('banner_station')
+Route.get('historics_purple_air/:slug','MonitorsController.historics_purple_air').as('historics_purple_air').where('slug', /^[0-9]+$/)
+Route.get('historics_fwop/:slug','MonitorsController.historics_fwop').as('historics_fwop').where('slug', /^[0-9]+$/)
 Route.get('historics_clinic/:id','ClinicsController.historics').as('historic_clinic')
 //GUEST
 Route.get('register','UsersController.register').as('register').middleware('guest')
@@ -17,6 +20,7 @@ Route.get('dashboard','UsersController.dashboard').as('dashboard').middleware(['
 //ADMIN
 Route.get('pollutants','PollutantsController.show').as('pollutants').middleware(['auth:web']).middleware(['role:ADMIN,GUEST'])
 Route.get('sponsors','SponsorsController.show').as('sponsors').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('json_fwop','DataController.showJsonFWOP').as(('json_fwop')).middleware('auth').middleware(['role:ADMIN,GUEST'])
 Route.get('clinics','ClinicsController.show').as('clinics').middleware('auth').middleware(['role:ADMIN,GUEST'])
 Route.get('models','ModelsController.show').as('models').middleware('auth').middleware(['role:ADMIN,GUEST'])
 Route.get('neighborhoods','NeighborhoodsController.show').as('neighborhoods').middleware('auth').middleware(['role:ADMIN,GUEST'])
@@ -96,3 +100,14 @@ Route.group(()=>{
   Route.patch('update/:id','MonitorsController.update').as('update_monitor').where('id', /^[0-9]+$/)
   Route.patch('active/:id','MonitorsController.active').as('active_monitor').where('id', /^[0-9]+$/)
 }).prefix('monitor')
+
+
+Route.group(()=>{
+  Route.post('store','StationsController.store').as('store_station')
+  Route.delete('delete/:id','StationsController.delete').as('delete_station').where('id', /^[0-9]+$/)
+  Route.patch('update/:id','StationsController.update').as('update_station').where('id', /^[0-9]+$/)
+}).prefix('station')
+
+Route.group(()=>{
+  Route.post('read_json_fwop','DataController.readJsonFWOP').as('read_json_fwop')
+}).prefix('data')

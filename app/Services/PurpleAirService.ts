@@ -8,6 +8,7 @@ import User from 'App/Models/User';
 
 
 const MODEL_PURPLE='PURPLE_AIR'
+const FWOP='FWOP'
 
 const getColor = (pm2, pm10) => {
   const colorRanges = [
@@ -71,7 +72,7 @@ export default class PurpleAirService{
     })
   }
 
-  private async fetchPurpleAir(monitor:Monitor){
+  public async fetchPurpleAir(monitor:Monitor){
     try {
       let url = `https://api.purpleair.com/v1/sensors/${monitor.slug}`;
 
@@ -79,16 +80,18 @@ export default class PurpleAirService{
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': Env.get('APP_KEY_READ_PURPLE'),
+          'X-API-Key': Env.get('APP_KEY_READ_PURPLE')
         },
       });
 
+      const responseBody = await response.json();
+
       if (!response.ok) {
-        const errorData = (await response.json()) as ErrorResponse;
+        const errorData = responseBody as ErrorResponse;
         console.log(errorData)
         throw new Error(`Error de red - Código de estado: ${response.status}, Mensaje: ${errorData.message}`);
       }   
-      return (await response.json()) as SensorData;
+      return responseBody as SensorData;
 
     } catch (error) {
       console.error(`Error en la consulta a ${monitor.name}: ${error}`);
@@ -102,18 +105,28 @@ export default class PurpleAirService{
       .preload('model')
       .preload('neighborhood')
       .preload('sponsors')
-      .whereHas('model', (query) => {
+      /*.whereHas('model', (query) => {
         query.where('name', MODEL_PURPLE);
-      })
+      })*/
       .where('active', true)
       .exec();
 
       const infoPromises=monitors.map(async monitor=>{
         
+        if(monitor.model.name!=MODEL_PURPLE){
+          return {
+            monitor:monitor,
+            "PM_2.5":0,
+            PM_10:0,
+            color: '#38B208'
+          }
+        }
+        
         const average = await this.fetchPurpleAir(monitor)
         
         let pm2 = average.sensor["pm2.5_atm"];
         let pm10 = average.sensor["pm10.0_atm"];
+
         
         return {
           monitor:monitor,

@@ -1,6 +1,12 @@
 @layout('master')
 
 @section('model')
+<style>
+    .scrollable-div {
+        height: 75%; 
+        overflow-y: auto; 
+    }
+</style>
 
 <div class="container">
     <hr/>
@@ -10,7 +16,7 @@
 
 <br>
 
-<div class="container">
+<div class="container scrollable-div">
     
     @if(auth.user.rol_id!=2)
     <div class="col col-12 align-self-end">
