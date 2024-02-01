@@ -24,7 +24,7 @@ export default class UsersController {
         response.redirect('/')
     }
 
-    public async login({auth, request, response,session,view}:HttpContextContract){
+    public async login({auth, request, response,session}:HttpContextContract){
 
         const email = request.input('email')
         const password = request.input('password')
