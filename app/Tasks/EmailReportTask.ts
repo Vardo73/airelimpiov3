@@ -3,10 +3,12 @@ import Monitor from 'App/Models/Monitor';
 import Database from '@ioc:Adonis/Lucid/Database';
 import SendgridService from 'App/Services/SendgridService';
 import { BaseTask } from 'adonis5-scheduler/build/src/Scheduler/Task'
+import { ReportEmail } from 'App/Interfaces/PurpleAirInterface';
 const MODEL_PURPLE='PURPLE_AIR'
 
 export default class EmailReportTask extends BaseTask {
   public static get schedule() {
+    return '0 39 * * * *'
     return '0 0 8 * * *'
   }
   public static get useLock() {
@@ -24,13 +26,7 @@ export default class EmailReportTask extends BaseTask {
       .where('active', true)
       .exec();
       
-      let info_general:{
-        monitor: string,
-        neighborhood:string,
-        pm2_average:number,
-        pm10_average:number,
-        percentage:number,
-      }[]=[]
+      let info_general:ReportEmail[]=[]
 
       let promess=monitors.map(async monitor =>{
 
@@ -59,14 +55,15 @@ export default class EmailReportTask extends BaseTask {
           pm10_average:parseFloat(pm10_average),
           percentage:parseFloat(percentage)
         }
-        info_general.push(info)
+        info_general.push(info) 
       })
 
       await Promise.all(promess);
 
       const emailService= new SendgridService()
 
-      emailService.sendEmailReport(promess)
+      emailService.sendEmailReport(info_general)
+
     } catch (error) {
       console.log(error,'EMAIL REPORT TASK')
     }

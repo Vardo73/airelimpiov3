@@ -23,7 +23,6 @@ export default class EmailUsersTask extends BaseTask {
 
       emailService.sendEmailUsers(users)
     } catch (error) {
-
       console.log(error,'EmailUserTask.ts')
     }
   }

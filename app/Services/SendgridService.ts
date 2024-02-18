@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer'
 import nodemailerSendgrid from 'nodemailer-sendgrid'
 import View from '@ioc:Adonis/Core/View'
 import Env from '@ioc:Adonis/Core/Env'
+import { ReportEmail } from 'App/Interfaces/PurpleAirInterface';
 export default class SendgridService{
 
 
@@ -44,7 +45,7 @@ export default class SendgridService{
         }
     }
 
-    public async sendEmailReport(data:Promise<void>[]){
+    public async sendEmailReport(data:ReportEmail[]){
         try {
             const view = View.getRenderer()
             const transporter= this.createTrans()

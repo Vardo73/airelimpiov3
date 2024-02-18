@@ -1,12 +1,6 @@
 @layout('master')
 
 @section('register')
-<style>
-    .fade {
-  opacity: 0;
-  transition: opacity 1s ease-out; /* Ajusta la duración y la función de temporización según sea necesario */
-}
-</style>
 
 <div class="container">
     <hr/>
@@ -69,15 +63,4 @@
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const alerts = document.querySelectorAll('.fade-alert');
-  
-      alerts.forEach(alert => {
-        setTimeout(() => {
-          alert.classList.add('fade');
-        }, 3000); // 3000 milisegundos = 3 segundos, ajusta según sea necesario
-      });
-    });
-  </script>
 @end

@@ -22,7 +22,7 @@ export default class TwitterTask extends BaseTask {
 
       let msg=`Se ha registrado un ascenso de la contaminaci\u00F3n del aire.\n`+
       `Para m\u00E1s informaci\u00F3n consulta airelimpiobcs.org.mx\n`+
-      +`#airelimpioBCS #monitoresCERCA #BCScalidaddeaire`
+      `#airelimpioBCS #monitoresCERCA #BCScalidaddeaire`
 
 		  const twitterService= new TwitterService();
 

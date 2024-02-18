@@ -169,19 +169,25 @@ export default class ClinicsController {
             .orderBy('year', 'desc')
             .first()
 
-            const clinics = await Clinic.query()
-            .preload('ailments', (query) => {
-              query.pivotColumns(['year', 'total'])
-              query.wherePivot('year', year?.year);
-            })
-            .exec();
-
+            let clinics;
+            if(year){
+                clinics = await Clinic.query()
+                .preload('ailments', (query) => {
+                query.pivotColumns(['year', 'total'])
+                query.wherePivot('year', year?.year);
+                })
+                .exec();
+            }else{
+                 clinics=await Clinic.query()
+                .preload('ailments') 
+                .exec();
+            }
 
             let banners:{html:any,latitude:number,longitude:number}[]=[]
 
             await clinics.forEach(async clinic=>{
 
-                let html=await view.render('partials/banner_clinic',{clinic,year})
+                let html=await view.render('partials/banner_clinic',{clinic,year:year})
 
                  let element={
                      html:html, 

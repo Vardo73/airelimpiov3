@@ -146,3 +146,11 @@ export interface StationData {
   message: string;
   errorCode: number;
 }
+
+export interface ReportEmail {
+  monitor: string,
+  neighborhood:string,
+  pm2_average:number,
+  pm10_average:number,
+  percentage:number,
+}
