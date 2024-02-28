@@ -96,7 +96,7 @@ export default class NeighborhoodsController {
             .preload('pollutants')
             .exec();
 
-            console.log(neighborhoods[0].pollutants)
+            //console.log(neighborhoods[0].pollutants)
 
             let banners:{html:any,latitude:number,longitude:number}[]=[]
 

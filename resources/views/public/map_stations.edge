@@ -3,8 +3,16 @@
 @section('map_stations')
 
 <style>
-    body { margin: 0; padding: 0; }
-    #mapStations { position: absolute;  width:85%; height: 100%; z-index: 1;}
+    body { 
+        margin: 0; 
+        padding: 0; 
+    }
+    #mapStations { 
+        position: absolute;   
+        margin-right: 220px; 
+        width: calc(100% - 220px); 
+        height: 100vh; 
+    }
         
     
     .mapboxgl-popup {
