@@ -74,23 +74,27 @@ export default class ClinicsController {
         try {
             const {ailments, year, total}=request.body();
 
+
             const years=await Database
             .from('ailment_clinics')
             .select('year')
             .whereRaw('ailment_clinics.clinic_id=? ',[params.id])
             .distinct('year')
-            .orderBy('year', 'asc')
+            .orderBy('year', 'asc').exec()
 
-            if(!years.includes(year)){
+            console.log(years)
+            if(years.some(item => item.year == parseInt(year))){
+
+                console.log(years)
                 session.flash('ER_DUP_ENTRY','Elementos ya creados para este año.')
                 return response.redirect('back')
             }
-
 
             const clinic=await Clinic.findOrFail(params.id)
             
             
             if(typeof(ailments)=="string"){
+
                 const ailment = await Ailment.findOrFail(parseInt(ailments, 10))
                 await clinic.related('ailments').attach({[ailment.id]: { year:year ,total:total}})
             }else{
@@ -102,6 +106,7 @@ export default class ClinicsController {
                     await clinic.related('ailments').attach({[ailment.id]: { year:year,total: element[1]}})
                 });
             }
+
             return response.redirect().back()
         } catch (error) {
             console.log(error)

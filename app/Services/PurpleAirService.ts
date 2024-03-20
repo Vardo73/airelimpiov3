@@ -10,21 +10,7 @@ import User from 'App/Models/User';
 const MODEL_PURPLE='PURPLE_AIR'
 const FWOP='FWOP'
 
-const getColor = (pm2, pm10) => {
-  const colorRanges = [
-    { range: [250.4, 425], color: '#7E0023' },
-    { range: [150.5, 355], color: '#A8549D' },
-    { range: [55.5, 255], color: '#7E0023' },
-    { range: [35.5, 155], color: '#FC7928' },
-    { range: [12.1, 55], color: '#EDB02D' },
-    { range: [0, 0], color: '#38B208' },
-    { range: [-Infinity, -Infinity], color: '#808080' },
-  ];
 
-  const matchingRange = colorRanges.find(({ range }) => pm2 > range[0] || pm10 > range[1]);
-
-  return matchingRange ? matchingRange.color : '#808080';
-};
 
 export default class PurpleAirService{
 
@@ -119,7 +105,6 @@ export default class PurpleAirService{
             monitor:monitor,
             "PM_2.5":0,
             PM_10:0,
-            color: '#38B208'
           }
         }
         
@@ -133,7 +118,6 @@ export default class PurpleAirService{
           monitor:monitor,
           "PM_2.5":pm2,
           PM_10:pm10,
-          color:getColor(pm2, pm10)
         }
       })
       const info = await Promise.all(infoPromises);

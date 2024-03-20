@@ -22,7 +22,7 @@ export default class MonitorsController {
         
         const monitors=await Monitor.query()
         .whereHas('model', (query) => {
-            query.where('name', 'PURPLE_AIR');
+            query.where('name', MODEL_PURPLE);
         })
         .preload('model')
         .preload('neighborhood')
@@ -172,14 +172,16 @@ export default class MonitorsController {
             const purpleAirService = await new PurpleAirService(); 
             let monitors= await purpleAirService.queryCurrentBanner()
 
-            let banners:{html:string,color:string,latitude:number,longitude:number}[]=[]
+            let banners:{html:string,latitude:number,longitude:number}[]=[]
             monitors?.map(async monitor=>{
                 let html=await view.render('partials/banner_monitor',{monitor})
                 let element={
                     html:html,
-                    color:monitor.color,
+                    monitor:monitor,
                     latitude:monitor.monitor.latitude, 
-                    longitude: monitor.monitor.longitude
+                    longitude: monitor.monitor.longitude,
+                    PM_2:monitor["PM_2.5"],
+                    PM_10:monitor["PM_10"]
                 }
                 banners.push(element)
             })

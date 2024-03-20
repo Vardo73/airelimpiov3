@@ -35,6 +35,24 @@
 </div>
 
 <script>
+
+let monitors_high=0;
+const MODEL_PURPLE='PURPLE_AIR'
+const getColor = (pm2, pm10) => {
+  const colorRanges = [
+    { range: [250.4, 425], color: '#7E0023' },
+    { range: [150.5, 355], color: '#A8549D' },
+    { range: [55.5, 255], color: '#7E0023' },
+    { range: [35.5, 155], color: '#FC7928' },
+    { range: [12.1, 55], color: '#EDB02D' },
+    { range: [0, 0], color: '#38B208' },
+    { range: [-Infinity, -Infinity], color: '#808080' },
+  ];
+
+  const matchingRange = colorRanges.find(({ range }) => pm2 > range[0] || pm10 > range[1]);
+
+  return matchingRange ? matchingRange.color : '#808080';
+};
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2lzdGVtYXNjZXJjYSIsImEiOiJjbDRldWE2ZjAwMjI3M2JwOHpsb21jbHpxIn0.jLF2ydLoAdgrv68l8iM2VQ';
 
 let divMap=document.getElementById('mapMonitors')
@@ -62,18 +80,32 @@ fetch('/banner_monitor')
 })
 .then(data => {
      
-    data.map(monitor => {
+    data.map(banner => {
+        
+      let color='#38B208';    
+      let popup=new mapboxgl.Popup({ offset: 25 }).setMaxWidth('200');
+      let coordinates=[banner.longitude,banner.latitude];
+      popup.setHTML(banner.html);
 
-      let popup=new mapboxgl.Popup({ offset: 25 }).setMaxWidth('200')
-      let coordinates=[monitor.longitude,monitor.latitude];
-      popup.setHTML(monitor.html)
-      
+      if(banner.PM_2>12.1){
+        monitors_high++;
+      }
 
-      new mapboxgl.Marker({color:monitor.color})
+      if(banner.monitor.monitor.model.name!=MODEL_PURPLE){
+        color='#2CECC6'
+      }else{
+        color=getColor(banner.PM_2, banner.PM_10)
+      }
+
+      new mapboxgl.Marker({color:color})
         .setLngLat(coordinates)
         .setPopup(popup) 
         .addTo(map);
     });
+
+    if(monitors_high>2){
+        alert("Las condiciones de calidad de aire no son favorables.")
+    }
 
 })
 .catch(error => {

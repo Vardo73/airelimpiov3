@@ -1,6 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Monitor from 'App/Models/Monitor';
 import FwopService from 'App/Services/FwopService';
 import fs from 'fs'
+const MODEL_PURPLE='PURPLE_AIR'
 
 export default class DataController {
 
@@ -45,5 +47,15 @@ export default class DataController {
         } catch (error) {
             console.log(error)
         }
+    }
+
+
+    public async showReports({view}:HttpContextContract){
+        const monitors=await Monitor.query()
+        .whereHas('model', (query) => {
+            query.where('name', MODEL_PURPLE);
+        })
+        .exec();
+        return view.render('admin/reports',{monitors})
     }
 }
