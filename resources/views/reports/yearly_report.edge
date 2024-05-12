@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reporte Anual</title>
+    <link  rel="icon"   href="../img/Nubeysolcoloresoriginales.svg" type="image/png" />
+    <!--Bootstrap-->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+        crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+    />
+
+    <!-- CHARTJS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
+    
+        html, body {
+          background-color: #F7F8FA;
+          font-family: 'Poppins', sans-serif;
+          height: 100vh;
+          color: #46444c;
+          position: relative;
+        }
+    
+        * {
+          margin: 0;
+          padding: 0;
+        }
+    
+        main code {
+          font-size: 16px;
+          background: #e6e2ff;
+        }
+    
+        main {
+            padding-top:2%;
+            padding-left:5%;
+            padding-right:5%;
+            margin: auto;
+            height: 100vh;
+            flex: 1;
+        }
+    
+    </style>
+    <script type="text/javascript">
+        window.data = "{{JSON.stringify(data)}}";
+    </script>
+  @entryPointScripts('chart_report')
+</head>
+<body>
+    <main>
+        <div class="container" id="ReportePDF">
+            <!--ENCABEZADO-->
+            <div class="row ">
+                <div class="col-auto" >
+                    <img src=" /img/LogotipoColoresOriginales.svg" alt="0" width="210" height="140" class="img-fluid d-inline-block align-text-top">    
+                </div>
+                <div class="col" style="text-align:center;">
+                    <h2>Reporte de concentraciones</h2>
+                    <h4 style=" opacity: 0.5;" id="lblData">{{dateformat}}</h4>
+                </div>
+            </div>
+            <br>
+            <div class="row ">
+                <div class="col-auto col-9" >
+                    <h3>Estación: {{monitor.name}}</h3>
+                </div>
+                <div class="col-auto col-3">
+                    <h5 id="monitor_id" style="opacity: 0.5;" name='{{monitor.id}}'>ID Estación: {{monitor.slug}}</h5>
+                </div>
+            </div>
+            <br>
+
+            <!--TABLA-->
+            <div class="row justify-content-md-center">
+                <div class="col">
+                    <table class="table table-bordered" style="text-align:center; ">
+                        <thead style="background: #BFBFBF">
+                            <tr>
+                                <th>Mes</th>
+                                <th>PM 2.5</th>
+                                <th>PM 10</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @each(dat in data)
+                            <tr>
+                                <th id="thHour"> {{dat.created_date}}</th>
+                                <th> {{dat.average_type_1}}</th>
+                                <th > {{dat.average_type_2}}</th>
+                            </tr>
+                            @endeach
+                        </tbody>
+                    </table>
+                    <h5 style="color: #F90000;">Valores marcados color rojo se consideran inválidos por estándares de calidad de información.</h5>
+                </div>
+            </div>
+
+            <br>
+        
+            <!--GRAFICAS-->
+            <h2>Grafica de pastel</h2>
+            <br>
+            <div class="row justify-content-md-center">
+                <div class="col-auto">
+                    <div class="chart-container" style="position: relative; height:400px; width:400px">
+                        <canvas id="piePM2" ></canvas>
+                    </div>
+                </div>
+                <br>
+                <div class="col-auto">
+                    <div class="chart-container" style="position: relative; height:400px; width:400px">
+                        <canvas id="piePM10" ></canvas>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <h2>Límites permisibles</h2>
+            <br>
+            <div class="row justify-content-md-center">
+                <div class="col-auto">
+                    <div class="chart-container" style="position: relative; height:400px; width:600px">
+                        <canvas id="limitsPM2" ></canvas>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="chart-container" style="position: relative; height:400px; width:600px">
+                        <canvas id="limitsPM10" ></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+</body>
+</html>

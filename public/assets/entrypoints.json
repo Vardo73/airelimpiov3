@@ -7,6 +7,14 @@
       "js": [
         "http://localhost:8080/assets/app.js"
       ]
+    },
+    "chart_report": {
+      "css": [
+        "http://localhost:8080/assets/chart_report.css"
+      ],
+      "js": [
+        "http://localhost:8080/assets/chart_report.js"
+      ]
     }
   }
 }

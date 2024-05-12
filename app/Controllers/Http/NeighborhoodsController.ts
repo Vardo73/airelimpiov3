@@ -1,5 +1,4 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-
 import Neighborhood from "App/Models/Neighborhood";
 import Pollutant from 'App/Models/Pollutant';
 import NeighborhoodValidator from 'App/Validators/NeighborhoodValidator';
@@ -13,7 +12,6 @@ export default class NeighborhoodsController {
         let flag=false
         return view.render('admin/neighborhood',{neighborhoods,pollutants,flag})
     }
-
 
     public async store({request,response}:HttpContextContract){
         const {name,city,longitude, latitude, pollutants}=request.body()
@@ -80,13 +78,10 @@ export default class NeighborhoodsController {
     }
 
     //public view
-
     public async showMap({view}:HttpContextContract){
 
         return view.render('public/map_neighborhoods')
     }
-
-
 
     public async bannerNeighborhood({view}:HttpContextContract){
       

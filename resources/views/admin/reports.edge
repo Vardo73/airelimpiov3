@@ -1,0 +1,89 @@
+@layout('master')
+
+@section('reports')
+
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Generar reportes</span></h2>
+    <hr/>
+    <p style="text-align: center;">
+        Escoge el tipo de reporte a generar, selecciona la estación y fecha correspondiente.
+    </p>
+    <div class="m-0  row justify-content-center align-items-center" >
+        <div class="container col">
+            <div class="card">
+                <form action="{{route('generate_report')}}" method="post" target="_blank">
+                    {{csrfField()}}
+                    <div class="card-body">
+                        <h4 style="text-align: center;">
+                            Tipo de reporte
+                        </h4>
+                        <div style="text-align: center;" >
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="rbReportType" id="rbDay" value="day" checked>
+                                <label class="form-check-label" for="inlineRadio1">Diario</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="rbReportType" id="rbMonth" value="month">
+                                <label class="form-check-label" for="inlineRadio2">Mensual</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="rbReportType" id="rbYear" value="year" >
+                                <label class="form-check-label" for="inlineRadio3">Anual</label>
+                            </div>
+                        </div>
+                        <div class="row mx-auto">
+                            <div class="col col-6 mx-auto">
+                                <label class="form-label" for="selectMonitor">Estación:</label>
+                                <select class="form-control" name="selectMonitor" id="selectMonitor" required>
+                                    <option  value='0' selected disabled>Seleccione una estación</option>
+                                    @each(monitor in monitors)
+                                    <option  value='{{ monitor.id }}'>{{ monitor.name }}</option>
+                                    @endeach
+                                </select>
+                            </div>
+                            <div class="col col-6 mx-auto">
+                                <label class="form-label" for="selectType">Fecha:</label>
+                                <div class="input-group mb-3">
+                                    <input type="date" class="form-control" id="dateFrom" name="dateFrom">
+                                </div>
+                            </div>
+                            <div class="row mx-auto">
+                                <button type="submit"  class="btn btn-primary" id="btnGenerateReport" >Generar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    let dateFrom=document.getElementById('dateFrom')
+    let rbReportType=document.querySelectorAll('input[name="rbReportType"]');
+
+    window.onload= function(){
+        dateFrom.value = moment().subtract(1, 'day').format('YYYY-MM-DD').toString();
+
+
+        rbReportType.forEach(element=>{
+            element.addEventListener('click',()=>{
+                if(element.value=='day'){
+                    dateFrom.type='date'
+                    dateFrom.value=moment().subtract(1, 'day').format('YYYY-MM-DD').toString();
+                }
+                if(element.value=='month'){
+                    dateFrom.type='month'
+                    dateFrom.value=moment().subtract(1, 'month').format('YYYY-MM').toString();
+                }
+                if(element.value=='year'){
+                    dateFrom.type='number'
+                    dateFrom.value=moment().subtract(1, 'year').format('YYYY').toString();
+                }
+            })
+        })
+    }
+</script>
+@end

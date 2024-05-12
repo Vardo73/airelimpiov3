@@ -29,6 +29,7 @@ Route.get('monitors_purple','MonitorsController.showPurple').as('monitors_purple
 Route.get('monitors_fwop','MonitorsController.showFWOP').as('monitors_fwop').middleware('auth').middleware(['role:ADMIN,GUEST'])
 Route.get('stations','StationsController.show').as('stations').middleware('auth').middleware(['role:ADMIN,GUEST'])
 Route.get('users','UsersController.show').as('users').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('reports','DataController.showReports').as('reports').middleware('auth').middleware(['role:ADMIN,GUEST'])
 Route.get('ailments_clinic/:id','AilmentsController.showAilments').as('ailments_clinic').where('id', /^[0-9]+$/).middleware('auth').middleware(['role:ADMIN,GUEST'])
 
 
@@ -111,3 +112,7 @@ Route.group(()=>{
 Route.group(()=>{
   Route.post('read_json_fwop','DataController.readJsonFWOP').as('read_json_fwop')
 }).prefix('data')
+
+Route.group(()=>{
+  Route.post('generate','ReportsController.generate').as('generate_report')
+}).prefix('report')
