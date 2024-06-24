@@ -3,19 +3,25 @@
 @section('map_monitors')
 
 <style>
-    body { margin: 0; padding: 0; }
-    #mapMonitors { 
-        position: absolute;   
-        margin-right: 220px; 
-        width: calc(100% - 220px); 
-        height: 100vh; 
+  body { margin: 0; padding: 0; }
+  #mapMonitors { 
+    position: absolute;   
+    margin-right: 220px; 
+    width: calc(100% - 220px); 
+    height: 100vh; 
+    transition: width 0.3s ease;
+  }
+  
+  .mapboxgl-popup {
+    max-width: 200px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 991px) {
+    #mapMonitors {
+      width: 100%;
     }
-        
-    
-    .mapboxgl-popup {
-        max-width: 200px;
-        font-size: 12px;
-    }
+  }
 </style>
 
 

@@ -8,8 +8,18 @@
     <hr/>
 </div>
 
+<br>
 
 <div class="container h-100">
+
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-9" >
+            <h4  style="text-align: center;" >Regístrate y recibe notificaciones del monitor más cercano instalado en tu zona</h4>
+        </div>
+    </div>
+
+    <br>
+
     <div class="row  justify-content-center align-items-center">
         <div class="col-sm-9">
             <div class="card ">
@@ -25,15 +35,17 @@
                         <br>
                         <p class="alert alert-danger">{{flashMessages.get('errors.username')}}</p>
                         @end 
+
                         <br>
                         <div class="row mx-auto">
                             <label for="name">Nombre:</label>
                             <input class="form-control" type="text" name='name' id="name" required min="1" max="45">
-                        </div>  
+                        </div> 
                         @if(flashMessages.has('errors.name'))
                         <br>
                         <p class="alert alert-danger">{{flashMessages.get('errors.name')}}</p>
                         @end
+
                         <br>
                         <div class="row mx-auto">
                             <label for="email">Email:</label>
@@ -43,6 +55,7 @@
                         <br>
                         <p class="alert alert-danger">{{flashMessages.get('errors.email')}}</p>
                         @end
+
                         <br>
                         <div class="row mx-auto">
                             <label for="password">Contraseña:</label>
@@ -52,15 +65,17 @@
                         <br>
                         <p class="alert alert-danger">{{flashMessages.get('errors.password')}}</p>
                         @end
-                        <br>
 
+                        <br>
                         <div class="row mx-auto">
                             <button type="submit" class="btn btn-outline-primary" >Aceptar</button>
                         </div>
+                        
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 @end
