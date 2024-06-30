@@ -1,0 +1,39 @@
+<section>
+    <div  class="card">
+        <div class="card-header" style=" text-align:center; background:#0d6efd; color:#FFFFFF; ">
+            <h5 style="font-size: 15px;">{{community.name}}</h5>
+            <span style="text-align:center; background:#0d6efd; color:#FFFFFF;">Localidad: {{community.locality.name}}</span>
+        </div>
+        <div class="card-body">
+
+            <div class="row" style="background-color:#white; color:#0d6efd; text-align:center; ">
+                <div class="col col-12">
+                    <span>Población</span>
+                </div>
+            </div>
+            <div class="row" style="text-align:center;">
+                <div class="col col-12">
+                    <span>{{community.population}}</span>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row" style="background-color:#white; color:#0d6efd; text-align:center; ">
+                <div class="col col-12">
+                    <span>Municipio</span>
+                </div>
+            </div>
+            <div class="row" style="text-align:center;">
+                <div class="col col-12">
+                    <span>{{community.municipality}}</span>
+                </div>
+            </div>
+            <hr/>
+            <br>
+            <div class='d-grid gap-2' style="text-align:center;">
+                <a class='btn btn-primary' href="{{community.photos_link}}" target="_blank">Fotografías</a>
+            </div>
+        </div>
+    </div>
+</section>

@@ -56,7 +56,7 @@ fetch('/banner_neighborhood')
   .then(data => {
     data.forEach(neighborhood => {
 
-      let popup=new mapboxgl.Popup({ offset: 25 }).setMaxWidth('500')
+      let popup=new mapboxgl.Popup({ offset: 25 }).setMaxWidth('200')
       let coordinates=[neighborhood.longitude,neighborhood.latitude];
       popup.setHTML(neighborhood.html)
 

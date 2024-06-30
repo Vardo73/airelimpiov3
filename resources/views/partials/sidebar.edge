@@ -100,6 +100,7 @@
                         <li><a class="dropdown-item" href="{{route('map_monitors')}}">Monitores</a></li>
                         <li><a class="dropdown-item" href="{{route('map_clinics')}}">Padecimientos</a></li>
                         <li><a class="dropdown-item" href="{{route('map_neighborhoods')}}">Contaminante</a></li>
+                        <li><a class="dropdown-item" href="{{route('map_communities')}}">Energía</a></li>
                         <!--<li><a class="dropdown-item" href="">Clima</a></li>-->
                     </ul>
                 </li>
@@ -178,25 +179,34 @@
                         <i class="bi bi-list"></i> Elementos
                     </a>
                     <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{route('sponsors')}}">Patrocinadores</a></li>
                         <li><a class="dropdown-item" href="{{route('pollutants')}}">Contaminantes</a></li>
-                        <li><a class="dropdown-item" href="{{route('models')}}">Modelos</a></li>
                         <li><a class="dropdown-item" href="{{route('ailments')}}">Enfermedades</a></li>
-                        <li><a class="dropdown-item" href="{{route('neighborhoods')}}">Colonias</a></li>
-                        <li><a class="dropdown-item" href="{{route('users')}}">Usuarios</a></li>
-                        <li><a class="dropdown-item" href="{{route('clinics')}}">Clinicas</a></li>
                         <li><a class="dropdown-item" href="{{route('json_fwop')}}">Json FWOP</a></li>
+                        <li><a class="dropdown-item" href="{{route('localities')}}">Localidades</a></li>
+                        <li><a class="dropdown-item" href="{{route('models')}}">Modelos</a></li>
                     </ul>
                 </li>
                 <li class="btn-group dropend d-block">
                     <a class="text-decoration-none dropdown-toggle px-3 py-2 d-block" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-router"></i> Estaciones
+                        <i class="bi bi-list"></i> Objetos
                     </a>
                     <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{route('monitors_purple')}}">Purple Air</a></li>
+                        <li><a class="dropdown-item" href="{{route('clinics')}}">Clinicas</a></li>
+                        <li><a class="dropdown-item" href="{{route('neighborhoods')}}">Colonias</a></li>
+                        <li><a class="dropdown-item" href="{{route('communities')}}">Comunidades</a></li>
+                        <li><a class="dropdown-item" href="{{route('sponsors')}}">Patrocinadores</a></li>
+                        <li><a class="dropdown-item" href="{{route('users')}}">Usuarios</a></li>
+                    </ul>
+                </li>
+                <li class="btn-group dropend d-block">
+                    <a class="text-decoration-none dropdown-toggle px-3 py-2 d-block" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-router"></i> Equipos
+                    </a>
+                    <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="{{route('monitors_fwop')}}">FWOP</a></li>
-                        <li><a class="dropdown-item" href="{{route('stations')}}">Weather Underground</a></li>
+                        <li><a class="dropdown-item" href="{{route('monitors_purple')}}">Purple Air</a></li>
                         <li><a class="dropdown-item" href="{{route('reports')}}">Reportes</a></li>
+                        <li><a class="dropdown-item" href="{{route('stations')}}">Weather Underground</a></li>
                     </ul>
                 </li>
                 @endif

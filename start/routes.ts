@@ -4,19 +4,24 @@ import Route from '@ioc:Adonis/Core/Route'
 //Public
 Route.get('/','MonitorsController.showMap').as('map_monitors')
 Route.get('banner_monitor','MonitorsController.bannerMonitor').as('banner_monitor')
+Route.get('banner_community','CommunitiesController.bannerCommunity').as('banner_community')
 Route.get('banner_clinic','ClinicsController.bannerClinic').as('banner_clinic')
 Route.get('banner_neighborhood','NeighborhoodsController.bannerNeighborhood').as('banner_neighborhood')
 Route.get('map_neighborhoods','NeighborhoodsController.showMap').as('map_neighborhoods')
 Route.get('map_clinics','ClinicsController.showMap').as('map_clinics')
-//Route.get('map_stations','StationsController.showMap').as('map_stations')
-//Route.get('banner_station','StationsController.bannerStation').as('banner_station')
+Route.get('map_communities','CommunitiesController.showMap').as('map_communities')
 Route.get('historics_purple_air/:slug','MonitorsController.historics_purple_air').as('historics_purple_air').where('slug', /^[0-9]+$/)
 Route.get('historics_fwop/:slug','MonitorsController.historics_fwop').as('historics_fwop').where('slug', /^[0-9]+$/)
 Route.get('historics_clinic/:id','ClinicsController.historics').as('historic_clinic')
+//Route.get('map_stations','StationsController.showMap').as('map_stations')
+//Route.get('banner_station','StationsController.bannerStation').as('banner_station')
+
 //GUEST
 Route.get('register','UsersController.register').as('register').middleware('guest')
+
 //AUTH
 Route.get('dashboard','UsersController.dashboard').as('dashboard').middleware(['auth:web'])
+
 //ADMIN
 Route.get('pollutants','PollutantsController.show').as('pollutants').middleware(['auth:web']).middleware(['role:ADMIN,GUEST'])
 Route.get('sponsors','SponsorsController.show').as('sponsors').middleware('auth').middleware(['role:ADMIN,GUEST'])
@@ -31,7 +36,8 @@ Route.get('stations','StationsController.show').as('stations').middleware('auth'
 Route.get('users','UsersController.show').as('users').middleware('auth').middleware(['role:ADMIN,GUEST'])
 Route.get('reports','DataController.showReports').as('reports').middleware('auth').middleware(['role:ADMIN,GUEST'])
 Route.get('ailments_clinic/:id','AilmentsController.showAilments').as('ailments_clinic').where('id', /^[0-9]+$/).middleware('auth').middleware(['role:ADMIN,GUEST'])
-
+Route.get('locality','LocalitiesController.show').as('localities').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('community','CommunitiesController.show').as('communities').middleware('auth').middleware(['role:ADMIN,GUEST'])
 
 Route.group(()=>{
   Route.post('store','RolsController.store')
@@ -94,14 +100,12 @@ Route.group(()=>{
   Route.patch('update/:id','NeighborhoodsController.update').as('update_neighborhoods').where('id', /^[0-9]+$/)
 }).prefix('neighborhood')
 
-
 Route.group(()=>{
   Route.post('store','MonitorsController.store').as('store_monitor')
   Route.delete('delete/:id','MonitorsController.delete').as('delete_monitor').where('id', /^[0-9]+$/)
   Route.patch('update/:id','MonitorsController.update').as('update_monitor').where('id', /^[0-9]+$/)
   Route.patch('active/:id','MonitorsController.active').as('active_monitor').where('id', /^[0-9]+$/)
 }).prefix('monitor')
-
 
 Route.group(()=>{
   Route.post('store','StationsController.store').as('store_station')
@@ -116,3 +120,16 @@ Route.group(()=>{
 Route.group(()=>{
   Route.post('generate','ReportsController.generate').as('generate_report')
 }).prefix('report')
+
+Route.group(()=>{
+  Route.post('store','LocalitiesController.store').as('store_locality')
+  Route.delete('delete/:id','LocalitiesController.delete').as('delete_locality').where('id', /^[0-9]+$/)
+  Route.patch('update/:id','LocalitiesController.update').as('update_locality').where('id', /^[0-9]+$/)
+}).prefix('locality')
+
+Route.group(()=>{
+  Route.post('store','CommunitiesController.store').as('store_community')
+  Route.delete('delete/:id','CommunitiesController.delete').as('delete_community').where('id', /^[0-9]+$/)
+  Route.patch('update/:id','CommunitiesController.update').as('update_community').where('id', /^[0-9]+$/)
+  Route.patch('active/:id','CommunitiesController.active').as('active_community').where('id', /^[0-9]+$/)
+}).prefix('community')

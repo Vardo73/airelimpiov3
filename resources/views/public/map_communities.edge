@@ -1,0 +1,80 @@
+@layout('master')
+
+@section('map_communities')
+
+<style>
+    body { margin: 0; padding: 0; }
+  
+    #mapCommunities { 
+      position: absolute;   
+      margin-right: 220px; 
+      width: calc(100% - 220px); 
+      height: 100vh; 
+      transition: width 0.3s ease;
+    }
+    
+    .mapboxgl-popup {
+      max-width: 200px;
+      font-size: 12px;
+    }
+  
+    @media (max-width: 991px) {
+      #mapCommunities {
+        width: 100%;
+      }
+    }
+</style>
+
+
+<div id='mapCommunities'></div>
+
+<script>
+
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2lzdGVtYXNjZXJjYSIsImEiOiJjbDRldWE2ZjAwMjI3M2JwOHpsb21jbHpxIn0.jLF2ydLoAdgrv68l8iM2VQ';
+
+let divMap=document.getElementById('mapCommunities')
+
+
+let map = new mapboxgl.Map({
+    container: divMap,
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center:[-110.143592,23.655148],
+    zoom:8
+});
+
+map.addControl(new mapboxgl.NavigationControl());
+map.addControl(new mapboxgl.GeolocateControl());
+map.addControl(new mapboxgl.FullscreenControl());
+map.addControl(new mapboxgl.ScaleControl());
+
+
+fetch('/banner_community')
+.then(response => {
+    if (!response.ok) {
+      throw new Error(`Error de red - Código de estado: ${response.status}`);
+    }
+    return response.json();
+})
+.then(data => {
+    data.map(banner => {
+        
+      let color='#FF0000';    
+      let popup=new mapboxgl.Popup({ offset: 25 }).setMaxWidth('200');
+      let coordinates=[banner.longitude,banner.latitude];
+      popup.setHTML(banner.html);
+
+      if(banner.active){
+        color='#FFFF00'
+      }
+
+      new mapboxgl.Marker({color:color})
+        .setLngLat(coordinates)
+        .setPopup(popup) 
+        .addTo(map);
+    });
+})
+.catch(error => {
+    console.error('Error en la petición de comunidades:', error);
+});
+</script>
+@end

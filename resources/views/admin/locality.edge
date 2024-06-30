@@ -1,0 +1,169 @@
+@layout('master')
+
+@section('locality')
+<style>
+    .scrollable-div {
+        height: 75%; 
+        overflow-y: auto; 
+    }
+</style>
+
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Localidades</span></h2>
+    <hr/>
+</div>
+
+<br>
+
+<div class="container scrollable-div">
+    
+    @if(auth.user.rol_id!=2)
+    <div class="col col-12 align-self-end">
+        <div class="d-grid gap-2 mx-auto ">
+            <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#LocalityModal">Agregar</button>
+        </div>
+    </div>
+    <br>
+    @endif
+    <div class=" container-fluid table-responsive table-bordered">
+        <table class="table table-hover " name="tabAnual" id="tabAnual">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Localiad</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @each(locality in localities)
+                <tr>
+                    <td>{{ locality.id}}</td>
+                    <td>{{ locality.name }}</td>
+                    <td>{{ locality.description }}</td>
+                    <td>
+                        <div class="row mx-auto">
+                            @if(auth.user.rol_id!=2)
+                            <div class="col col-6 d-grid gap-2 mx-auto">
+                                <button  class="btn btn-info"   data-bs-toggle="modal" data-bs-target="#LocalityModalEdit{{locality.id}}">Editar</button>
+                            </div>
+                            <div class="col col-6 d-grid gap-2 mx-auto" >
+                                <form action="{{route('delete_locality',[locality.id])}}?_method=DELETE" method="post" class="formDelete">
+                                    {{csrfField()}}
+                                    <button class="btn btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                            @else
+                            <div class="col col-12 d-grid gap-2 mx-auto">
+                                <button  class="btn btn-info"   data-bs-toggle="modal" data-bs-target="#LocalityModalEdit{{locality.id}}">Editar</button>
+                            </div>
+                            @endif
+                        </div>
+                    </td>
+                </tr>
+
+                <div class="container-fluid">
+                    <div class="modal fade" id="LocalityModalEdit{{locality.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                            <form action="{{route('update_locality',[locality.id])}}?_method=PATCH" method="POST">
+                                {{csrfField()}}
+                                <div class="modal-header">
+                                    <h2>Editar Localiad</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+                                        <label class="form-label" for="name">Nombre:</label>
+                                        <input class="form-control" type="text" name="name" id="name" required min="1" max="25" value="{{ locality.name }}">
+                                    </div> 
+                                    @if(flashMessages.has('errors.name'))
+                                    <br>
+                                    <p class="alert alert-danger">{{flashMessages.get('errors.name')}}</p>
+                                    @end
+                                    <div>
+                                        <label  class="form-label" for="txtDesModelo">Descripción:</label>
+                                        <textarea class="form-control" name="description" id="description" style="height: 100px" max="50">{{ locality.description }}</textarea>
+                                    </div>         
+                                    @if(flashMessages.has('errors.description'))
+                                    <br>
+                                    <p class="alert alert-danger">{{flashMessages.get('errors.description')}}</p>
+                                    @end
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-outline-primary" type="submit" data-bs-dismiss="modal">Guardar</button>
+                            </form>
+                                    <button class="btn btn-outline-primary" type="button" data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endeach
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- MODAL NUEVA LOCALIDAD -->
+<div class="container-fluid">
+    <div class="modal fade" id="LocalityModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            <form action="{{route('store_locality')}}" method="post">
+                {{csrfField()}}
+                <div class="modal-header">
+                    <h2>Agregar Localidad</h2>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label class="form-label" for="name">Nombre:</label>
+                        <input class="form-control" type="text" name="name" id="name" required min="1" max="25">
+                    </div> 
+                    @if(flashMessages.has('errors.name'))
+                    <br>
+                    <p class="alert alert-danger">{{flashMessages.get('errors.name')}}</p>
+                    @end
+                    <div>
+                        <label  class="form-label" for="description">Descripción:</label>
+                        <textarea class="form-control" name="description" id="description" style="height: 100px" max="50"></textarea>
+                    </div>         
+                    @if(flashMessages.has('errors.description'))
+                    <br>
+                    <p class="alert alert-danger">{{flashMessages.get('errors.description')}}</p>
+                    @end   
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-outline-primary"  data-bs-dismiss="modal">Crear</button>
+                    <button type="button" class="btn btn-outline-primary"  data-bs-dismiss="modal">Cancelar</button>
+                </div>
+             </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+   window.onload= function(){
+        let forms=document.querySelectorAll('.formDelete')
+
+        forms.forEach(form=>{
+            form.addEventListener('submit',(e)=>{
+                e.preventDefault()
+                Swal.fire({
+                    title:'Está seguró de eliminar este elemento?',
+                    showCancelButton:true,
+                    confirmButtonText:'Eliminar',
+                    denyButtonText:'Cancelar',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        form.submit()
+                    }
+                })
+            })
+        })
+    }
+</script>
+@end

@@ -58,7 +58,7 @@ fetch('/banner_clinic')
   .then(data => {
     data.forEach(clinic => {
 
-      let popup=new mapboxgl.Popup({ offset: 25 }).setMaxWidth('500')
+      let popup=new mapboxgl.Popup({ offset: 25 }).setMaxWidth('200')
       let coordinates=[clinic.longitude,clinic.latitude];
       popup.setHTML(clinic.html)
 
