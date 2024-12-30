@@ -1,0 +1,82 @@
+@layout('master')
+
+@section('csv_sky')
+
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Carga de datos</span></h2>
+    <hr/>
+</div>
+
+<div class="container">
+    <br>
+    <form action="{{route('read_csv_sky')}}" method="post" enctype="multipart/form-data">
+        {{csrfField()}}
+        <div class="row">
+            <div class="col">
+                <label class="form-label" for="csvfileSky">Suba el archivo en formato xlsx:</label>
+                <input class="form-control" type="file" name="csvfileSky" id="csvfileSky" accept=".xlsx" onchange="fileSelected()"> 
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <button type="submit" class='form-control btn btn-primary' id="btnCsvSky" disabled="true">Aceptar</button>
+            </div>
+        </div>
+    </form>
+    <br>
+
+    <div class="alert alert-warning" role="alert">
+        <h4 class="alert-heading">Recuerda!</h4>
+        <ul>
+            <li>No cambiar los nombres de los encabezados.</li>
+            <li>No ingresar letras en campos numéricos.</li>
+            <li>Menejar el mismo formato al nombrar el ID de los Sitios y no repetirlos.</li>
+            <li>Validar la información para evitar duplicidad en los registros.</li>
+        </ul>
+      </div>
+
+    @if(flashMessages.has('notification'))
+    <br>
+    <p class="alert alert-{{flashMessages.get('notification').status}}" role="alert">{{flashMessages.get('notification').message}}</p>
+    @end
+</div>
+
+
+<script>
+    function fileSelected() {
+        let jsonfileFwop=document.getElementById('csvfileSky');
+        let btnJsonFwop=document.getElementById('btnCsvSky');
+
+        if (jsonfileFwop.files.length > 0) {
+            btnJsonFwop.disabled = false;
+        } else {
+            btnJsonFwop.disabled = true;
+        }
+    }
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+    
+    @if(flashMessages.has('success'))
+    Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: '{{ flashMessages.get("success") }}',
+        confirmButtonColor: '#5233EA'
+    });
+    @endif
+
+    @if(flashMessages.has('errorCatch'))
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '{{ flashMessages.get("errorCatch") }}',
+        confirmButtonColor: '#5233EA'
+    });
+    @endif
+});
+</script>
+
+@end

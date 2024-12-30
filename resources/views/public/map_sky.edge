@@ -1,11 +1,11 @@
 @layout('master')
 
-@section('map_clinics')
+@section('map_sky')
 
 <style>
   body { margin: 0; padding: 0; }
 
-  #mapClinics { 
+  #mapSky { 
     position: absolute;   
     margin-right: 220px; 
     width: calc(100% - 220px); 
@@ -19,20 +19,20 @@
   }
 
   @media (max-width: 991px) {
-    #mapClinics {
+    #mapSky {
       width: 100%;
     }
   }
 </style>
 
 
-<div id='mapClinics'></div>
+<div id='mapSky'></div>
 
 <script>
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2lzdGVtYXNjZXJjYSIsImEiOiJjbDRldWE2ZjAwMjI3M2JwOHpsb21jbHpxIn0.jLF2ydLoAdgrv68l8iM2VQ';
 
-let divMap=document.getElementById('mapClinics')
+let divMap=document.getElementById('mapSky')
 
 
 let map = new mapboxgl.Map({
@@ -48,7 +48,7 @@ map.addControl(new mapboxgl.FullscreenControl());
 map.addControl(new mapboxgl.ScaleControl());
 
 
-fetch('/banner_clinic')
+fetch('/banner_sky')
 .then(response => {
     if (!response.ok) {
       throw new Error(`Error de red - Código de estado: ${response.status}`);
@@ -56,11 +56,11 @@ fetch('/banner_clinic')
     return response.json();
   })
   .then(data => {
-    data.forEach(clinic => {
+    data.forEach(site => {
 
       let popup=new mapboxgl.Popup({ offset: 25 }).setMaxWidth('200')
-      let coordinates=[clinic.longitude,clinic.latitude];
-      popup.setHTML(clinic.html)
+      let coordinates=[site.longitude,site.latitude];
+      popup.setHTML(site.html)
 
 
       new mapboxgl.Marker()

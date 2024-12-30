@@ -16,8 +16,6 @@ export default class NeighborhoodsController {
     public async store({request,response}:HttpContextContract){
         const {name,city,longitude, latitude, pollutants}=request.body()
 
-        console.log(request.body())
-
         await request.validate(NeighborhoodValidator)
 
         const neighborhood=await Neighborhood.create({

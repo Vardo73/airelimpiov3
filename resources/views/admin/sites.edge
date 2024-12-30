@@ -1,0 +1,266 @@
+@layout('master')
+
+@section('sites')
+
+<style>
+    .scrollable-div {
+        height: 75%; 
+        overflow-y: auto; 
+    }
+</style>
+
+<div class="container">
+    <hr/>
+        <h2 style="text-align: center;"><span style="color: #2aa5d6;">Sitios</span></h2>
+    <hr/>
+</div>
+
+<br>
+
+<div class="container scrollable-div">
+
+    @if(auth.user.rol_id!=2)
+    <div class="col col-12 align-self-end">
+        <div class="d-grid gap-2 mx-auto ">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newSiteModal">Agregar Nuevo</button>
+        </div>
+    </div>
+    <br>
+    @endif
+    <div class=" container-fluid table-responsive table-bordered">
+        <table class="table table-hover " name="tabAnual" id="tabAnual">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Coordenadas</th>
+                    <th scope="col">Municipio</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @each(site in sites)
+                    <tr>
+                        <td>{{ site.slug}}</td>
+                        <td>{{ site.name }}</td>
+                        <td>{{ site.latitude }},{{ site.longitude }}</td>
+                        <td>{{ site.municipality }}</td>
+                        <td>
+                            <div class="row mx-auto">
+                                @if(auth.user.rol_id!=2)
+                                <div class="col col-6 d-grid gap-2 mx-auto">
+                                    <button class="btn btn-info"  data-bs-toggle="modal" data-bs-target="#editSiteModal{{site.id}}">Editar</button>
+                                </div>
+
+                                <div class="col col-6 d-grid gap-2 mx-auto">
+                                    <form action="{{route('delete_site',[site.id])}}?_method=DELETE" method="POST" class="formDelete">
+                                        {{csrfField()}}
+                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                    </form>
+                                </div>
+                                @else
+                                <div class="col col-12 d-grid gap-2 mx-auto">
+                                    <button class="btn btn-info"  data-bs-toggle="modal" data-bs-target="#editSiteModal{{site.id}}">Editar</button>
+                                </div>
+                                @endif
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- MODAL Edit CONTAMINANTE -->
+                    <div class="container-fluid">
+                        <div class="modal fade" id="editSiteModal{{site.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2>Editar sitio</h2>
+                                    </div>
+                                    <form action="{{route('update_site',[site.id])}}?_method=PATCH" method="POST">
+                                        {{csrfField()}}
+                                        <div class="modal-body">
+                                            
+                                            <div class="row mx-auto">
+                                                @if(flashMessages.has('errors.slug'))
+                                                    <div class="alert alert-danger" role="alert">
+                                                        {{flashMessages.get('errors.slug')}}
+                                                    </div>
+                                                @endif
+                                                <div class="col col-6 d-grid gap-2 mx-auto">
+                                                    <label class="form-label" for="slug">ID:</label>
+                                                    <input class="form-control" type="text" name="slug" id="slug" required min="1" max="25"  value={{site.slug}}>
+                                                </div>
+                                                @if(flashMessages.has('errors.name'))
+                                                    <div class="alert alert-danger" role="alert">
+                                                        {{flashMessages.get('errors.name')}}
+                                                    </div>
+                                                @endif
+                                                <div class="col col-6 d-grid gap-2 mx-auto">
+                                                    <label class="form-label" for="name">Nombre:</label>
+                                                    <input class="form-control" type="text" name="name" id="name" required min="1" max="25"  value={{site.name}}>
+                                                </div>
+                                            </div>
+
+                                            <br>
+
+                                            <div class="row mx-auto">
+                                                @if(flashMessages.has('errors.municipality'))
+                                                    <div class="alert alert-danger" role="alert">
+                                                        {{flashMessages.get('errors.municipality')}}
+                                                    </div>
+                                                @endif
+                                                <div class="col col-12 d-grid gap-2 mx-auto">
+                                                    <label class="form-label" for="municipality">Municipio:</label>
+                                                    <input class="form-control" type="text" name="municipality" id="municipality" required min="1" max="25"  value={{site.municipality}}>
+                                                </div>
+                                            </div>
+
+                                            <br>
+
+                                            <div class="row mx-auto">
+                                                @if(flashMessages.has('errors.latitude'))
+                                                    <div class="alert alert-danger" role="alert">
+                                                        {{flashMessages.get('errors.latitude')}}
+                                                    </div>
+                                                @endif
+                                                <div class="col col-6 d-grid gap-2 mx-auto">
+                                                    <label class="form-label" for="latitude">Latitud:</label>
+                                                    <input class="form-control" step="any" type="number" name="latitude" id="latitude" required value={{site.latitude}}>
+                                                </div>
+                                                @if(flashMessages.has('errors.longitude'))
+                                                    <div class="alert alert-danger" role="alert">
+                                                        {{flashMessages.get('errors.longitude')}}
+                                                    </div>
+                                                @endif
+                                                <div class="col col-6 d-grid gap-2 mx-auto">
+                                                    <label class="form-label" for="longitude">Longitud:</label>
+                                                    <input class="form-control" type="number" step="any" name="longitude" id="longitude" required value={{site.longitude}}>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-outline-primary">Aceptar</button>
+                                            <button type="button" class="btn btn-outline-primary "  data-bs-dismiss="modal">Cancelar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endeach
+            </tbody>
+        </table>
+    </div>
+    
+
+
+    <!-- MODAL NUEVO CONTAMINANTE -->
+    <div class="container-fluid">
+        <div class="modal fade" id="newSiteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Agregar sitio</h2>
+                    </div>
+                    <form action="{{route('store_site')}}" method="post">
+                        {{csrfField()}}
+                        <div class="modal-body">
+                            
+                            <div class="row mx-auto">
+                                @if(flashMessages.has('errors.slug'))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{flashMessages.get('errors.slug')}}
+                                    </div>
+                                @endif
+                                <div class="col col-6 d-grid gap-2 mx-auto">
+                                    <label class="form-label" for="slug">ID:</label>
+                                    <input class="form-control" type="text" name="slug" id="slug" required min="1" max="25">
+                                </div>
+                                @if(flashMessages.has('errors.name'))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{flashMessages.get('errors.name')}}
+                                    </div>
+                                @endif
+                                <div class="col col-6 d-grid gap-2 mx-auto">
+                                    <label class="form-label" for="name">Nombre:</label>
+                                    <input class="form-control" type="text" name="name" id="name" required min="1" max="25">
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <div class="row mx-auto">
+                                @if(flashMessages.has('errors.municipality'))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{flashMessages.get('errors.municipality')}}
+                                    </div>
+                                @endif
+                                <div class="col col-12 d-grid gap-2 mx-auto">
+                                    <label class="form-label" for="municipality">Municipio:</label>
+                                    <input class="form-control" type="text" name="municipality" id="municipality" required min="1" max="25">
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <div class="row mx-auto">
+                                @if(flashMessages.has('errors.latitude'))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{flashMessages.get('errors.latitude')}}
+                                    </div>
+                                @endif
+                                <div class="col col-6 d-grid gap-2 mx-auto">
+                                    <label class="form-label" for="latitude">Latitud:</label>
+                                    <input class="form-control" step="any" type="number" name="latitude" id="latitude" required >
+                                </div>
+                                @if(flashMessages.has('errors.longitude'))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{flashMessages.get('errors.longitude')}}
+                                    </div>
+                                @endif
+                                <div class="col col-6 d-grid gap-2 mx-auto">
+                                    <label class="form-label" for="longitude">Longitud:</label>
+                                    <input class="form-control" type="number" step="any" name="longitude" id="longitude" required >
+                                </div>
+                            </div>
+                            
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-outline-primary" >Aceptar</button>
+                            <button type="button" class="btn btn-outline-primary btnCancel" name="btnCancelSite" id="btnCancelSite" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload= function(){
+        let forms=document.querySelectorAll('.formDelete')
+
+        forms.forEach(form=>{
+            form.addEventListener('submit',(e)=>{
+                e.preventDefault()
+                Swal.fire({
+                    title:'Está seguró de eliminar este elemento?',
+                    showCancelButton:true,
+                    confirmButtonText:'Eliminar',
+                    denyButtonText:'Cancelar',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        form.submit()
+                    }
+                })
+            })
+        })
+    }
+</script>
+
+
+
+
+
+@end
