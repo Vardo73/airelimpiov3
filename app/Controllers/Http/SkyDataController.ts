@@ -112,7 +112,7 @@ export default class SkyDataController {
                 west_visual_magnitude: row['magnitud_oeste'],
                 observers: row['observadores'],
                 bortle_scale: row['escala_bortle'],
-                sqm_l_number: row['sqm_l-l'],
+                sqm_l_number: row['sqm_l'],
                 altitude: row['altitud'],
             })
           }
