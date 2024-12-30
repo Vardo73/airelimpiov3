@@ -101,6 +101,7 @@
                         <li><a class="dropdown-item" href="{{route('map_clinics')}}">Padecimientos</a></li>
                         <li><a class="dropdown-item" href="{{route('map_neighborhoods')}}">Contaminante</a></li>
                         <li><a class="dropdown-item" href="{{route('map_communities')}}">Energía</a></li>
+                        <li><a class="dropdown-item" href="{{route('map_sky')}}">Cielo</a></li>
                         <!--<li><a class="dropdown-item" href="">Clima</a></li>-->
                     </ul>
                 </li>
@@ -173,7 +174,7 @@
             @if (auth.isLoggedIn)
             <hr class="hr-color mx-2">
             <ul class="list-unstyled px-2">
-                @if(auth.user.rol_id!=3)
+                @if(auth.user.rol_id<=2 )
                 <li class="btn-group dropend d-block">
                     <a class="text-decoration-none dropdown-toggle px-3 py-2 d-block" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-list"></i> Elementos
@@ -186,6 +187,7 @@
                         <li><a class="dropdown-item" href="{{route('models')}}">Modelos</a></li>
                     </ul>
                 </li>
+
                 <li class="btn-group dropend d-block">
                     <a class="text-decoration-none dropdown-toggle px-3 py-2 d-block" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-list"></i> Objetos
@@ -198,6 +200,7 @@
                         <li><a class="dropdown-item" href="{{route('users')}}">Usuarios</a></li>
                     </ul>
                 </li>
+
                 <li class="btn-group dropend d-block">
                     <a class="text-decoration-none dropdown-toggle px-3 py-2 d-block" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-router"></i> Equipos
@@ -207,6 +210,18 @@
                         <li><a class="dropdown-item" href="{{route('monitors_purple')}}">Purple Air</a></li>
                         <li><a class="dropdown-item" href="{{route('reports')}}">Reportes</a></li>
                         <li><a class="dropdown-item" href="{{route('stations')}}">Weather Underground</a></li>
+                    </ul>
+                </li>
+
+                @endif
+                @if(auth.user.rol_id==4 || auth.user.rol_id==1)
+                <li class="btn-group dropend d-block">
+                    <a class="text-decoration-none dropdown-toggle px-3 py-2 d-block" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-stars"></i> Calidad del cielo
+                    </a>
+                    <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{route('sites')}}">Sitios</a></li>
+                        <li><a class="dropdown-item" href="{{route('csv_sky')}}">Subír CSV</a></li>
                     </ul>
                 </li>
                 @endif

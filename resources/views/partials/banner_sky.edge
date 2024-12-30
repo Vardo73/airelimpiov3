@@ -1,0 +1,28 @@
+<section>
+    <div  class="card">
+        <div class="card-header" style=" text-align:center; background:#0d6efd; color:#FFFFFF; ">
+            <h5 style="font-size: 15px;">{{site.$attributes.name}}</h5>
+            <span style="text-align:center; background:#0d6efd; color:#FFFFFF;">Municipio: {{site.$attributes.municipality}}</span>
+        </div>
+        <div class="card-body">
+
+            <div class="row" style="background-color:#white; color:#0d6efd; text-align:center; ">
+                <div class="col col-12">
+                    <span>Magnitud visual al cenit</span>
+                </div>
+            </div>
+            <div class="row" style="text-align:center;">
+                <div class="col col-12">
+                    <span>
+                        @if(value?.$attributes.zenith_visual_magnitude==0)
+                        0.0 mag/arcsec&sup2;
+                        @else
+                            {{value?.$attributes.zenith_visual_magnitude}} mag/arcsec&sup2;
+                        @end
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

@@ -1,15 +1,18 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 //View
+
 //Public
 Route.get('/','MonitorsController.showMap').as('map_monitors')
 Route.get('banner_monitor','MonitorsController.bannerMonitor').as('banner_monitor')
 Route.get('banner_community','CommunitiesController.bannerCommunity').as('banner_community')
 Route.get('banner_clinic','ClinicsController.bannerClinic').as('banner_clinic')
 Route.get('banner_neighborhood','NeighborhoodsController.bannerNeighborhood').as('banner_neighborhood')
+Route.get('banner_sky','SitesController.bannerSite').as('banner_sky')
 Route.get('map_neighborhoods','NeighborhoodsController.showMap').as('map_neighborhoods')
 Route.get('map_clinics','ClinicsController.showMap').as('map_clinics')
 Route.get('map_communities','CommunitiesController.showMap').as('map_communities')
+Route.get('map_sky','SitesController.showMap').as('map_sky')
 Route.get('historics_purple_air/:slug','MonitorsController.historics_purple_air').as('historics_purple_air').where('slug', /^[0-9]+$/)
 Route.get('historics_fwop/:slug','MonitorsController.historics_fwop').as('historics_fwop').where('slug', /^[0-9]+$/)
 Route.get('historics_clinic/:id','ClinicsController.historics').as('historic_clinic')
@@ -38,6 +41,9 @@ Route.get('reports','DataController.showReports').as('reports').middleware('auth
 Route.get('ailments_clinic/:id','AilmentsController.showAilments').as('ailments_clinic').where('id', /^[0-9]+$/).middleware('auth').middleware(['role:ADMIN,GUEST'])
 Route.get('locality','LocalitiesController.show').as('localities').middleware('auth').middleware(['role:ADMIN,GUEST'])
 Route.get('community','CommunitiesController.show').as('communities').middleware('auth').middleware(['role:ADMIN,GUEST'])
+Route.get('site','SitesController.show').as('sites').middleware('auth').middleware(['role:ADMIN,SKY'])
+Route.get('csv_sky','SkyDataController.show').as('csv_sky').middleware('auth').middleware(['role:ADMIN,SKY'])
+
 
 Route.group(()=>{
   Route.post('store','RolsController.store')
@@ -115,6 +121,7 @@ Route.group(()=>{
 
 Route.group(()=>{
   Route.post('read_json_fwop','DataController.readJsonFWOP').as('read_json_fwop')
+  Route.post('read_csv_sky','SkyDataController.readCsvSky').as('read_csv_sky')
 }).prefix('data')
 
 Route.group(()=>{
@@ -133,3 +140,10 @@ Route.group(()=>{
   Route.patch('update/:id','CommunitiesController.update').as('update_community').where('id', /^[0-9]+$/)
   Route.patch('active/:id','CommunitiesController.active').as('active_community').where('id', /^[0-9]+$/)
 }).prefix('community')
+
+
+Route.group(()=>{
+  Route.post('store','SitesController.store').as('store_site')
+  Route.delete('delete/:id','SitesController.delete').as('delete_site').where('id', /^[0-9]+$/)
+  Route.patch('update/:id','SitesController.update').as('update_site').where('id', /^[0-9]+$/)
+}).prefix('sites')
